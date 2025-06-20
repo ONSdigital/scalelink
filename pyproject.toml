@@ -11,5 +11,5 @@ readme = "README.md"
 
 [tool.isort]
 profile = "black"
-known_local_hose_folder = "scalelink"
+known_local_host_folder = "scalelink"
 skip = [".gitignore"]
