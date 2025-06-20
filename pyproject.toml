@@ -8,3 +8,8 @@ authors = [
 license = {file = "LICENSE"}
 classifiers = ["License :: OSI Approved :: MIT License"]
 readme = "README.md"
+
+[tool.isort]
+profile = "black"
+known_local_hose_folder = "scalelink"
+skip = [".gitignore"]
