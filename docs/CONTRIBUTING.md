@@ -34,22 +34,7 @@ of use for others.
 
 ### Git guidance
 
-- Use [GitFlow workflow][gitflow].
-- Follow naming conventions for branches:
-  - `docs/<documentation-description>` - for updates to documentation only.
-  - `feat/<feature-description>` - feature branches, for introducing new features.
-  - `fix/<bug-description>` - bugfixes, for resolving bugs.
-  - `hotfix/<issue-description>` - hotfixes, for urgent fixes that go straight to production.
-- Use [conventional commits][commits] when writing commit messages, including the following types:
-  - `build` - for changes that affect the build system or external dependencies.
-  - `ci` - for changes to CI configuration files and scripts, e.g. GitHub Actions, Dependabot.
-  - `docs` - for documentation-only changes.
-  - `feat` - for new features.
-  - `fix` - for bugfixes and hotfixes.
-  - `perf` - for changes that improve performance only.
-  - `refactor` - for code changes that neither add a feature, fix a bug nor improve performance.
-  - `style` - for changes that do not affect code meaning (e.g. removing whitespace, standardising quote type).
-  - `test` - for changes that add missing tests or correct existing tests.
+See [Branching and deployment guide][git-guide].
 
 ### General code guidance
 
@@ -124,6 +109,7 @@ of use for others.
 [gitflow]: https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow
 [commits]: https://www.markdownguide.org/basic-syntax/#links
 [pre-commit]: .pre-commit-config.yaml
+[git-guide]: /docs/branch_and_deploy_guide.md
 [pep8]: https://peps.python.org/pep-0008/
 [pyproject]: pyproject.toml
 [style-guide]: https://github.com/google/styleguide/blob/gh-pages/pyguide.md#38-comments-and-docstrings
