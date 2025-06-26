@@ -1,0 +1,54 @@
+name: "Pull Request Workflow"
+on:
+  pull_request:
+    # The specific activity types are listed here to include "labeled" and "unlabeled"
+    # (which are not included by default for the "pull_request" trigger).
+    # This is needed to allow skipping enforcement of the changelog in PRs with specific labels,
+    # as defined in the (optional) "skipLabels" property.
+    types: [opened, synchronize, reopened, ready_for_review, labeled, unlabeled]
+
+jobs:
+  # Enforces the update of the changelog file on every pull request
+  changelog:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks for updates to CHANGELOG.md
+      # https://github.com/marketplace/actions/changelog-enforcer
+      - uses: dangoslen/changelog-enforcer@v3
+  
+  # Enforces the running of the pre-commit hooks on every pull request
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-puython@v4
+      
+      - name: Run pre-commit hooks
+        uses: pre-commit/action@v3.0.0
+
+  # Enforces the running of all unit tests on every pull request
+  test:
+    needs: changelog
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10"]
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip3 install -e .[dev]
+
+      - name: Run unit tests
+        run: pytest
