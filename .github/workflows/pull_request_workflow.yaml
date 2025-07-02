@@ -24,7 +24,7 @@ jobs:
         uses: actions/checkout@v3
       
       - name: Set up Python
-        uses: actions/setup-puython@v4
+        uses: actions/setup-python@v4
       
       - name: Run pre-commit hooks
         uses: pre-commit/action@v3.0.0
