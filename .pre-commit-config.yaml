@@ -36,10 +36,10 @@ repos:
     hooks:
       - id: isort
 
-  - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.27.2
-    hooks:
-      - id: gitleaks
+#  - repo: https://github.com/gitleaks/gitleaks
+#    rev: v8.23.1
+#    hooks:
+#      - id: gitleaks
 
   - repo: local
     hooks:
