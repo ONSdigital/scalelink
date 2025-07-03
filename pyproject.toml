@@ -1,15 +1,3 @@
-[project]
-name = "scalelink"
-description = "Python and PySpark implementation of Goldstein et al.'s Scalelink method of data linkage."
-authors = [
-    {name = "Mary Cleaton", email = "data.linkage@ons.gov.uk"},
-    {name = "Gavin Thomson"}
-]
-license = {file = "LICENSE"}
-classifiers = ["License :: OSI Approved :: MIT License"]
-readme = "README.md"
-
-[tool.isort]
-profile = "black"
-known_local_folder = "scalelink"
-skip = [".gitignore"]
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
