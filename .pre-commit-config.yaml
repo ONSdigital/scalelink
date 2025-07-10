@@ -1,0 +1,50 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: |
+          (?x)(
+            ^.github/
+          )
+        exclude_types: [markdown, yaml, toml]
+      - id: end-of-file-fixer
+        exclude: |
+          (?x)(
+            ^.github/
+          )
+        exclude_types: [markdown, yaml, toml]
+      - id: check-docstring-first
+      - id: check-yaml
+      - id: check-toml
+      - id: debug-statements
+      - id: requirements-txt-fixer
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.12.0
+    hooks:
+      - id: ruff-check
+        args: [--fix]
+
+  - repo: https://github.com/psf/black
+    rev: 25.1.0
+    hooks:
+      - id: black
+
+  - repo: https://github.com/PyCQA/isort
+    rev: 6.0.1
+    hooks:
+      - id: isort
+
+#  - repo: https://github.com/gitleaks/gitleaks
+#    rev: v8.23.1
+#    hooks:
+#      - id: gitleaks
+
+  - repo: local
+    hooks:
+      - id: restricted-filenames
+        name: Check commits for restricted file extensions
+        entry: These file extensions are restricted. Data should be removed from the commit
+        language: fail
+        files: .*\.(csv|feather|xlsx|zip|hdf5|h5|txt|json|xml|hd|parquet)
