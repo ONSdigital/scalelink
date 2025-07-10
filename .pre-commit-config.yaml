@@ -25,16 +25,19 @@ repos:
     hooks:
       - id: ruff-check
         args: [--fix]
+        exclude: .github/workflows/
 
   - repo: https://github.com/psf/black
     rev: 25.1.0
     hooks:
       - id: black
+        exclude: .github/workflows/
 
   - repo: https://github.com/PyCQA/isort
     rev: 6.0.1
     hooks:
       - id: isort
+        exclude: .github/workflows/
 
 #  - repo: https://github.com/gitleaks/gitleaks
 #    rev: v8.23.1
