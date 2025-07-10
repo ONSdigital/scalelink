@@ -50,10 +50,10 @@ Our repository has two permanent branches:
    - Before merging `develop` into `main`, update the package version following [semantic versioning principles][sem-ver].
    - Use `bump2version` to bump the `scalelink` package version. E.g. `bump2version patch` for a patch update,
      `bump2version minor` for a minor update or `bump2version major` for a major update.
-   - Rememver to update the changelog.
+   - Remember to update the changelog.
 
 4. **Merging to main:**
-   - After a set of features is finalised in the `develop` vranch and the package version is bumped, merge `develop`
+   - After a set of features is finalised in the `develop` branch and the package version is bumped, merge `develop`
      into `main`.
    - This action triggers the automated deployment process through GitHub Actions.
 
@@ -129,11 +129,11 @@ As `scalelink` maintainers, ensuring a seamless transition from `develop` to `ma
 
 - **Update `CHANGELOG.md`:**
   - In the `CHANGELOG.md` file, create a new header/section for the newly bumped version.
-  - Move all entried from the "Unreleased" section to the new version section. This action effectively transfers the documentation of changes from being pending release to being part of the new version's official changelog.
+  - Move all entries from the "Unreleased" section to the new version section. This action effectively transfers the documentation of changes from being pending release to being part of the new version's official changelog.
   - Ensure the "Unreleased" section is left empty after this process, ready for documenting future changes.
 
 - **Update `CHANGELOG.md` release links:**
-  - After bumping the version and updating the `CHANGELOG.md` with the new version header adn changes, proceed to update the "Release links" section at the bottom of the document. Add links to the new version's GitHub Release page and its PyPi listing, following the existing format. **Note: this repo does not currently have a PyPi listing.**
+  - After bumping the version and updating the `CHANGELOG.md` with the new version header and changes, proceed to update the "Release links" section at the bottom of the document. Add links to the new version's GitHub Release page and its PyPi listing, following the existing format. **Note: this repo does not currently have a PyPi listing.**
     This step ensures users and developers can easily find and access the specific versions of `scalelink` through their respective release pages and download links, maintaining comprehensive and navigable documentation.
 
 - **Final review and push:**
