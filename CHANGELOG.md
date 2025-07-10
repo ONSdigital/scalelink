@@ -9,6 +9,18 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Deprecated
+
+### Fixed
+
+### Removed
+
+## [0.1.0] 2025-07-10
+
+### Added
+
 - The `scalelink` and `tests` folders.
 - Various helper files:
   - Git: `.gitignore`, `pull_request_template.md`.
