@@ -25,7 +25,7 @@ Our repository has two permanent branches:
   - All new features and bugfixes are developed in separate branches created from the `develop` branch.
   - Any hotfixes are developed in separate branches created from the `main` branch.
   - Branch naming conventions:
-    -`docs/<documentation-description>` - for updates to documentation only.
+    - `docs/<documentation-description>` - for updates to documentation only.
     - `feat/<feature-description>` - feature branches, for introducing new features.
     - `fix/<bug-description>` - bugfixes, for resolving bugs.
     - `hotfix/<issue-description>` - hotfixes, for urgent fixes that go straight to production.
@@ -74,13 +74,16 @@ that pull requests cannot be merged if these GitHub Actions fail.
 1. **Trigger:**
    - The pipeline is triggered when a `merge` is detected.
 
-2. **Changelog check:**
+2. **Branch check:**
+   - Checks that the pull request is only into `main` if coming from `develop` or a branch whose name starts with `hotfix`.
+
+3. **Changelog check:**
    - The changelog is checked for updates.
 
-3. **Pre-commit hooks:**
+4. **Pre-commit hooks:**
    - All pre-commit hooks are run.
 
-4. **Unit tests:**
+5. **Unit tests:**
    - All unit tests are run.
 
 ## Deployment process using GitHub Actions
