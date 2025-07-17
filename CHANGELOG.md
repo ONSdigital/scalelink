@@ -11,8 +11,6 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Team name in `CODEOWNERS`.
-
 ### Deprecated
 
 ### Fixed
