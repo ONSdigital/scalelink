@@ -14,7 +14,7 @@ jobs:
       - name: Extract package version
         id: package_version
         run: |
-          echo "PACKAGE_VERSION=$(python setup.py --version)" >> $GITHUB_ENV
+          echo "PACKAGE_VERSION=$python setup.py --version)" >> $GITHUB_ENV
       
       - name: Bump version and push tag
         id: tag_version
