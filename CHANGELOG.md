@@ -9,6 +9,18 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Deprecated
+
+### Fixed
+
+### Removed
+
+## [0.1.1] 2025-07-18
+
+### Added
+
 - Config for bump2version: `.bumpversion.cfg`
 
 ### Changed
