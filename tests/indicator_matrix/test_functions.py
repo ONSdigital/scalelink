@@ -20,7 +20,7 @@ import chispa as ch
 import pytest
 from pyspark.sql import types as T
 
-from scalelink.scalelink.indicator_matrix import functions as im
+from scalelink.indicator_matrix import functions as im
 
 
 def test_calculate_agreement_states(spark):
