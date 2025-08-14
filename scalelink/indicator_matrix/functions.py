@@ -182,9 +182,9 @@ def calculate_deltas(df, cutpoints, agreement_col_suffix, string_similarity_suff
         if cutpoints is None:
             df_with_deltas = df_with_deltas.withColumn(
                 "di_" + col_name + "_1",
-                F.when(
-                    not F.col(col_name + agreement_col_suffix), F.lit(True)
-                ).otherwise(F.lit(False)),
+                F.when(~F.col(col_name + agreement_col_suffix), F.lit(True)).otherwise(
+                    F.lit(False)
+                ),
             ).withColumn(
                 "di_" + col_name + "_2",
                 F.when(F.col(col_name + agreement_col_suffix), F.lit(True)).otherwise(
