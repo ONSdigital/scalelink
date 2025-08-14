@@ -18,9 +18,8 @@ Methods:
 
 import chispa as ch
 import pytest
-from pyspark.sql import types as T
-
 from indicator_matrix import functions as im
+from pyspark.sql import types as T
 
 
 def test_calculate_agreement_states(spark):
