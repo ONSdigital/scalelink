@@ -509,7 +509,7 @@ def test_make_bigrams(spark):
             (3, "TOM", ["T O", "O M"]),
             (4, "RITA", ["R I", "I T", "T A"]),
             (5, "BILAL", ["B I", "I L", "L A", "A L"]),
-            (6, "Q", ["Q #"]),
+            (6, "Q", None),
             (7, "", None),
             (8, None, None),
         ],

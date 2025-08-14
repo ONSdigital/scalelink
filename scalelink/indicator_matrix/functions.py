@@ -447,52 +447,36 @@ def make_bigrams(df, col):
         df_compared (Spark DataFrame):
             A dataframe consisting of df with an additional column containing a
             list of strings called 'col_bigrams', which contains the bigrams of
-            col.
-            Where the string in col was empty or Null, col_bigrams will be Null.
-            Where the string in col was of length 1, col_bigrams will be
-            calculated by appending a '#' onto the string to make it length 2.
+            col. Where the string in col was empty, Null or only contained a
+            single character, col_bigrams will be Null.
 
     Dependencies:
         The feature transformer NGram from pyspark.ml.feature.
-        col must not contain the character '#'.
     """
-    # Split df (Null or empty string in col breaks ngram.transform())
-    df_no_nulls = df.filter((F.col(col).isNotNull()) & (F.col(col) != ""))
-    df_nulls = df.filter((F.col(col).isNull()) | (F.col(col) == ""))
-
-    # Extend strings of length 1, to enable bigrams to be made from them
-    df_no_nulls = df_no_nulls.withColumn(
-        col,
-        F.when(F.length(F.col(col)) == 1, F.concat(F.col(col), F.lit("#"))).otherwise(
-            F.col(col)
-        ),
+    # Create a modified col without 0- or 1-character values
+    df_modified = df.withColumn(
+        col + "_mod",
+        F.when(F.length(F.col(col)) == 1, None)
+        .when(F.col(col) == "", None)
+        .otherwise(F.col(col)),
     )
+
+    # Split df (Null or empty string in col breaks ngram.transform())
+    df_no_nulls = df_modified.filter(F.col(col + "_mod").isNotNull())
+    df_nulls = df_modified.filter(F.col(col + "_mod").isNull())
 
     # Split columns
     df_no_nulls = df_no_nulls.withColumn(col + "_split", F.split(col, ""))
 
-    # Set up bigrams
+    # Set up and make bigrams
     ngram = NGram(n=2)
     ngram.setInputCol(col + "_split")
     ngram.setOutputCol(col + "_bigrams")
+    df_no_nulls = ngram.transform(df_no_nulls)
 
-    # Make bigrams
-    df_no_nulls = (
-        ngram.transform(df_no_nulls)
-        .withColumn(col + "_bigrams_length", (F.size((col + "_bigrams")) - 1))
-        .withColumn(
-            col + "_bigrams",
-            F.expr(
-                "slice(" + col + "_bigrams" + ", 1," + col + "_bigrams_length" + ")"
-            ),
-        )
-        .drop(col + "_split", col + "_bigrams_length")
-    )
-
-    # Remove # from strings that were length 1, reverting them back to length 1
-    df_no_nulls = df_no_nulls.withColumn(
-        col, F.regexp_replace(col, "^([0-9A-Za-z]{1})([#]{1})$", "$1")
-    )
+    # Drop helper columns
+    df_no_nulls = df_no_nulls.drop(col + "_mod", col + "_split")
+    df_nulls = df_nulls.drop(col + "_mod")
 
     # Join Nulls back on
     df_with_bigrams = df_no_nulls.unionByName(
