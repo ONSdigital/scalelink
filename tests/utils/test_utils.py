@@ -29,7 +29,7 @@ import os
 
 import pytest
 
-from scalelink.utils import functions as ut
+from scalelink.utils import utils as ut
 
 
 def test_define_binary_agreement_vars():
