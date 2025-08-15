@@ -2,15 +2,25 @@
 
 Methods:
   define_binary_agreement_vars
+  
   cartesian_join_dataframes - needs updating - reads/writes from HDFS
+  
   create_spark_session - test shell only, currently
+  
   define_K
+  
   define_kj
+  
   define_p
+  
   define_partial_agreement_vars
+  
   format_cutpoints
+  
   get_input_variables - test shell only, currently
+  
   get_s - needs updating - function updated but test not
+  
   read_configs
 """
 
