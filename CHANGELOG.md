@@ -9,7 +9,8 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Indicator matrix functions and unit tests.
+- Indicator matrix functions and their unit tests.
+- Utility functions and their unit tests.
 
 ### Changed
 
