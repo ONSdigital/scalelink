@@ -6,7 +6,7 @@ This implementation has been created in response to recommendation six of the [J
 
 The Data Linkage team within the Methodology and Quality Directorate of the Office for National Statistics (ONS) have authored this work. This team researches novel data linkage methods and applications to facilitate production of high-quality linked datasets for national statistics.
 
-`scalelink` is a Python and PySpark codebase built with Python 3.8-3.10 and Spark 2.4.0-3.2.3.
+`scalelink` is a Python and PySpark codebase built with Python 3.8-3.10 and Spark 3.5.1.
 
 ## Method
 
