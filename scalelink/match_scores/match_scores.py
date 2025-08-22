@@ -14,7 +14,7 @@ Methods:
     given as inputs a set of Scalelink deltas (agreement state values for ID 
     pairs), and a scaled vector x* (agreement state weights by matching 
     variable). Acts on the outputs of calculate_deltas, scale_x_star, and 
-    get_input_variables().
+    get_input_variables.
 
   get_match_scores:
     A method to produce a dataframe containing final Scalelink match scores and

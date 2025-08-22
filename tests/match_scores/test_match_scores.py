@@ -1,8 +1,3 @@
-import chispa as ch
-import pytest
-
-from scalelink.match_scores import match_scores as msf
-
 """Match score function unit tests.
 
 Methods:
@@ -12,6 +7,11 @@ Methods:
 
   test_get_match_scores - test shell only, currently
 """
+
+import chispa as ch
+import pytest
+
+from scalelink.match_scores import match_scores as msf
 
 def test_assign_match_score(spark):
   """
