@@ -85,9 +85,6 @@ def assign_weights(df_with_deltas, df1_id, df2_id, cutpoints, x_star_scaled, spa
         spark (PySpark SparkSession):
             Name of the Spark session being used.
 
-    Dependencies:
-        re
-
     Returns:
         df_with_weights (Spark DataFrame):
             A dataframe consisting of df1_id and df2_id from df_with_deltas with
@@ -175,11 +172,6 @@ def get_match_scores(df_deltas, x_star_scaled_labelled, input_variables, spark):
             This may be produced by the utils function get_input_variables().
         spark (PySpark SparkSession):
             Name of the Spark session being used.
-
-    Dependencies:
-        re
-        match_scores.assign_weights
-        match_scores.assign_match_score
 
     Returns:
         df_weights_match_scores (Spark DataFrame):

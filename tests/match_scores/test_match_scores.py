@@ -11,13 +11,13 @@ Methods:
 import chispa as ch
 import pytest
 
-from scalelink.match_scores import match_scores as msf
+from scalelink.match_scores import match_scores as ms
 
 
 def test_assign_match_score(spark):
     """
     Tests that assign_match_score() gives the correct output when provided with
-    suitable inputs.
+    appropriate inputs.
 
     Dependencies:
       chispa as ch
@@ -42,7 +42,7 @@ def test_assign_match_score(spark):
     )
 
     # Act
-    test_output = msf.assign_match_score(df_with_weights=test_input)
+    test_output = ms.assign_match_score(df_with_weights=test_input)
 
     # Assert
     ch.assert_df_equality(df1=test_output, df2=expected_output, ignore_row_order=True)
@@ -51,7 +51,7 @@ def test_assign_match_score(spark):
 def test_assign_weights(spark):
     """
     Tests that assign_weights() gives the correct output when provided with
-    suitable inputs.
+    appropriate inputs.
 
     Dependencies:
         chispa as ch
@@ -140,7 +140,7 @@ def test_assign_weights(spark):
     )
 
     # Act
-    test_output = msf.assign_weights(
+    test_output = ms.assign_weights(
         df_with_deltas=test_input_df,
         df1_id="id_df1",
         df2_id="id_df2",
