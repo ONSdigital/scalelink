@@ -19,7 +19,7 @@ Methods:
 
   get_input_variables - test shell only, currently
 
-  get_s - needs updating - function updated but test not
+  get_s
 
   read_configs
 """
@@ -250,39 +250,46 @@ def test_get_input_variables():
     pass
 
 
-@pytest.mark.skip(reason="needs updating")
 def test_get_s(spark):
     """
-    Tests that define_s() gives the gives the correct output when provided with
+    Tests that get_s() gives the gives the correct output when provided with
     appropriate inputs.
     """
-    pass
+    # Arrange
+    test_input_df = spark.createDataFrame(
+        [
+            (1, "GREGORY", "PARKIN", 1, None, "SAYED"),
+            (2, "ELIZABETH", "CARTER", 1, None, "SAYED"),
+            (3, "ALFONSO", None, 1, None, "SAYED"),
+            (1, "GREGORY", "PARKIN", 2, "AMICA", "MAGNUSSON"),
+            (2, "ELIZABETH", "CARTER", 2, "AMICA", "MAGNUSSON"),
+            (3, "ALFONSO", None, 2, "AMICA", "MAGNUSSON"),
+            (1, "GREGORY", "PARKIN", 3, "LIZ", "CARTER-JONES"),
+            (2, "ELIZABETH", "CARTER", 3, "LIZ", "CARTER-JONES"),
+            (3, "ALFONSO", None, 3, "LIZ", "CARTER-JONES"),
+        ],
+        ["id_df1", "fn_df1", "sn_df1", "id_df2", "fn_df2", "sn_df2"],
+    )
+    test_input_variables = {
+        "spark_session_size": "small",
+        "df1_path": "df1_path",
+        "df2_path": "df2_path",
+    }
 
+    expected_output = {
+        "spark_session_size": "small",
+        "df1_path": "df1_path",
+        "df2_path": "df2_path",
+        "s": 9,
+    }
 
-#  # Arrange
-#  test_input = spark.createDataFrame(
-#    [
-#      (1, 'GREGORY',   'PARKIN', 1,  None,   'SAYED'),
-#      (2, 'ELIZABETH', 'CARTER', 1,  None,   'SAYED'),
-#      (3, 'ALFONSO',    None,    1,  None,   'SAYED'),
-#      (1, 'GREGORY',   'PARKIN', 2, 'AMICA', 'MAGNUSSON'),
-#      (2, 'ELIZABETH', 'CARTER', 2, 'AMICA', 'MAGNUSSON'),
-#      (3, 'ALFONSO',    None,    2, 'AMICA', 'MAGNUSSON'),
-#      (1, 'GREGORY',   'PARKIN', 3, 'LIZ',   'CARTER-JONES'),
-#      (2, 'ELIZABETH', 'CARTER', 3, 'LIZ',   'CARTER-JONES'),
-#      (3, 'ALFONSO',    None,    3, 'LIZ',   'CARTER-JONES'),
-#    ],
-#    ['id_df1', 'fn_df1', 'sn_df1', 'id_df2', 'fn_df2', 'sn_df2']
-#  )
-#
-#  expected_output = 9
-#
-#  # Assert
-#  test_output = ut.define_s(df = test_input)
-#  define_s(input_variables, df_cartesian_join)
-#
-#  # Act
-#  assert test_output == expected_output
+    # Assert
+    test_output = ut.get_s(
+        input_variables=test_input_variables, df_cartesian_join=test_input_df
+    )
+
+    # Act
+    assert test_output == expected_output
 
 
 def test_read_configs():
