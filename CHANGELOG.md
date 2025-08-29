@@ -12,6 +12,7 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 - Indicator matrix functions and unit tests.
 - Utility functions and their unit tests.
 - Matrix A* functions and their unit tests.
+- Match score functions and their unit tests.
 
 ### Changed
 
