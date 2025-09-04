@@ -26,6 +26,7 @@ Methods:
 
 import configparser as cp
 import os
+from unittest.mock import Mock
 
 import chispa as ch
 import pytest
@@ -50,23 +51,13 @@ def test_define_binary_agreement_vars():
     assert test_output == expected_output
 
 
-def test_cartesian_join_dataframes(mocker, spark):
+def test_cartesian_join_dataframes(spark, spark_mock):
     """
     Tests that cartesian_join_dataframes() gives the gives the correct output
     when supplied with appropriate inputs.
-
-    Dependencies:
-        configparser as cp
-        subprocess
     """
     # Arrange
-    mocker.patch(
-        "spark.read.parquet",
-        side_effect=lambda path: {
-            "mock_df1_path": mock_df1,
-            "mock_df2_path": mock_df2,
-        }.get(path, pytest.raises(ValueError)),
-    )
+    mock_path = Mock()
 
     mock_df1 = spark.createDataFrame(
         [(1, "GREGORY", "PARKIN"), (2, "ELIZABETH", "CARTER"), (3, "ALFONSO", None)],
@@ -77,6 +68,11 @@ def test_cartesian_join_dataframes(mocker, spark):
         [(1, None, "SAYED"), (2, "AMICA", "MAGNUSSON"), (3, "LIZ", "CARTER-JONES")],
         ["id_df2", "fn_df2", "sn_df2"],
     )
+
+    spark_mock.read.parquet.side_effect = [
+        mock_df1,
+        mock_df2,
+    ]
 
     expected_output = spark.createDataFrame(
         [
@@ -95,7 +91,7 @@ def test_cartesian_join_dataframes(mocker, spark):
 
     # Act
     test_output = ut.cartesian_join_dataframes(
-        df1_path="mock_df1_path", df2_path="mock_df2_path", spark=spark
+        df1_path=mock_path, df2_path=mock_path, spark=spark_mock
     )
 
     # Assert
