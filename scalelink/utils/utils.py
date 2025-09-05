@@ -106,9 +106,9 @@ def cartesian_join_dataframes(df1_path, df2_path, spark):
             A dataframe containing the two input dataframes Cartesian joined
             together.
     """
-    cartesian_join_df = spark.read.parquet(df1_path).crossJoin(
-        other=spark.read.parquet(df2_path)
-    )
+    df1 = spark.read.parquet(df1_path)
+    df2 = spark.read.parquet(df2_path)
+    cartesian_join_df = df1.crossJoin(other=df2)
     return cartesian_join_df
 
 
