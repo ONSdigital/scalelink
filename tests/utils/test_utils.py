@@ -3,7 +3,7 @@
 Methods:
   define_binary_agreement_vars
 
-  cartesian_join_dataframes - needs updating - reads/writes from HDFS
+  cartesian_join_dataframes
 
   create_spark_session - test shell only, currently
 
