@@ -272,23 +272,23 @@ def test_get_s(spark):
     )
     test_input_variables = {
         "spark_session_size": "small",
-        "df1_path": "df1_path",
-        "df2_path": "df2_path",
+        "df1_path": "path_to_df_1",
+        "df2_path": "path_to_df_2",
     }
 
     expected_output = {
         "spark_session_size": "small",
-        "df1_path": "df1_path",
-        "df2_path": "df2_path",
+        "df1_path": "path_to_df_1",
+        "df2_path": "path_to_df_2",
         "s": 9,
     }
 
-    # Assert
+    # Act
     test_output = ut.get_s(
         input_variables=test_input_variables, df_cartesian_join=test_input_df
     )
 
-    # Act
+    # Assert
     assert test_output == expected_output
 
 
