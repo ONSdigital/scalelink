@@ -16,8 +16,9 @@ Methods:
   test_make_bigrams
 """
 
+from unittest.mock import patch
+
 import chispa as ch
-import pytest
 from pyspark.sql import types as T
 
 from scalelink.indicator_matrix import indicator_matrix as im
@@ -474,9 +475,57 @@ def test_compute_normalized_levenshtein(spark):
     )
 
 
-@pytest.mark.skip(reason="test shell")
-def test_get_deltas():
-    pass
+@patch("scalelink.indicator_matrix.indicator_matrix.calculate_deltas")
+@patch("scalelink.indicator_matrix.indicator_matrix.calculate_agreement_states")
+@patch("scalelink.indicator_matrix.indicator_matrix.calculate_sorensen_dice")
+def test_get_deltas(
+    mock_calculate_sorensen_dice,
+    mock_calculate_agreement_states,
+    mock_calculate_deltas,
+    spark,
+):
+    """
+    Tests that get_deltas give the correct output when supplied with appropriate inputs.
+
+    """
+    # Arrange
+    test_input_df = spark.createDataFrame(
+        [
+            (1, 1, "SARAH", "SAARAH"),
+            (1, 2, "ALEESHA", "ALEESHA"),
+            (2, 1, "TOM", "GRACE"),
+            (None, 1, "RITA", "RITER"),
+            (2, None, "BILAL", "BILLALL"),
+            (None, None, "Q", "HUI"),
+            (1, 1, None, "YUSUF"),
+        ],
+        [
+            "sex_df1",
+            "sex_df2",
+            "forename_df1",
+            "forename_df2",
+        ],
+    )
+    test_input_dict = {
+        "df1_suffix": "_df1",
+        "df2_suffix": "_df2",
+        "binary_agreement_vars": ["sex"],
+        "partial_agreement_vars": ["forename"],
+        "cutpoints": {"sex": None, "forename": [0.5, 0.8]},
+    }
+
+    # Act
+    _ = im.get_deltas(df_cartesian_join=test_input_df, input_variables=test_input_dict)
+
+    # Assert
+    mock_calculate_sorensen_dice.assert_called_once_with(
+        df=test_input_df,
+        col1="forename_df1",
+        col2="forename_df2",
+        new_col="forename_sorensen_dice",
+        decimal_places=4,
+    )
+    # mock_calculate_agreement_states.assert_called_once_with(Mock(), )
 
 
 def test_make_bigrams(spark):
