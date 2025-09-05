@@ -13,6 +13,7 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 - Utility functions and their unit tests.
 - Matrix A* functions and their unit tests.
 - Match score functions and their unit tests.
+- Unit test for `cartesian_join_dataframes` in `tests/utils/utils.py`.
 
 ### Changed
 
