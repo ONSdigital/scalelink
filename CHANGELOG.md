@@ -20,6 +20,7 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 - GitHub Action that increments release version, fixing typos.
 - Dependabot updates including:
   - In GitHub Actions, bump actions/checkout from v4 to v5.
+  - In GitHub Actions, bump actions/setup-python from v5 to v6.
 
 ### Deprecated
 
