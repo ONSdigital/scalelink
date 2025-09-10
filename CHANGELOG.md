@@ -9,8 +9,15 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Indicator matrix functions and unit tests.
+- Utility functions and their unit tests.
+- Matrix A* functions and their unit tests.
+- Match score functions and their unit tests.
+- Unit test for `cartesian_join_dataframes` in `tests/utils/utils.py`.
+
 ### Changed
 
+- GitHub Action that increments release version, fixing typos.
 - Dependabot updates including:
   - In GitHub Actions, bump actions/checkout from v4 to v5.
 
