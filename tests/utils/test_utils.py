@@ -3,7 +3,7 @@
 Methods:
   define_binary_agreement_vars
 
-  cartesian_join_dataframes - needs updating - reads/writes from HDFS
+  cartesian_join_dataframes
 
   create_spark_session - test shell only, currently
 
@@ -26,7 +26,9 @@ Methods:
 
 import configparser as cp
 import os
+from unittest.mock import Mock
 
+import chispa as ch
 import pytest
 
 from scalelink.utils import utils as ut
@@ -49,77 +51,51 @@ def test_define_binary_agreement_vars():
     assert test_output == expected_output
 
 
-@pytest.mark.skip(reason="needs updating")
-def test_cartesian_join_dataframes(spark, hdfs_test_path):
+def test_cartesian_join_dataframes(spark, spark_mock):
     """
     Tests that cartesian_join_dataframes() gives the gives the correct output
     when supplied with appropriate inputs.
-
-    Dependencies:
-        configparser as cp
-        subprocess
     """
-    pass
+    # Arrange
+    mock_path = Mock()
 
+    mock_df1 = spark.createDataFrame(
+        [(1, "GREGORY", "PARKIN"), (2, "ELIZABETH", "CARTER"), (3, "ALFONSO", None)],
+        ["id_df1", "fn_df1", "sn_df1"],
+    )
 
-#  # Arrange
-#  test_input_df1 = spark.createDataFrame(
-#    [
-#      (1, 'GREGORY',   'PARKIN'),
-#      (2, 'ELIZABETH', 'CARTER'),
-#      (3, 'ALFONSO',    None)
-#    ],
-#    ['id_df1', 'fn_df1', 'sn_df1']
-#  )
-#
-#  test_input_df1.coalesce(1).write.mode('overwrite')\
-#  .parquet(hdfs_test_path + 'df1')
-#
-#  test_input_df2 = spark.createDataFrame(
-#    [
-#      (1,  None,   'SAYED'),
-#      (2, 'AMICA', 'MAGNUSSON'),
-#      (3, 'LIZ',   'CARTER-JONES')
-#    ],
-#    ['id_df2', 'fn_df2', 'sn_df2']
-#  )
-#
-#  test_input_df2.coalesce(1).write.mode('overwrite')\
-#  .parquet(hdfs_test_path + 'df2')
-#
-#  expected_output = spark.createDataFrame(
-#    [
-#      (1, 'GREGORY',   'PARKIN', 1,  None,   'SAYED'),
-#      (2, 'ELIZABETH', 'CARTER', 1,  None,   'SAYED'),
-#      (3, 'ALFONSO',    None,    1,  None,   'SAYED'),
-#      (1, 'GREGORY',   'PARKIN', 2, 'AMICA', 'MAGNUSSON'),
-#      (2, 'ELIZABETH', 'CARTER', 2, 'AMICA', 'MAGNUSSON'),
-#      (3, 'ALFONSO',    None,    2, 'AMICA', 'MAGNUSSON'),
-#      (1, 'GREGORY',   'PARKIN', 3, 'LIZ',   'CARTER-JONES'),
-#      (2, 'ELIZABETH', 'CARTER', 3, 'LIZ',   'CARTER-JONES'),
-#      (3, 'ALFONSO',    None,    3, 'LIZ',   'CARTER-JONES'),
-#    ],
-#    ['id_df1', 'fn_df1', 'sn_df1', 'id_df2', 'fn_df2', 'sn_df2']
-#  )
-#
-#  # Act
-#  test_output = ut.cartesian_join_dataframes(
-#    df1_path = hdfs_test_path + 'df1',
-#    df2_path = hdfs_test_path + 'df2',
-#    spark = spark
-#  )
-#
-#  # Assert
-#  ch.assert_df_equality(
-#    df1 = test_output,
-#    df2 = expected_output,
-#    ignore_row_order = True
-#  )
-#
-#  # Cleanup
-#  for i in ['df1', 'df2']:
-#    cmd = f'hdfs dfs -rm -r -skipTrash {hdfs_test_path + i}'
-#    p = subprocess.run(cmd, shell = True)
+    mock_df2 = spark.createDataFrame(
+        [(1, None, "SAYED"), (2, "AMICA", "MAGNUSSON"), (3, "LIZ", "CARTER-JONES")],
+        ["id_df2", "fn_df2", "sn_df2"],
+    )
+
+    spark_mock.read.parquet.side_effect = [
+        mock_df1,
+        mock_df2,
+    ]
+
+    expected_output = spark.createDataFrame(
+        [
+            (1, "GREGORY", "PARKIN", 1, None, "SAYED"),
+            (2, "ELIZABETH", "CARTER", 1, None, "SAYED"),
+            (3, "ALFONSO", None, 1, None, "SAYED"),
+            (1, "GREGORY", "PARKIN", 2, "AMICA", "MAGNUSSON"),
+            (2, "ELIZABETH", "CARTER", 2, "AMICA", "MAGNUSSON"),
+            (3, "ALFONSO", None, 2, "AMICA", "MAGNUSSON"),
+            (1, "GREGORY", "PARKIN", 3, "LIZ", "CARTER-JONES"),
+            (2, "ELIZABETH", "CARTER", 3, "LIZ", "CARTER-JONES"),
+            (3, "ALFONSO", None, 3, "LIZ", "CARTER-JONES"),
+        ],
+        ["id_df1", "fn_df1", "sn_df1", "id_df2", "fn_df2", "sn_df2"],
+    )
+
+    # Act
+    test_output = ut.cartesian_join_dataframes(
+        df1_path=mock_path, df2_path=mock_path, spark=spark_mock
+    )
+
+    # Assert
+    ch.assert_df_equality(df1=test_output, df2=expected_output, ignore_row_order=True)
 
 
 @pytest.mark.skip(reason="test shell")
