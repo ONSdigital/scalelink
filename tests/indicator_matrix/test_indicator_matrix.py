@@ -11,19 +11,22 @@ Methods:
 
   test_compute_normalised_levenshtein
 
-  test_get_deltas - test shell only, currently
+  test_get_deltas
 
   test_make_bigrams
 """
 
+from unittest.mock import patch
+
 import chispa as ch
-import pytest
 from pyspark.sql import types as T
 
 from scalelink.indicator_matrix import indicator_matrix as im
 
 
-def test_calculate_agreement_states(spark):
+def test_calculate_agreement_states(
+    spark, sorensen_dice_output_df, agreement_states_output_df
+):
     """
     Tests that calculate_agreement_states gives the correct output when provided
     with appropriate inputs.
@@ -32,88 +35,13 @@ def test_calculate_agreement_states(spark):
       chispa as ch
     """
     # Arrange
-    test_input = spark.createDataFrame(
-        [
-            (12, 12, 2000, "EC1A1BB", 12, 12, 2000, "EC1A1BB"),
-            (9, 3, 1971, "W1A0AX", 9, 3, 1971, "EC1A1BB"),
-            (27, 6, 1959, "M11AE", 12, 12, 2000, "EC1A1BB"),
-            (None, 10, 1996, "B338TH", None, 10, 1996, "B338TH"),
-            (13, None, 1947, "CR26XH", None, 10, 1947, "B338TH"),
-            (21, 8, None, "DN551PT", 9, 3, 1971, "W1A0AX"),
-            (1, 4, 1983, None, None, 4, 1983, None),
-            (None, None, None, None, 27, 6, 1959, "M11AE"),
-            (None, None, None, None, None, None, None, None),
-        ],
-        [
-            "dob_day_df1",
-            "dob_month_df1",
-            "dob_year_df1",
-            "postcode_df1",
-            "dob_day_df2",
-            "dob_month_df2",
-            "dob_year_df2",
-            "postcode_df2",
-        ],
-    )
-
-    expected_output = spark.createDataFrame(
-        [
-            (12, 12, 2000, "EC1A1BB", 12, 12, 2000, "EC1A1BB", True, True, True, True),
-            (9, 3, 1971, "W1A0AX", 9, 3, 1971, "EC1A1BB", True, True, True, False),
-            (27, 6, 1959, "M11AE", 12, 12, 2000, "EC1A1BB", False, False, False, False),
-            (
-                None,
-                10,
-                1996,
-                "B338TH",
-                None,
-                10,
-                1996,
-                "B338TH",
-                True,
-                True,
-                True,
-                True,
-            ),
-            (
-                13,
-                None,
-                1947,
-                "CR26XH",
-                None,
-                10,
-                1947,
-                "B338TH",
-                True,
-                True,
-                True,
-                False,
-            ),
-            (21, 8, None, "DN551PT", 9, 3, 1971, "W1A0AX", False, False, True, False),
-            (1, 4, 1983, None, None, 4, 1983, None, True, True, True, True),
-            (None, None, None, None, 27, 6, 1959, "M11AE", True, True, True, True),
-            (None, None, None, None, None, None, None, None, True, True, True, True),
-        ],
-        [
-            "dob_day_df1",
-            "dob_month_df1",
-            "dob_year_df1",
-            "postcode_df1",
-            "dob_day_df2",
-            "dob_month_df2",
-            "dob_year_df2",
-            "postcode_df2",
-            "dob_day_agr_state",
-            "dob_month_agr_state",
-            "dob_year_agr_state",
-            "postcode_agr_state",
-        ],
-    )
+    test_input = sorensen_dice_output_df
+    expected_output = agreement_states_output_df
 
     # Act
     test_output = im.calculate_agreement_states(
         df=test_input,
-        binary_agreement_cols=["dob_day", "dob_month", "dob_year", "postcode"],
+        binary_agreement_cols=["sex"],
         df_suffixes=["_df1", "_df2"],
     )
 
@@ -126,7 +54,9 @@ def test_calculate_agreement_states(spark):
     )
 
 
-def test_calculate_deltas(spark):
+def test_calculate_deltas(
+    spark, agreement_states_output_df, calculate_deltas_output_df
+):
     """
     Tests that calculate_deltas gives the correct output when provided with
     appropriate inputs.
@@ -135,74 +65,8 @@ def test_calculate_deltas(spark):
       chispa as ch
     """
     # Arrange
-    test_input = spark.createDataFrame(
-        [
-            (1, 1, "SARAH", "SAARAH", True, 0.8889),
-            (1, 2, "ALEESHA", "ALEESHA", False, 1.0000),
-            (2, 1, "TOM", "GRACE", False, 0.0000),
-            (None, 1, "RITA", "RITER", True, 0.5714),
-            (2, None, "BILAL", "BILLALL", True, 0.8000),
-            (None, None, "Q", "HUI", None, 0.0000),
-            (1, 1, None, "YUSUF", True, None),
-        ],
-        [
-            "sex_df1",
-            "sex_df2",
-            "forename_df1",
-            "forename_df2",
-            "sex_agr_state",
-            "forename_sorensen_dice",
-        ],
-    )
-
-    expected_output = spark.createDataFrame(
-        [
-            (1, 1, "SARAH", "SAARAH", True, 0.8889, False, True, False, False, True),
-            (
-                1,
-                2,
-                "ALEESHA",
-                "ALEESHA",
-                False,
-                1.0000,
-                True,
-                False,
-                False,
-                False,
-                True,
-            ),
-            (2, 1, "TOM", "GRACE", False, 0.0000, True, False, True, False, False),
-            (None, 1, "RITA", "RITER", True, 0.5714, False, True, False, True, False),
-            (
-                2,
-                None,
-                "BILAL",
-                "BILLALL",
-                True,
-                0.8000,
-                False,
-                True,
-                False,
-                False,
-                True,
-            ),
-            (None, None, "Q", "HUI", None, 0.0000, False, False, True, False, False),
-            (1, 1, None, "YUSUF", True, None, False, True, False, False, False),
-        ],
-        [
-            "sex_df1",
-            "sex_df2",
-            "forename_df1",
-            "forename_df2",
-            "sex_agr_state",
-            "forename_sorensen_dice",
-            "di_sex_1",
-            "di_sex_2",
-            "di_forename_1",
-            "di_forename_2",
-            "di_forename_3",
-        ],
-    )
+    test_input = agreement_states_output_df
+    expected_output = calculate_deltas_output_df
 
     # Act
     test_output = im.calculate_deltas(
@@ -221,7 +85,9 @@ def test_calculate_deltas(spark):
     )
 
 
-def test_calculate_sorensen_dice(spark):
+def test_calculate_sorensen_dice(
+    spark, sorensen_dice_input_df, sorensen_dice_output_df
+):
     """
     Tests that calculate_sorensen_dice gives the correct output when supplied
     with appropriate inputs.
@@ -230,40 +96,15 @@ def test_calculate_sorensen_dice(spark):
       chispa as ch
     """
     # Arrange
-    test_input = spark.createDataFrame(
-        [
-            ("SARAH", "SAARAH"),
-            ("ALEESHA", "ALEESHA"),
-            ("TOM", "GRACE"),
-            ("RITA", "RITER"),
-            ("BILAL", "BILLALL"),
-            ("Q", "HUI"),
-            ("", "YUSUF"),
-            (None, None),
-        ],
-        ["fn_df1", "fn_df2"],
-    )
-
-    expected_output = spark.createDataFrame(
-        [
-            ("SARAH", "SAARAH", 0.8889),
-            ("ALEESHA", "ALEESHA", 1.0000),
-            ("TOM", "GRACE", 0.0000),
-            ("RITA", "RITER", 0.5714),
-            ("BILAL", "BILLALL", 0.8000),
-            ("Q", "HUI", 0.0000),
-            ("", "YUSUF", 0.0000),
-            (None, None, 0.0000),
-        ],
-        ["fn_df1", "fn_df2", "fn_sorensen_dice"],
-    )
+    test_input = sorensen_dice_input_df
+    expected_output = sorensen_dice_output_df
 
     # Act
     test_output = im.calculate_sorensen_dice(
         df=test_input,
-        col1="fn_df1",
-        col2="fn_df2",
-        new_col="fn_sorensen_dice",
+        col1="forename_df1",
+        col2="forename_df2",
+        new_col="forename_sorensen_dice",
         decimal_places=4,
     )
 
@@ -474,9 +315,57 @@ def test_compute_normalized_levenshtein(spark):
     )
 
 
-@pytest.mark.skip(reason="test shell")
-def test_get_deltas():
-    pass
+@patch("scalelink.indicator_matrix.indicator_matrix.calculate_deltas")
+@patch("scalelink.indicator_matrix.indicator_matrix.calculate_agreement_states")
+@patch("scalelink.indicator_matrix.indicator_matrix.calculate_sorensen_dice")
+def test_get_deltas(
+    mock_calculate_sorensen_dice,
+    mock_calculate_agreement_states,
+    mock_calculate_deltas,
+    spark_mock,
+    sorensen_dice_input_df,
+    sorensen_dice_output_df,
+    agreement_states_output_df,
+):
+    """
+    Tests that get_deltas give the correct output when supplied with appropriate inputs.
+    """
+    # Arrange
+    test_input_df = sorensen_dice_input_df
+    test_input_dict = {
+        "df1_suffix": "_df1",
+        "df2_suffix": "_df2",
+        "binary_agreement_vars": ["sex"],
+        "partial_agreement_vars": ["forename"],
+        "cutpoints": {"sex": None, "forename": [0.5, 0.8]},
+    }
+
+    mock_calculate_sorensen_dice.return_value = sorensen_dice_output_df
+    mock_calculate_agreement_states.return_value = spark_mock.sql.DataFrame
+    spark_mock.sql.DataFrame.checkpoint.return_value = agreement_states_output_df
+
+    # Act
+    _ = im.get_deltas(df_cartesian_join=test_input_df, input_variables=test_input_dict)
+
+    # Assert
+    mock_calculate_sorensen_dice.assert_called_once_with(
+        df=test_input_df,
+        col1="forename_df1",
+        col2="forename_df2",
+        new_col="forename_sorensen_dice",
+        decimal_places=4,
+    )
+    mock_calculate_agreement_states.assert_called_once_with(
+        df=sorensen_dice_output_df,
+        binary_agreement_cols=test_input_dict["binary_agreement_vars"],
+        df_suffixes=[test_input_dict["df1_suffix"], test_input_dict["df2_suffix"]],
+    )
+    mock_calculate_deltas.assert_called_once_with(
+        df=agreement_states_output_df,
+        cutpoints=test_input_dict["cutpoints"],
+        agreement_col_suffix="_agr_state",
+        string_similarity_suffix="_sorensen_dice",
+    )
 
 
 def test_make_bigrams(spark):
