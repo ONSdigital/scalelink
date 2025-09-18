@@ -17,7 +17,7 @@ Methods:
 
   format_cutpoints
 
-  get_input_variables - test shell only, currently
+  get_input_variables
 
   get_s - needs updating - function updated but test not
 
@@ -224,6 +224,28 @@ def test_format_cutpoints():
 @pytest.mark.skip(reason="test shell")
 def test_get_input_variables():
     pass
+
+
+# @patch("scalelink.utils.utils.define_K")
+# @patch("scalelink.utils.utils.define_kj")
+# @patch("scalelink.utils.utils.define_p")
+# @patch("scalelink.utils.utils.define_partial_agreement_vars")
+# @patch("scalelink.utils.utils.define_binary_agreement_vars")
+# @patch("scalelink.utils.utils.format_cutpoints")
+# @patch("scalelink.utils.utils.read_configs")
+# def test_get_input_variables(read_configs, format_cutpoints, define_binary_agreement_vars,
+#                            define_partial_agreement_vars, define_p, define_kj, define_K):
+#    """
+#    Tests that get_input_variables() gives the correct output when provided with
+#    appropriate inputs.
+#    """
+#    # Arrange
+#    test_input = "folder/subfolder/config_file.yaml"
+#
+#    # Act
+#    _ = ut.get_input_variables(config_path = test_input)
+#
+#    # Assert
 
 
 @pytest.mark.skip(reason="needs updating")
