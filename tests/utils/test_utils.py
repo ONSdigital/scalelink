@@ -246,18 +246,9 @@ def test_get_s(spark):
         ],
         ["id_df1", "fn_df1", "sn_df1", "id_df2", "fn_df2", "sn_df2"],
     )
-    test_input_variables = {
-        "spark_session_size": "small",
-        "df1_path": "path_to_df_1",
-        "df2_path": "path_to_df_2",
-    }
+    test_input_variables = {}
 
-    expected_output = {
-        "spark_session_size": "small",
-        "df1_path": "path_to_df_1",
-        "df2_path": "path_to_df_2",
-        "s": 9,
-    }
+    expected_output = {"s": 9}
 
     # Act
     test_output = ut.get_s(
