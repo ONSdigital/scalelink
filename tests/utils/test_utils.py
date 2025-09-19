@@ -234,18 +234,18 @@ def test_get_input_variables():
 # @patch("scalelink.utils.utils.format_cutpoints")
 # @patch("scalelink.utils.utils.read_configs")
 # def test_get_input_variables(read_configs, format_cutpoints, define_binary_agreement_vars,
-#                            define_partial_agreement_vars, define_p, define_kj, define_K):
-#    """
-#    Tests that get_input_variables() gives the correct output when provided with
-#    appropriate inputs.
-#    """
-#    # Arrange
-#    test_input = "folder/subfolder/config_file.yaml"
+#                          define_partial_agreement_vars, define_p, define_kj, define_K):
+#  """
+#  Tests that get_input_variables() gives the correct output when provided with
+#  appropriate inputs.
+#  """
+#  # Arrange
+#  test_input = "folder/subfolder/config_file.yaml"
 #
-#    # Act
-#    _ = ut.get_input_variables(config_path = test_input)
+#  # Act
+#  _ = ut.get_input_variables(config_path = test_input)
 #
-#    # Assert
+#  # Assert
 
 
 @pytest.mark.skip(reason="needs updating")
@@ -299,12 +299,10 @@ def test_read_configs():
         config.write(configfile)
 
     # Act
-    test_output = ut.read_configs(
-        config_path=test_config_path, config_section="section_1"
-    )
+    test_output = ut.read_configs(config_path=test_config_path)
 
     # Assert
-    assert test_output["variables"] == "a, b, c, d"
+    assert test_output["section_1"]["variables"] == "a, b, c, d"
 
     # Cleanup
     os.remove("test_config.ini")
