@@ -272,8 +272,21 @@ def test_get_input_variables(
         "pc1_cutpoints": "0.9",
         "pc2_cutpoints": "0.9",
     }
+    test_input_formatted_linkage_vars = ["forename", "surname", "sex", "dob"]
+    test_input_formatted_cutpoints = {
+        "fn_cutpoints": [0.5, 0.8],
+        "mn_cutpoints": [0.5, 0.8],
+        "sn_cutpoints": [0.5, 0.8],
+        "dob_cutpoints": None,
+        "sex_cutpoints": None,
+        "pc1_cutpoints": [0.9],
+        "pc2_cutpoints": [0.9],
+    }
+    test_input_kj = {"fn": 3, "mn": 3, "sn": 3, "dob": 2, "sex": 2, "pc1": 2, "pc2": 2}
 
     mock_read_configs.return_value = test_input_config
+    mock_format_cutpoints.return_value = test_input_formatted_cutpoints
+    mock_define_kj.return_value = test_input_kj
 
     # Act
     _ = ut.get_input_variables(config_path=test_input_filepath)
@@ -281,14 +294,20 @@ def test_get_input_variables(
     # Assert
     mock_read_configs.assert_called_once_with(config_path=test_input_filepath)
     mock_format_cutpoints.assert_called_once_with(
-        linkage_vars=["forename", "surname", "sex", "dob"],
+        linkage_vars=test_input_formatted_linkage_vars,
         configs=test_input_config["cutpoints"],
     )
-    mock_define_binary_agreement_vars.assert_called_once()
-    mock_define_partial_agreement_vars.assert_called_once()
-    mock_define_p.assert_called_once()
-    mock_define_kj.assert_called_once()
-    mock_define_K.assert_called_once()
+    mock_define_binary_agreement_vars.assert_called_once_with(
+        cutpoints=test_input_formatted_cutpoints
+    )
+    mock_define_partial_agreement_vars.assert_called_once_with(
+        cutpoints=test_input_formatted_cutpoints
+    )
+    mock_define_p.assert_called_once_with(
+        linkage_vars=test_input_formatted_linkage_vars
+    )
+    mock_define_kj.assert_called_once_with(cutpoints=test_input_formatted_cutpoints)
+    mock_define_K.assert_called_once_with(kj=test_input_kj)
 
 
 @pytest.mark.skip(reason="needs updating")
