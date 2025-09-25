@@ -159,20 +159,20 @@ def create_spark_session(spark_session_name, spark_session_size):
     }
 
     if spark_session_size not in session_configs.keys():
-      raise ValueError(
-        f"{spark_session_size} is not a valid SparkSession, use one of [{", ".join(list(session_configs.keys()))}]
-      )
+        raise ValueError(
+            f"{spark_session_size} is not a valid SparkSession, use one of [{', '.join(list(session_configs.keys()))}]"
+        )
 
     session_config = session_configs[spark_session_size]
     spark_builder = (
-      SparkSession.builder.appName(spark_session_name)
-      .config("spark.shuffle.service.enabled", "true")
-      .config("spark.ui.showConsoleProgress", "false")
-      .enableHiveSupport()
+        SparkSession.builder.appName(spark_session_name)
+        .config("spark.shuffle.service.enabled", "true")
+        .config("spark.ui.showConsoleProgress", "false")
+        .enableHiveSupport()
     )
 
-    for k, v in session_size.items():
-      spark_builder.config(k, v)
+    for k, v in session_config.items():
+        spark_builder.config(k, v)
 
     spark = spark_builder.getOrCreate()
 
