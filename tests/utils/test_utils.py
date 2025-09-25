@@ -36,8 +36,8 @@ from scalelink.utils import utils as ut
 
 def test_define_binary_agreement_vars():
     """
-    Tests that define_binary_agreement_vars gives the gives the correct output
-    when supplied with appropriate inputs.
+    Tests that define_binary_agreement_vars gives the correct output when
+    supplied with appropriate inputs.
     """
     # Arrange
     test_input = {"fn": [0.4, 0.7, 0.9], "sn": [0.75, 0.9], "sex": None, "dob": None}
@@ -53,8 +53,8 @@ def test_define_binary_agreement_vars():
 
 def test_cartesian_join_dataframes(spark, spark_mock):
     """
-    Tests that cartesian_join_dataframes() gives the gives the correct output
-    when supplied with appropriate inputs.
+    Tests that cartesian_join_dataframes() gives the correct output when supplied
+    with appropriate inputs.
     """
     # Arrange
     mock_path = Mock()
@@ -105,8 +105,8 @@ def test_create_spark_session():
 
 def test_define_K():
     """
-    Tests that define_K() gives the gives the gives the correct output when
-    supplied with appropriate inputs.
+    Tests that define_K() gives the correct output when supplied with appropriate
+    inputs.
     """
     # Arrange
     test_input = {"fn": 2, "sn": 4, "sex": 2}
@@ -122,8 +122,8 @@ def test_define_K():
 
 def test_define_kj():
     """
-    Tests that define_kj() gives the gives the correct output when supplied with
-    appropriate inputs.
+    Tests that define_kj() gives the correct output when supplied with appropriate
+    inputs.
     """
     # Arrange
     test_input = {
@@ -143,8 +143,8 @@ def test_define_kj():
 
 def test_define_p():
     """
-    Tests that define_p() gives the gives the correct output when provided with
-    appropriate inputs.
+    Tests that define_p() gives the correct output when provided with appropriate
+    inputs.
     """
     # Arrange
     test_input_1 = ["fn", "sn", "sex"]
@@ -164,8 +164,8 @@ def test_define_p():
 
 def test_define_partial_agreement_vars():
     """
-    Tests that define_partial_agreement_vars() gives the gives the correct
-    output when provided with appropriate inputs.
+    Tests that define_partial_agreement_vars() gives the correct output when
+    provided with appropriate inputs.
     """
     # Arrange
     test_input = {"fn": [0.4, 0.7, 0.9], "sn": [0.75, 0.9], "sex": None, "dob": None}
@@ -181,8 +181,8 @@ def test_define_partial_agreement_vars():
 
 def test_format_cutpoints():
     """
-    Tests that format_cutpoints() gives the gives the correct output when
-    provided with appropriate inputs.
+    Tests that format_cutpoints() gives the correct output when provided with
+    appropriate inputs.
 
     Dependencies:
       configparser as cp
@@ -228,8 +228,8 @@ def test_get_input_variables():
 
 def test_get_s(spark):
     """
-    Tests that get_s() gives the gives the correct output when provided with
-    appropriate inputs.
+    Tests that get_s() gives the correct output when provided with appropriate
+    inputs.
     """
     # Arrange
     test_input_df = spark.createDataFrame(
