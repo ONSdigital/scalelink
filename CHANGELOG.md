@@ -13,8 +13,10 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 - Utility functions and their unit tests.
 - Matrix A* functions and their unit tests.
 - Match score functions and their unit tests.
-- New unit test for `get_deltas` in `tests/indicator_matrix/test_indicator_matrix.py`.
-- New unit test for `get_input_variables` in `tests/utils/utils.py`
+- New unit test for:
+  - `cartesian_join_dataframes` in `tests/utils/utils.py`.
+  - `get_input_variables` in `tests/utils/utils.py`.
+  - `get_deltas` in `tests/indicator_matrix/test_indicator_matrix.py`.
 
 ### Changed
 
@@ -28,6 +30,7 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 
 - GitHub Action that increments release version - fixed typos.
 - Unit test for `cartesian_join_dataframes` in `tests/utils/utils.py`.
+- Unit test for `get_s` in `tests/utils/utils.py`.
 
 ### Removed
 

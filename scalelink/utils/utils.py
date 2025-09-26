@@ -483,7 +483,7 @@ def get_s(input_variables, df_cartesian_join):
             A dictionary containing the other input variables required for
             the scaling algorithm. The keys are the name of the input variables
             and the values are the variables themselves. Produced by the utils
-            function get_inputs().
+            function get_input_variables().
         df_cartesian_join (Spark DataFrame):
             A Spark DataFrame consisting of the Cartesian join of the two
             dataframes to be linked.
