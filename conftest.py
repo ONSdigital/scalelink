@@ -14,12 +14,14 @@ def spark():
     """
     Sets up the Spark session by using a fixture decorator.
     """
-    return (
+    spark_session = (
         SparkSession.builder.appName("Unit testing")
         .config("spark.dynamicAllocation.enabled", "true")
         .config("spark.dynamicAllocation.maxExecutors", 30)
         .getOrCreate()
     )
+    yield spark_session
+    spark_session.stop()
 
 
 @pytest.fixture(scope="function")
