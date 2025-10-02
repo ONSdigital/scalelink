@@ -9,7 +9,7 @@ import pytest
 from pyspark.sql import SparkSession
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def spark():
     """
     Sets up the Spark session by using a fixture decorator.

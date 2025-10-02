@@ -132,12 +132,14 @@ def create_spark_session(spark_session_name, spark_session_size):
     session_configs = {
         "s": {
             "spark.executor.memory": "1g",
+            "spark.yarn.executor.memoryOverhead": "1g",
             "spark.executor.cores": 1,
             "spark.dynamicAllocation.maxExecutors": 3,
             "spark.sql.shuffle.partitions": 12,
         },
         "m": {
             "spark.executor.memory": "6g",
+            "spark.yarn.executor.memoryOverhead": "1g",
             "spark.executor.cores": 3,
             "spark.dynamicAllocation.maxExecutors": 3,
             "spark.sql.shuffle.partitions": 18,

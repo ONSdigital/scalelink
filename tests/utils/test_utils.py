@@ -5,8 +5,6 @@ Methods:
 
   cartesian_join_dataframes
 
-  create_spark_session - test shell only, currently
-
   define_K
 
   define_kj
@@ -98,11 +96,6 @@ def test_cartesian_join_dataframes(spark, spark_mock):
     ch.assert_df_equality(df1=test_output, df2=expected_output, ignore_row_order=True)
 
 
-@pytest.mark.skip(reason="test shell")
-def test_create_spark_session():
-    pass
-
-
 def test_define_K():
     """
     Tests that define_K() gives the correct output when supplied with appropriate
@@ -113,10 +106,10 @@ def test_define_K():
 
     expected_output = 8
 
-    # Assert
+    # Act
     test_output = ut.define_K(kj=test_input)
 
-    # Act
+    # Assert
     assert test_output == expected_output
 
 
