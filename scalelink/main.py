@@ -1,9 +1,11 @@
-import shutil
+"""
+Run script for Scalelink module.
+"""
 
-from scalelink.src.indicator_matrix import indicator_matrix as im
-from scalelink.src.match_scores import match_scores as ms
-from scalelink.src.matrix_a_star import matrix_a_star as ma
-from scalelink.src.utils import utils as ut
+from scalelink.indicator_matrix import indicator_matrix as im
+from scalelink.match_scores import match_scores as ms
+from scalelink.matrix_a_star import matrix_a_star as ma
+from scalelink.utils import utils as ut
 
 
 def run_scalelink(config_path="scalelink/configs.ini"):
@@ -14,8 +16,8 @@ def run_scalelink(config_path="scalelink/configs.ini"):
 
     Args:
         config_path (str):
-            The filepath for the config file. The default is the location of the
-            configs.ini file in this package. The contents should follow the
+            The filepath for the config file. The default is a file called
+            configs.ini in the head of this repo. The contents should follow the
             template found at scalelink/configs_template.ini in this repo.
 
     Dependencies:
@@ -93,13 +95,13 @@ def run_scalelink(config_path="scalelink/configs.ini"):
 
     print("Your linked dataset has been written to:", input_variables["output_path"])
 
-    shutil.rmtree(input_variables["checkpoint_path"])
-
-    print("Your checkpoint files have been tidied up")
-
-    return df_weights_match_scores
+    #    shutil.rmtree(input_variables["checkpoint_path"])
+    #
+    #    print("Your checkpoint files have been tidied up")
 
     spark.stop()
+
+    return df_weights_match_scores
 
 
 if __name__ == "__main__":
