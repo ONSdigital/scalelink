@@ -17,7 +17,7 @@ Methods:
 
   format_cutpoints
 
-  get_input_variables - test shell only, currently
+  get_input_variables
 
   get_s
 
@@ -26,7 +26,7 @@ Methods:
 
 import configparser as cp
 import os
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 import chispa as ch
 import pytest
@@ -221,9 +221,93 @@ def test_format_cutpoints():
     os.remove("test_config.ini")
 
 
-@pytest.mark.skip(reason="test shell")
-def test_get_input_variables():
-    pass
+@patch("scalelink.utils.utils.define_K")
+@patch("scalelink.utils.utils.define_kj")
+@patch("scalelink.utils.utils.define_p")
+@patch("scalelink.utils.utils.define_partial_agreement_vars")
+@patch("scalelink.utils.utils.define_binary_agreement_vars")
+@patch("scalelink.utils.utils.format_cutpoints")
+@patch("scalelink.utils.utils.read_configs")
+def test_get_input_variables(
+    mock_read_configs,
+    mock_format_cutpoints,
+    mock_define_binary_agreement_vars,
+    mock_define_partial_agreement_vars,
+    mock_define_p,
+    mock_define_kj,
+    mock_define_K,
+):
+    """
+    Tests that get_input_variables() gives the correct output when provided with
+    appropriate inputs.
+
+      Dependencies:
+        configparser installed as cp
+    """
+    # Arrange
+    test_input_filepath = "folder/subfolder/config_file.yaml"
+    test_input_config = cp.ConfigParser()
+    test_input_config["run_spec"] = {"spark_session_size": "m"}
+    test_input_config["filepaths"] = {
+        "df1_path": "folder/subfolder/df1",
+        "df2_path": "folder/subfolder/df2",
+        "df_candidates_path": "folder/subfolder/df_candidates",
+        "checkpoint_path": "folder/subfolder/checkpoints/",
+        "output_path": "folder/subfolder/output/",
+        "hdfs_test_path": "folder/subfolder/hdfs_tests/",
+    }
+    test_input_config["variables"] = {
+        "df1_id": "df1_id",
+        "df2_id": "df2_id",
+        "linkage_vars": "forename, surname, sex, dob",
+        "df1_suffix": "_df1",
+        "df2_suffix": "_df2",
+    }
+    test_input_config["cutpoints"] = {
+        "fn_cutpoints": "0.5, 0.8",
+        "mn_cutpoints": "0.5, 0.8",
+        "sn_cutpoints": "0.5, 0.8",
+        "dob_cutpoints": "None",
+        "sex_cutpoints": "None",
+        "pc1_cutpoints": "0.9",
+        "pc2_cutpoints": "0.9",
+    }
+    test_input_formatted_linkage_vars = ["forename", "surname", "sex", "dob"]
+    test_input_formatted_cutpoints = {
+        "fn_cutpoints": [0.5, 0.8],
+        "mn_cutpoints": [0.5, 0.8],
+        "sn_cutpoints": [0.5, 0.8],
+        "dob_cutpoints": None,
+        "sex_cutpoints": None,
+        "pc1_cutpoints": [0.9],
+        "pc2_cutpoints": [0.9],
+    }
+    test_input_kj = {"fn": 3, "mn": 3, "sn": 3, "dob": 2, "sex": 2, "pc1": 2, "pc2": 2}
+
+    mock_read_configs.return_value = test_input_config
+    mock_format_cutpoints.return_value = test_input_formatted_cutpoints
+    mock_define_kj.return_value = test_input_kj
+
+    # Act
+    _ = ut.get_input_variables(config_path=test_input_filepath)
+
+    # Assert
+    mock_read_configs.assert_called_once_with(config_path=test_input_filepath)
+    mock_format_cutpoints.assert_called_once_with(
+        linkage_vars=test_input_formatted_linkage_vars,
+        configs=test_input_config["cutpoints"],
+    )
+    mock_define_binary_agreement_vars.assert_called_once_with(
+        cutpoints=test_input_formatted_cutpoints
+    )
+    mock_define_partial_agreement_vars.assert_called_once_with(
+        cutpoints=test_input_formatted_cutpoints
+    )
+    mock_define_p.assert_called_once_with(
+        linkage_vars=test_input_formatted_linkage_vars
+    )
+    mock_define_kj.assert_called_once_with(cutpoints=test_input_formatted_cutpoints)
+    mock_define_K.assert_called_once_with(kj=test_input_kj)
 
 
 def test_get_s(spark):
@@ -275,12 +359,10 @@ def test_read_configs():
         config.write(configfile)
 
     # Act
-    test_output = ut.read_configs(
-        config_path=test_config_path, config_section="section_1"
-    )
+    test_output = ut.read_configs(config_path=test_config_path)
 
     # Assert
-    assert test_output["variables"] == "a, b, c, d"
+    assert test_output["section_1"]["variables"] == "a, b, c, d"
 
     # Cleanup
     os.remove("test_config.ini")
