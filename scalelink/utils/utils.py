@@ -371,13 +371,12 @@ def get_input_variables(config_path):
                     The total number of candidate pairs entering the scaling
                     algorithm.
     """
-    run_spec_configs = read_configs(config_path=config_path, config_section="run_spec")
+    configs = read_configs(config_path=config_path)
 
-    filepath_configs = read_configs(config_path=config_path, config_section="filepaths")
-
-    variable_configs = read_configs(config_path=config_path, config_section="variables")
-
-    cutpoint_configs = read_configs(config_path=config_path, config_section="cutpoints")
+    run_spec_configs = configs["run_spec"]
+    filepath_configs = configs["filepaths"]
+    variable_configs = configs["variables"]
+    cutpoint_configs = configs["cutpoints"]
 
     spark_session_size = run_spec_configs["spark_session_size"]
 
@@ -465,25 +464,21 @@ def get_s(input_variables, df_cartesian_join):
     return input_variables_with_s
 
 
-def read_configs(config_path, config_section):
+def read_configs(config_path):
     """
     Reads in configs.
 
     Args:
         config_path (str):
             The filepath for the config file.
-        config_section (str):
-            The name of the section of the config file that the configs are to be
-            read from.
 
     Returns:
         configs (configparser.SectionProxy):
-            The configs from the specified section of the config file.
+            The configs from the config file.
 
     Dependencies:
         configparser as cp
     """
     config = cp.ConfigParser()
     config.read(config_path)
-    configs = config[config_section]
-    return configs
+    return config
