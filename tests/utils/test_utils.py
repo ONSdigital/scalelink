@@ -27,7 +27,6 @@ import os
 from unittest.mock import Mock, patch
 
 import chispa as ch
-import pytest
 
 from scalelink.utils import utils as ut
 
