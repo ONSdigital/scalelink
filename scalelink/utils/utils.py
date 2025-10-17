@@ -361,19 +361,28 @@ def get_input_variables(config_path):
                 spark_session_size (str):
                     The specified Spark session size for this run. Can be 's',
                     'm', 'l' or 'xl'.
+                bucket_name (str):
+                    The name of the S3 bucket where the various filepaths can be
+                    found. Must not include the "s://" prefix.
+                ssl_file (str):
+                    The path, including file name and extension, for the SSL
+                    Certificate to be used by the Boto3 client.
                 df1_path (str):
-                    The filepath for df1.
+                    The filepath for df1, excluding the S3 bucket name.
                 df2_path (str):
-                    The filepath for df2.
+                    The filepath for df2, excluding the S3 bucket name.
                 df_candidates_path (str):
-                    The filepath for the dataset of candidate pairs, if a
-                    specific set of candidate pairs (e.g., from blocking) is to
-                    be used instead of getting candidate pairs by Cartesian join
-                    of df1 and df2.
+                    The filepath for the dataset of candidate pairs, excluding
+                    the S3 bucket name.
+                    Only use if a specific set of candidate pairs (e.g. from
+                    blocking) is to be used instead of getting candidate pairs
+                    by Cartesian join of df1 and df2.
                 checkpoint_path (str):
-                    The filepath where checkpoints will be written.
+                    The filepath where checkpoints will be written, excluding
+                    the S3 bucket name.
                 output_path (str):
-                    The filepath where the linked dataset will be written.
+                    The filepath where the linked dataset will be written,
+                    excluding the S3 bucket name.
                 df1_id (str):
                     The name of the ID variable in df1.
                 df2_id (str):
@@ -418,6 +427,10 @@ def get_input_variables(config_path):
 
     spark_session_size = run_spec_configs["spark_session_size"]
 
+    bucket_name = filepath_configs["bucket_name"]
+
+    ssl_file = filepath_configs["ssl_file"]
+
     df1_path = filepath_configs["df1_path"]
 
     df2_path = filepath_configs["df2_path"]
@@ -452,6 +465,8 @@ def get_input_variables(config_path):
 
     input_variables = {
         "spark_session_size": spark_session_size,
+        "bucket_name": bucket_name,
+        "ssl_file": ssl_file,
         "df1_path": df1_path,
         "df2_path": df2_path,
         "df_candidates_path": df_candidates_path,

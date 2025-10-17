@@ -1,6 +1,10 @@
 """
-Run script for Scalelink module.
+Run script for Scalelink.
 """
+
+import boto3
+import raz_client
+from rdsa_utils.cdp.helpers.s3_utils import delete_folder
 
 from scalelink.indicator_matrix import indicator_matrix as im
 from scalelink.match_scores import match_scores as ms
@@ -45,18 +49,28 @@ def run_scalelink(config_path="scalelink/configs.ini"):
 
     if input_variables["df_candidates_path"] == "":
         df_candidate_pairs = ut.cartesian_join_dataframes(
-            df1_path=input_variables["df1_path"],
-            df2_path=input_variables["df2_path"],
+            df1_path="s3a://"
+            + input_variables["bucket_name"]
+            + input_variables["df1_path"],
+            df2_path="s3a://"
+            + input_variables["bucket_name"]
+            + input_variables["df2_path"],
             spark=spark,
         )
     else:
-        df_candidate_pairs = spark.read.parquet(input_variables["df_candidates_path"])
+        df_candidate_pairs = spark.read.parquet(
+            "s3a://"
+            + input_variables["bucket_name"]
+            + input_variables["df_candidates_path"]
+        )
 
     input_variables = ut.get_s(
         input_variables=input_variables, df_cartesian_join=df_candidate_pairs
     )
 
-    spark.sparkContext.setCheckpointDir(input_variables["checkpoint_path"])
+    spark.sparkContext.setCheckpointDir(
+        "s3a://" + input_variables["bucket_name"] + input_variables["checkpoint_path"]
+    )
 
     df_deltas = im.get_deltas(
         df_cartesian_join=df_candidate_pairs, input_variables=input_variables
@@ -90,16 +104,18 @@ def run_scalelink(config_path="scalelink/configs.ini"):
     print("Match scores have been calculated")
 
     df_weights_match_scores.write.mode("overwrite").parquet(
-        input_variables["output_path"]
+        "s3a://" + input_variables["bucket_name"] + input_variables["output_path"]
     )
 
     print("Your linked dataset has been written to:", input_variables["output_path"])
 
-    #    shutil.rmtree(input_variables["checkpoint_path"])
-    #
-    #    print("Your checkpoint files have been tidied up")
+    client = boto3.client("s3")
+    raz_client.configure_ranger_raz(client, ssl_file=input_variables["ssl_file"])
+    delete_folder(
+        client, input_variables["bucket_name"], input_variables["checkpoint_path"]
+    )
 
-    spark.stop()
+    print("Your checkpoint files have been tidied up")
 
     return df_weights_match_scores
 
