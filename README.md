@@ -9,7 +9,10 @@ This implementation has been created in response to recommendation six of the [J
 
 This work is authored by the Data Linkage team within the Methodology and Quality Directorate (MQD) of the Office for National Statistics (ONS). This team researches novel data linkage methods and applications to facilitate production of high-quality linked datasets for national statistics.
 
-`scalelink` is a Python and PySpark codebase built with Python 3.8-3.10 and Spark 3.5.1.
+## Pre-requisites
+
+- Python 3.8-3.10
+- Spark 3.5.1
 
 ## Method
 
