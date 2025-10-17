@@ -7,7 +7,7 @@ An implementation of the probabilistic data linkage method **Scalelink**, descri
 
 This implementation has been created in response to recommendation six of the [Joined Up Data in Government: The Future of Data Linking Methods][guidance] cross-government review.
 
-The Data Linkage team within the Methodology and Quality Directorate of the Office for National Statistics (ONS) have authored this work. This team researches novel data linkage methods and applications to facilitate production of high-quality linked datasets for national statistics.
+This work is authored by the Data Linkage team within the Methodology and Quality Directorate (MQD) of the Office for National Statistics (ONS). This team researches novel data linkage methods and applications to facilitate production of high-quality linked datasets for national statistics.
 
 `scalelink` is a Python and PySpark codebase built with Python 3.8-3.10 and Spark 3.5.1.
 
@@ -16,6 +16,10 @@ The Data Linkage team within the Methodology and Quality Directorate of the Offi
 The Scalelink method is a novel probabilistic data linkage method. It uses a scaling algorithm based on correspondence analysis. A key potential advantage is that it utilises linkage variable dependence. In contrast, the current gold-standard probabilistic data linkage method, the Fellegi-Sunter algorithm, assumes that linkage variables are independent, an assumption which is violated to at least some extent in all linkage problems. For example, forenames are correlated with middle names, surnames, age, gender, home address, etc.
 
 The Scalelink method is **experimental**. This implementation is has been open-sourced to facilitate further research regarding the suitability of the Scalelink method for real-world data linkage, particularly on Big Data. The authors **do not** currently endorse using the Scalelink method to produce linked datasets for research, analysis or statistics.
+
+## Contact
+
+For questions, support or feedback about `scalelink`, please email [DataLinkage@ons.gov.uk](mailto:DataLinkage@ons.gov.uk).
 
 ## Acknowledgements
 
