@@ -31,6 +31,10 @@ The authors would like to acknowledge the following collaborators for their cont
  - Paul Smith (University of Southampton)
  - Zoe White (Office for National Statistics)
 
+## Dedication
+
+This project is dedicated to the memory of Harvey Goldstein (1939-2020).
+
 ## License
 
 Unless stated otherwise, the codebase is released under the [MIT License][mit]. This covers both the codebase and any sample code in the documentation.
