@@ -1,5 +1,6 @@
 """Matrix A* functions unit tests.
 
+
 Methods:
   calculate_b
 
@@ -25,6 +26,7 @@ Methods:
 
   solve_for_x_star
 """
+
 
 import numpy as np
 import pandas as pd
@@ -54,8 +56,30 @@ def test_calculate_njklm_values() -> None:
     """
     Tests that calculate_njklm_values() gives the correct output when provided with
     appropriate inputs.
-    """"
+    """
     # Arrange
+    columns = [
+            "col_1",
+            "col_2",
+            "col_3",
+            "col_4",
+            "col_5",
+            "col_6",
+            "col_7",
+            "col_8",
+            "col_9",
+            "col_10"]
+    
+    data=[
+            [1, 0, 1, 0, 1, 0, 0, 0, 1, 0],
+            [1, 0, 1, 0, 1, 0, 0, 0, 1, 0],
+            [1, 0, 1, 0, 1, 0, 0, 0, 1, 1]
+        ]
+    test_input =  pd.DataFrame(data, columns=columns)
+    
+    expected_output = pd.Series([3,0,3,0,3,0,0,0,3,1],index=columns)
+    
+    """
     test_input = pd.DataFrame(
         data=[
             [1, 0, 1, 0, 1, 0, 0, 0, 1, 0],
@@ -72,11 +96,11 @@ def test_calculate_njklm_values() -> None:
             "col_7",
             "col_8",
             "col_9",
-            "col_10"
+            "col_10",
         ],
     )
-    expected_output = pd.Series([3,0,3,0,3,0,0,0,3,1],index= columns)
-
+    expected_output = pd.Series([3,0,3,0,3,0,0,0,3,1],index=columns)
+   """
     # Act
     test_output = ma.calculate_njklm_values(df = test_input)
 
