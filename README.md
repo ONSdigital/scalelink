@@ -36,6 +36,10 @@ The authors would like to acknowledge the following collaborators for their cont
  - Josie Plachta (Office for National Statistics)
  - Rachel Shipsey (Office for National Statistics)
  - Paul Smith (University of Southampton)
+
+The authors would also like to acknowledge the following individuals for their support in making this code public:
+ - Dominic Bean (Office for National Statistics)
+ - Diego Lara de Andres (Office for National Statistics)
  - Zoe White (Office for National Statistics)
 
 ## Dedication
