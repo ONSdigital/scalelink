@@ -15,11 +15,11 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 - Match score functions and their unit tests.
 - Run script, `main.py`, with updates to work on Spark 3.5.1.
 - Configs template, with updates to reflect updated `main.py`.
-- New unit tests for:
-  - `cartesian_join_dataframes` in `tests/utils/utils.py`.
-  - `create_spark_session` in `tests/utils/test_utils_create_spark_session.py`.
-  - `get_input_variables` in `tests/utils/utils.py`.
-  - `get_deltas` in `tests/indicator_matrix/test_indicator_matrix.py`.
+- New unit tests:
+  - `test_cartesian_join_dataframes` in `tests/utils/utils.py`.
+  - `test_create_spark_session` in `tests/utils/test_utils_create_spark_session.py`.
+  - `test_get_input_variables` in `tests/utils/utils.py`.
+  - `test_get_deltas` in `tests/indicator_matrix/test_indicator_matrix.py`.
 
 ### Changed
 
@@ -29,14 +29,18 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 - Function `create_spark_session` in `scalelink/utils/utils.py`, to make it less verbose and make it work with Spark 3.5.1.
 - Code contribution guidelines, to clarify that we are only accepting contributions from ONSdigital users currently.
 - Dependabot config, so that version updates are targeted to `develop` not `main`.
+- Unit tests:
+  - `test_create_spark_session` in `tests/utils/test_utils_create_spark_session.py`.
+  - `test_get_input_variables` in `tests/utils/utils.py`.
 
 ### Deprecated
 
 ### Fixed
 
 - GitHub Action that increments release version - fixed typos.
-- Unit test for `cartesian_join_dataframes` in `tests/utils/utils.py`.
-- Unit test for `get_s` in `tests/utils/utils.py`.
+- Unit tests:
+  - `test_cartesian_join_dataframes` in `tests/utils/utils.py`.
+  - `test_get_s` in `tests/utils/utils.py`.
 
 ### Removed
 
