@@ -19,10 +19,6 @@ repos:
       - id: check-docstring-first
 
       - id: check-yaml
-        exclude: |
-          (?x)(
-            ^.github/
-          )
 
       - id: check-toml
 
