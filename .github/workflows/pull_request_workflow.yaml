@@ -10,6 +10,15 @@ on:
 jobs:
   # Enforces that only `develop` and hotfix branches can merge into `main`
   # Source: https://stackoverflow.com/questions/71120146/
+  install-libkrb5:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install libkrb5 for Kerberos on Linux
+        if: contains(matrix.os, 'ubuntu')
+        run: |
+          sudo apt install -y libkrb5-dev
+          pip install requests-kerberos
+  
   check_branch:
     runs-on: ubuntu-latest
     steps:
