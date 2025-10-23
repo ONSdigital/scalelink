@@ -8,16 +8,26 @@ repos:
             ^.github/
           )
         exclude_types: [markdown, yaml, toml]
+
       - id: end-of-file-fixer
         exclude: |
           (?x)(
             ^.github/
           )
         exclude_types: [markdown, yaml, toml]
+
       - id: check-docstring-first
+
       - id: check-yaml
+        exclude: |
+          (?x)(
+            ^.github/
+          )
+
       - id: check-toml
+
       - id: debug-statements
+
       - id: requirements-txt-fixer
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
