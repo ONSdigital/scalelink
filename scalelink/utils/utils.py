@@ -179,7 +179,7 @@ def create_spark_session(spark_session_name, spark_session_size):
                 "spark.sql.shuffle.partitions",
                 session_sizes[spark_session_size]["shuffle_partitions"],
             )
-            .config("spark.shuffle.service.enabled", "true")
+            .config("spark.shuffle.service.enabled", "false")
             .config("spark.ui.showConsoleProgress", "false")
             .enableHiveSupport()
             .getOrCreate()
@@ -209,7 +209,7 @@ def create_spark_session(spark_session_name, spark_session_size):
                 "spark.sql.shuffle.partitions",
                 session_sizes[spark_session_size]["shuffle_partitions"],
             )
-            .config("spark.shuffle.service.enabled", "true")
+            .config("spark.shuffle.service.enabled", "false")
             .config("spark.ui.showConsoleProgress", "false")
             .enableHiveSupport()
             .getOrCreate()
