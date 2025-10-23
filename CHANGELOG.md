@@ -20,6 +20,7 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
   - `test_create_spark_session` in `tests/utils/test_utils_create_spark_session.py`.
   - `test_get_input_variables` in `tests/utils/utils.py`.
   - `test_get_deltas` in `tests/indicator_matrix/test_indicator_matrix.py`.
+- Python 3.11 support.
 
 ### Changed
 
@@ -43,6 +44,8 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
   - `test_get_s` in `tests/utils/utils.py`.
 
 ### Removed
+
+- Python 3.8 support.
 
 ## [0.1.1] 2025-07-18
 
