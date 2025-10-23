@@ -50,10 +50,39 @@ def test_calculate_b() -> None:
     assert test_output == expected_output
 
 
-@pytest.mark.skip(reason="test shell")
 def test_calculate_njklm_values() -> None:
-    pass
+    """
+    Tests that calculate_njklm_values() gives the correct output when provided with
+    appropriate inputs.
+    """"
+    # Arrange
+    test_input = pd.DataFrame(
+        data=[
+            [1, 0, 1, 0, 1, 0, 0, 0, 1, 0],
+            [1, 0, 1, 0, 1, 0, 0, 0, 1, 0],
+            [1, 0, 1, 0, 1, 0, 0, 0, 1, 1]
+        ],
+        columns=[
+            "col_1",
+            "col_2",
+            "col_3",
+            "col_4",
+            "col_5",
+            "col_6",
+            "col_7",
+            "col_8",
+            "col_9",
+            "col_10"
+        ],
+    )
+    expected_output = pd.Series([3,0,3,0,3,0,0,0,3,1],index= columns)
 
+    # Act
+    test_output = ma.calculate_njklm_values(df = test_input)
+
+    # Assert
+    assert test_output == expected_output 
+    
 
 def test_calculate_q() -> None:
     """
