@@ -124,96 +124,59 @@ def create_spark_session(spark_session_name, spark_session_size):
             extra-large (xl).
 
     Dependencies:
-        pyspark
-        pyspark.sql
+        SparkSession from pyspark.sql
 
     Returns:
         A Spark session of the specified size.
     """
-    session_sizes = {
+    session_configs = {
         "s": {
-            "executor_memory": "1g",
-            "executor_cores": 1,
-            "max_executors": 3,
-            "shuffle_partitions": 12,
+            "spark.executor.memory": "1g",
+            "spark.yarn.executor.memoryOverhead": "1g",
+            "spark.executor.cores": 1,
+            "spark.dynamicAllocation.maxExecutors": 3,
+            "spark.sql.shuffle.partitions": 12,
         },
         "m": {
-            "executor_memory": "6g",
-            "executor_cores": 3,
-            "max_executors": 3,
-            "shuffle_partitions": 18,
+            "spark.executor.memory": "6g",
+            "spark.yarn.executor.memoryOverhead": "1g",
+            "spark.executor.cores": 3,
+            "spark.dynamicAllocation.maxExecutors": 3,
+            "spark.sql.shuffle.partitions": 18,
         },
         "l": {
-            "executor_memory": "10g",
-            "memory_overhead": "1g",
-            "executor_cores": 5,
-            "max_executors": 5,
-            "shuffle_partitions": 200,
+            "spark.executor.memory": "10g",
+            "spark.yarn.executor.memoryOverhead": "1g",
+            "spark.executor.cores": 5,
+            "spark.dynamicAllocation.maxExecutors": 5,
+            "spark.sql.shuffle.partitions": 200,
         },
         "xl": {
-            "executor_memory": "20g",
-            "memory_overhead": "2g",
-            "executor_cores": 5,
-            "max_executors": 12,
-            "shuffle_partitions": 240,
+            "spark.executor.memory": "20g",
+            "spark.yarn.executor.memoryOverhead": "2g",
+            "spark.executor.cores": 5,
+            "spark.dynamicAllocation.maxExecutors": 12,
+            "spark.sql.shuffle.partitions": 240,
         },
     }
 
-    if spark_session_size in ["s", "m"]:
-        spark = (
-            SparkSession.builder.appName(spark_session_name)
-            .config(
-                "spark.executor.memory",
-                session_sizes[spark_session_size]["executor_memory"],
-            )
-            .config(
-                "spark.executor.cores",
-                session_sizes[spark_session_size]["executor_cores"],
-            )
-            .config("spark.dynamicAllocation.enabled", "true")
-            .config(
-                "spark.dynamicAllocation.maxExecutors",
-                session_sizes[spark_session_size]["max_executors"],
-            )
-            .config(
-                "spark.sql.shuffle.partitions",
-                session_sizes[spark_session_size]["shuffle_partitions"],
-            )
-            .config("spark.shuffle.service.enabled", "false")
-            .config("spark.ui.showConsoleProgress", "false")
-            .enableHiveSupport()
-            .getOrCreate()
+    if spark_session_size not in session_configs.keys():
+        raise ValueError(
+            f"{spark_session_size} is not a valid SparkSession, use one of [{', '.join(list(session_configs.keys()))}]"
         )
 
-    if spark_session_size in ["l", "xl"]:
-        spark = (
-            SparkSession.builder.appName(spark_session_name)
-            .config(
-                "spark.executor.memory",
-                session_sizes[spark_session_size]["executor_memory"],
-            )
-            .config(
-                "spark.yarn.executor.memoryOverhead",
-                session_sizes[spark_session_size]["memory_overhead"],
-            )
-            .config(
-                "spark.executor.cores",
-                session_sizes[spark_session_size]["executor_cores"],
-            )
-            .config("spark.dynamicAllocation.enabled", "true")
-            .config(
-                "spark.dynamicAllocation.maxExecutors",
-                session_sizes[spark_session_size]["max_executors"],
-            )
-            .config(
-                "spark.sql.shuffle.partitions",
-                session_sizes[spark_session_size]["shuffle_partitions"],
-            )
-            .config("spark.shuffle.service.enabled", "false")
-            .config("spark.ui.showConsoleProgress", "false")
-            .enableHiveSupport()
-            .getOrCreate()
-        )
+    session_config = session_configs[spark_session_size]
+    spark_builder = (
+        SparkSession.builder.appName(spark_session_name)
+        .config("spark.shuffle.service.enabled", "false")
+        .config("spark.ui.showConsoleProgress", "false")
+        .enableHiveSupport()
+    )
+
+    for k, v in session_config.items():
+        spark_builder.config(k, v)
+
+    spark = spark_builder.getOrCreate()
 
     return spark
 
@@ -417,13 +380,12 @@ def get_input_variables(config_path):
                     The total number of candidate pairs entering the scaling
                     algorithm.
     """
-    run_spec_configs = read_configs(config_path=config_path, config_section="run_spec")
+    configs = read_configs(config_path=config_path)
 
-    filepath_configs = read_configs(config_path=config_path, config_section="filepaths")
-
-    variable_configs = read_configs(config_path=config_path, config_section="variables")
-
-    cutpoint_configs = read_configs(config_path=config_path, config_section="cutpoints")
+    run_spec_configs = configs["run_spec"]
+    filepath_configs = configs["filepaths"]
+    variable_configs = configs["variables"]
+    cutpoint_configs = configs["cutpoints"]
 
     spark_session_size = run_spec_configs["spark_session_size"]
 
@@ -517,25 +479,21 @@ def get_s(input_variables, df_cartesian_join):
     return input_variables_with_s
 
 
-def read_configs(config_path, config_section):
+def read_configs(config_path):
     """
     Reads in configs.
 
     Args:
         config_path (str):
             The filepath for the config file.
-        config_section (str):
-            The name of the section of the config file that the configs are to be
-            read from.
 
     Returns:
         configs (configparser.SectionProxy):
-            The configs from the specified section of the config file.
+            The configs from the config file.
 
     Dependencies:
         configparser as cp
     """
     config = cp.ConfigParser()
     config.read(config_path)
-    configs = config[config_section]
-    return configs
+    return config

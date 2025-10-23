@@ -13,17 +13,22 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 - Utility functions and their unit tests.
 - Matrix A* functions and their unit tests.
 - Match score functions and their unit tests.
-- Unit test for `cartesian_join_dataframes` in `tests/utils/utils.py`.
-- Unit test for `get_deltas` in `tests/indicator_matrix/test_indicator_matrix.py`.
 - Run script, `main.py`, with updates to work on Spark 3.5.1.
+- New unit tests for:
+  - `cartesian_join_dataframes` in `tests/utils/utils.py`.
+  - `create_spark_session` in `tests/utils/test_utils_create_spark_session.py`.
+  - `get_input_variables` in `tests/utils/utils.py`.
+  - `get_deltas` in `tests/indicator_matrix/test_indicator_matrix.py`.
 
 ### Changed
 
-- Dependabot updates including:
+- Dependabot updates:
   - In GitHub Actions, bump actions/checkout from v4 to v5.
   - In GitHub Actions, bump actions/setup-python from v5 to v6.
 - Configs template, to reflect updated `main.py`.
-- Updated `create_spark_session` in `scalelink/utils/utils.py` so it works with Spark 3.5.1.
+- Function `create_spark_session` in `scalelink/utils/utils.py`, to make it less verbose and make it work with Spark 3.5.1.
+- Code contribution guidelines, to clarify that we are only accepting contributions from ONSdigital users currently.
+- Dependabot config, so that version updates are targeted to `develop` not `main`.
 
 ### Deprecated
 

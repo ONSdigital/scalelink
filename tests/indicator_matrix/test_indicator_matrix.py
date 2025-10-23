@@ -328,7 +328,7 @@ def test_get_deltas(
     agreement_states_output_df,
 ):
     """
-    Tests that get_deltas give the correct output when supplied with appropriate inputs.
+    Tests that get_deltas gives the correct output when supplied with appropriate inputs.
     """
     # Arrange
     test_input_df = sorensen_dice_input_df
