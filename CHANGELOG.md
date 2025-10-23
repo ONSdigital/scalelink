@@ -23,6 +23,9 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
   - In GitHub Actions, bump actions/setup-python from v5 to v6.
 - Code contribution guidelines, to clarify that we are only accepting contributions from ONSdigital users currently.
 - Dependabot config, so that version updates are targeted to `develop` not `main`.
+- `README.md`:
+  - Added contact, dedication and icons for linter and formatter.
+  - Edited pre-requisites and acknowledgements.
 
 ### Deprecated
 
