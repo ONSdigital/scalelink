@@ -241,12 +241,13 @@ def test_get_input_variables(
     test_input_config = cp.ConfigParser()
     test_input_config["run_spec"] = {"spark_session_size": "m"}
     test_input_config["filepaths"] = {
+        "bucket_name": "my_bucket",
+        "ssl_file": "my_ssl_file",
         "df1_path": "folder/subfolder/df1",
         "df2_path": "folder/subfolder/df2",
         "df_candidates_path": "folder/subfolder/df_candidates",
         "checkpoint_path": "folder/subfolder/checkpoints/",
         "output_path": "folder/subfolder/output/",
-        "hdfs_test_path": "folder/subfolder/hdfs_tests/",
     }
     test_input_config["variables"] = {
         "df1_id": "df1_id",
