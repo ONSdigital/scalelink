@@ -24,6 +24,7 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 - GitHub Action that creates releases from tags.
 - Python 3.11 support.
 
+
 ### Changed
 
 - Dependabot updates including:
@@ -45,9 +46,8 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - GitHub Action that increments release version - fixed typos.
-- Unit tests:
-  - `test_cartesian_join_dataframes` in `tests/utils/utils.py`.
-  - `test_get_s` in `tests/utils/utils.py`.
+- Unit test for `cartesian_join_dataframes` in `tests/utils/utils.py`.
+- Unit test for `get_s` in `tests/utils/utils.py`.
 
 ### Removed
 
