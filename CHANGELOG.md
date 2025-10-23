@@ -15,12 +15,15 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 - Match score functions and their unit tests.
 - Unit test for `cartesian_join_dataframes` in `tests/utils/utils.py`.
 - Unit test for `get_deltas` in `tests/indicator_matrix/test_indicator_matrix.py`.
+- Run script, `main.py`, with updates to work on Spark 3.5.1.
 
 ### Changed
 
 - Dependabot updates including:
   - In GitHub Actions, bump actions/checkout from v4 to v5.
   - In GitHub Actions, bump actions/setup-python from v5 to v6.
+- Configs template, to reflect updated `main.py`.
+- Updated `create_spark_session` in `scalelink/utils/utils.py` so it works with Spark 3.5.1.
 
 ### Deprecated
 
