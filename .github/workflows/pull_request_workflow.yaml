@@ -58,7 +58,8 @@ jobs:
       
       - name: Install system dependencies
         # This prevents failure of raz_client to install due to dependency on krb5-config
-        run: sudo apt-get update && sudo apt-get install -y libkrb5-dev
+        run: |
+          sudo apt-get update && sudo apt-get install -y libkrb5-dev
 
       - name: Install dependencies
         run: |
