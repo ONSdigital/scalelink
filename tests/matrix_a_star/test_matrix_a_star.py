@@ -27,12 +27,16 @@ Methods:
   solve_for_x_star
 """
 
-
+import chispa as ch
 import numpy as np
 import pandas as pd
 import pytest
 
+from pyspark.sql import SparkSession, functions as F
+from pandas.testing import assert_frame_equal
+
 from scalelink.matrix_a_star import matrix_a_star as ma
+from scalelink.utils.utils import create_spark_session
 
 
 def test_calculate_b() -> None:
@@ -52,60 +56,41 @@ def test_calculate_b() -> None:
     assert test_output == expected_output
 
 
-def test_calculate_njklm_values() -> None:
+def test_calculate_njklm_values(spark):
+
     """
     Tests that calculate_njklm_values() gives the correct output when provided with
-    appropriate inputs.
-    """
-    # Arrange
-    columns = [
-            "col_1",
-            "col_2",
-            "col_3",
-            "col_4",
-            "col_5",
-            "col_6",
-            "col_7",
-            "col_8",
-            "col_9",
-            "col_10"]
+      appropriate inputs. 
+
+    """ 
+    test_input = spark.createDataFrame(
+    [
+        (1.0, 2.0, 1.0, 0.0),
+        (0.0, 1.0, 1.0, 0.0),
+        (0.0, 1.0, 1.0, 0.0),
+        (0.0, 1.0, 1.0, 0.0),
+    ],
+    ["col1", "col2", "col3", "col4"],
+      
+)
     
-    data=[
-            [1, 0, 1, 0, 1, 0, 0, 0, 1, 0],
-            [1, 0, 1, 0, 1, 0, 0, 0, 1, 0],
-            [1, 0, 1, 0, 1, 0, 0, 0, 1, 1]
-        ]
-    test_input =  pd.DataFrame(data, columns=columns)
-    
-    expected_output = pd.Series([3,0,3,0,3,0,0,0,3,1],index=columns)
-    
-    """
-    test_input = pd.DataFrame(
-        data=[
-            [1, 0, 1, 0, 1, 0, 0, 0, 1, 0],
-            [1, 0, 1, 0, 1, 0, 0, 0, 1, 0],
-            [1, 0, 1, 0, 1, 0, 0, 0, 1, 1]
-        ],
-        columns=[
-            "col_1",
-            "col_2",
-            "col_3",
-            "col_4",
-            "col_5",
-            "col_6",
-            "col_7",
-            "col_8",
-            "col_9",
-            "col_10",
-        ],
-    )
-    expected_output = pd.Series([3,0,3,0,3,0,0,0,3,1],index=columns)
-   """
+    expected_output = {
+      
+      "col1": 1.0,  
+      "col2": 5.0,
+      "col3": 4.0,
+      "col4": 0.0
+    }
+       
+
     # Act
-    test_output = ma.calculate_njklm_values(df = test_input)
+    actual_output = ma.calculate_njklm_values(test_input)
+    
+    test_output =actual_output.iloc[0].to_dict() 
 
     # Assert
-    assert test_output == expected_output 
+    assert test_output ==  expected_output
+>>>>>>> 888ad39 (feat: test added to cal_njklm f'n)
     
 
 def test_calculate_q() -> None:
