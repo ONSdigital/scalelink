@@ -214,7 +214,7 @@ graph TD
     Dev3[Raise pull request to merge develop branch into main branch]
     Dev4[Trigger automated checks via GitHub Actions]
     Dev5[Review pull request]
-    Dev6{Dev branch: approve pull request?}
+    Dev6{Develop branch: approve pull request?}
     Dev7[Merge pull request]
     
     Deploy1[Trigger automated deployment via GitHub Actions]
@@ -232,10 +232,10 @@ graph TD
     Hotfix7{Hotfix branch: approve pull request?}
     Hotfix8[Update package version - semver patch update]
     Hotfix9[Merge pull request]
-    
+
     Start1 --> Feat1
     Start2 --> Hotfix1
-    
+
     Feat1 --> Feat2
     Feat2 --> Feat3
     Feat3 -- No --> Feat2
@@ -244,9 +244,9 @@ graph TD
     Feat5 --> Feat6
     Feat6 --> Feat7
     Feat7 -- No --> Feat2
-    Feat7 -- Yes --> Feat8    
+    Feat7 -- Yes ---> Feat8
     Feat8 --> Dev1
-    
+
     Dev1 -- No --> Start1
     Dev1 -- Yes --> Dev2
     Dev2 --> Dev3
@@ -254,7 +254,7 @@ graph TD
     Dev4 --> Dev5
     Dev5 --> Dev6
     Dev6 -- No --> Start1
-    Dev6 -- Yes ---> Dev7    
+    Dev6 -- Yes ---> Dev7
     Dev7 --> Deploy1
     
     Deploy1 --> Deploy2
@@ -266,14 +266,14 @@ graph TD
     Hotfix1 --> Hotfix2
     Hotfix2 --> Hotfix3
     Hotfix3 -- No --> Hotfix2
-    Hotfix3 -- Yes ---> Hotfix4
+    Hotfix3 -- Yes --> Hotfix4
     Hotfix4 --> Hotfix5
     Hotfix5 --> Hotfix6
     Hotfix6 --> Hotfix7
     Hotfix7 -- No --> Hotfix2
     Hotfix7 -- Yes --> Hotfix8
     Hotfix8 --> Hotfix9
-    Hotfix9 --> Deploy1
+    Hotfix9 ----------> Deploy1
 ```
 
 [branches]: https://conventional-branch.github.io/
