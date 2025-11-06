@@ -66,44 +66,64 @@ Our repository has two permanent branches:
 ### Overview
 
 [GitHub Actions][github-actions] are triggered on pull request from any branch, including feature branches. This CI/CD pipeline
-ensures code does not enter the `develop` or `main` branches unless it has had certain checks. The repository is set up so
-that pull requests cannot be merged if these GitHub Actions fail.
+ensures code does not enter the `develop` or `main` branches unless it has had certain checks.
 
-### Steps in the pull request pipeline
+### Pull request workflow steps
 
 1. **Trigger:**
-   - The pipeline is triggered when a `merge` is detected.
+   - When a `merge` is detected.
 
-2. **Branch check:**
-   - Checks that the pull request is only into `main` if coming from `develop` or a branch whose name starts with `hotfix`.
+2. **Check branch:**
+   - Check the base branch for the pull request.
+   - If the base branch is `main`, check if the branch is `develop` or has a name starting with `hotfix`.
 
-3. **Changelog check:**
-   - The changelog is checked for updates.
+3. **Check changelog:**
+   - Check that `CHANGELOG.md` has been updated.
 
-4. **Pre-commit hooks:**
-   - All pre-commit hooks are run.
+4. **Pre-commit:**
+   - Run all pre-commit hooks.
 
-5. **Unit tests:**
-   - All unit tests are run.
+5. **Test:**
+   - Run all unit tests on all versions of Python supported by the repo.
 
 ## Deployment process using GitHub Actions
 
 ### Overview
 
 The deployment process is automated using [GitHub Actions][github-actions]. This CI/CD pipeline is triggered upon merging
-changes into the `main` branch.
+changes into the `main` branch. It is separated into two workflows: one for incrementing the version tag in GitHub and the other
+for deploying to PyPI.
 
-### Steps in the deployment pipeline
+### Increment version workflow steps
 
 1. **Trigger:**
-   - The pipeline is triggered when a `merge` into `main` is detected.
+   - When a `push` to `main` is detected.
 
-2. **Increment version:**
-   - The version of the package is incremented.
-   - The new version tag is pushed.
-   - A new GitHub release is made that refers to the new version tag.
+2. **Extract repo version:**
+   - Extract the version of the repo from the location specified in `setup.py`.
+
+3. **Bump version and push tag:**
+   - Bump the repository version by pushing a new tag.
   
-Further deployment steps will be added in due course.
+### Deploy PyPI workflow steps
+
+1. **Trigger:**
+   - When a `push` to `main` is detected.
+
+2. **Build and verify package:**
+   - Use `uv` via `hynek/build-and-inspect-python-package` to:
+         - Build the package.
+         - Upload the built wheel and the source distribution as GitHub Actions artifacts.
+         - Lint the wheel contents using `check-wheel-contents`.
+         - Lint the PyPI README using `Twine` and upload it as a GitHub Actions artifact.
+         - Print the tree of both SDist and `wheel`, allowing manual checking of the content list.
+         - Print and upload the packaging metadata as a GitHub Actions artifact.
+
+3. **Download built package:**
+   - Download the built package from GitHub Actions artifacts to `dist`.
+
+4. **Upload package to PyPI:**
+   - Upload the package from `dist` to PyPI.
 
 ## Merging develop to main: A guide for maintainers
 
@@ -149,7 +169,7 @@ As `scalelink` maintainers, ensuring a seamless transition from `develop` to `ma
 - **Merge to main:**
   - With all preparations complete and changes reviewed, proceed to merge the `develop` branch into the `main` branch.
   - This action can be done through the GitHub UI by completing the pull request initiated in the Preparation section of this guide.
-  - Merging to `main` automatically triggers the GitHub Actions workflow for deployment. **Note: this currently only includes creating a GitHub Release with the new version tag.**
+  - Merging to `main` automatically triggers the GitHub Actions workflow for deployment.
 
 ### Synchronising develop branch post-merge
 
@@ -176,37 +196,64 @@ Below is a visual representation of our Git workflow, illustrating the process f
 
 ```mermaid
 graph TD
-    A([Start feature development])
+    A([Start or continue feature development or bugfix])
     B[Create feature branch from develop branch]
-    C{Feature complete and tested?}
-    D[Raise pull request to merge feature branch into develop branch]
-    E[Trigger automated checks via GitHub Actions]
-    F[Review and approve pull request]
-    G{Develop branch: Ready for release?}
-    H[Update package version -- semver]
-    I[Raise pull request to merge develop branch into main branch]
-    J[Trigger automated checks via GitHub Actions]
-    K[Review and approve pull request]
-    L[Trigger automated deployment via GitHub Actions]
-    M[Create GitHub Release with version tag]
-    N[Update develop branch with main]
-
+    C[Develop feature or bugfix in feature branch]
+    D{Feature branch: complete and tested?}
+    E[Raise pull request to merge feature branch into develop branch]
+    F[Trigger automated checks via GitHub Actions]
+    G[Review and approve pull request]
+    H{Develop branch: Ready for release?}
+    I[Update package version - major or minor update]
+    J[Raise pull request to merge develop branch into main branch]
+    K[Trigger automated checks via GitHub Actions]
+    L[Review and approve pull request]
+    M[Trigger automated deployment via GitHub Actions]
+    N[Create GitHub Release with version tag]
+    O[Update develop branch with main]
+    P[Build and test scalelink package]
+    Q[Publish to PyPI]
+    
+    R([Start or continue hotfix])
+    S[Create hotfix branch from main branch]
+    T[Develop hotfix in hotfix branch]
+    U{Hotfix branch: complete and tested?}
+    V[Update package version - patch update]
+    W[Raise pull request to merge hotfix branch into main branch]
+    X[Trigger automated checks via GitHub Actions]
+    Y[Review and approve pull request]
+    Z{Hotfix branch: Ready for release?}
+    
     A --> B
     B --> C
-    C -- No --> B
-    C -- Yes --> D
-    D --> E
+    C --> D
+    D -- No --> C
+    D -- Yes --> E
     E --> F
     F --> G
-    G -- No --> A
-    G -- Yes --> H
-    H --> I
+    G --> H
+    H -- No --> A
+    H -- Yes --> I
     I --> J
     J --> K
     K --> L
     L --> M
     M --> N
-    N --> A
+    N --> O
+    O --> P
+    P --> A
+    
+    R --> S
+    S --> T
+    T --> U
+    U -- No --> T
+    U -- Yes --> V
+    V --> W
+    W --> X
+    X --> Y
+    Y --> Z
+    Z -- No --> T
+    Z -- Yes --> M
 ```
 
 [commits]: https://www.markdownguide.org/basic-syntax/#links
