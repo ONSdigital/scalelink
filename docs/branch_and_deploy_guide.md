@@ -66,7 +66,7 @@ Our repository has two permanent branches:
 
 ### Overview
 
-[GitHub Actions][github-actions] are triggered on merging to any branch. This CI/CD pipeline ensures code does not enter
+Certain [GitHub Actions][github-actions] are triggered on merging to any branch. This CI/CD pipeline ensures code does not enter
 any parent branches unless it has had certain checks.
 
 ### Pull request workflow steps
@@ -255,7 +255,7 @@ graph TD
     X --> Y
     Y --> Z
     Z -- No --> T
-    Z -- Yes ----------> M
+    Z -- Yes --> M
 ```
 
 [branches]: https://conventional-branch.github.io/
