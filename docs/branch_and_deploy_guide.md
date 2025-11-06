@@ -197,65 +197,82 @@ Below is a visual representation of our Git workflow, illustrating the process f
 
 ```mermaid
 graph TD
-    A([Start or continue feature development or bugfix])
-    B[Create feature branch from develop branch]
-    C[Develop feature or bugfix in feature branch]
-    D{Feature branch: complete and tested?}
-    E[Raise pull request to merge feature branch into develop branch]
-    F[Trigger automated checks via GitHub Actions]
-    G[Review and approve pull request]
-    H{Develop branch: Ready for release?}
-    I[Update package version - major or minor update]
-    J[Raise pull request to merge develop branch into main branch]
-    K[Trigger automated checks via GitHub Actions]
-    L[Review and approve pull request]
-    M[Trigger automated deployment via GitHub Actions]
-    N[Create GitHub Release with version tag]
-    O[Update develop branch with main]
-    P[Build and test scalelink package]
-    Q[Publish to PyPI]
+    Start1([Start or continue feature development or bugfix])
+    Start2([Start or continue hotfix])
     
-    R([Start or continue hotfix])
-    S[Create hotfix branch from main branch]
-    T[Develop hotfix in hotfix branch]
-    U{Hotfix branch: complete and tested?}
-    V[Update package version - patch update]
-    W[Raise pull request to merge hotfix branch into main branch]
-    X[Trigger automated checks via GitHub Actions]
-    Y[Review and approve pull request]
-    Z{Hotfix branch: Ready for release?}
+    Feat1[Create feature branch from develop branch]
+    Feat2[Develop feature or bugfix in feature branch]
+    Feat3{Feature branch: complete and tested?}
+    Feat4[Raise pull request to merge feature branch into develop branch]
+    Feat5[Trigger automated checks via GitHub Actions]
+    Feat6[Review pull request]
+    Feat7{Feature branch: approve pull request?}
+    Feat8[Merge pull request]
     
-    A --> B
-    B --> C
-    C --> D
-    D -- No --> C
-    D -- Yes --> E
-    E --> F
-    F --> G
-    G --> H
-    H -- No --> A
-    H -- Yes --> I
-    I --> J
-    J --> K
-    K --> L
-    L --> M
-    M --> N
-    N --> O
-    O --> P
-    P --> Q
-    Q ------------> A
+    Dev1{Develop branch: Ready for release?}
+    Dev2[Update package version - semver major or minor update]
+    Dev3[Raise pull request to merge develop branch into main branch]
+    Dev4[Trigger automated checks via GitHub Actions]
+    Dev5[Review pull request]
+    Dev6{Dev branch: approve pull request?}
+    Dev7[Merge pull request]
     
-    R --> S
-    S --> T
-    T --> U
-    U -- No --> T
-    U -- Yes --> V
-    V --> W
-    W --> X
-    X --> Y
-    Y --> Z
-    Z -- No --> T
-    Z -- Yes --> M
+    Deploy1[Trigger automated deployment via GitHub Actions]
+    Deploy2[Create GitHub Release with version tag]
+    Deploy3[Update develop branch with main]
+    Deploy4[Build and test scalelink package]
+    Deploy5[Publish to PyPI]
+    
+    Hotfix1[Create hotfix branch from main branch]
+    Hotfix2[Develop hotfix in hotfix branch]
+    Hotfix3{Hotfix branch: complete and tested?}
+    Hotfix4[Raise pull request to merge hotfix branch into main branch]
+    Hotfix5[Trigger automated checks via GitHub Actions]
+    Hotfix6[Review pull request]
+    Hotfix7{Hotfix branch: approve pull request?}
+    Hotfix8[Update package version - semver patch update]
+    Hotfix9[Merge pull request]
+    
+    Start1 --> Feat1
+    
+    Feat1 --> Feat2
+    Feat2 --> Feat3
+    Feat3 -- No --> Feat2
+    Feat3 -- Yes --> Feat4
+    Feat4 --> Feat5
+    Feat5 --> Feat6
+    Feat6 --> Feat7
+    Feat7 -- No --> Feat2
+    Feat7 -- Yes --> Feat8    
+    Feat8 --> Dev1
+    
+    Dev1 -- No --> Start1
+    Dev1 -- Yes --> Dev2
+    Dev2 --> Dev3
+    Dev3 --> Dev4
+    Dev4 --> Dev5
+    Dev5 --> Dev6
+    Dev6 -- No --> Start1
+    Dev6 -- Yes --> Dev7    
+    Dev7 --> Deploy1
+    
+    Deploy1 --> Deploy2
+    Deploy2 --> Deploy3
+    Deploy3 --> Deploy4
+    Deploy4 --> Deploy5
+    Deploy5 ------------> Start1
+    
+    Hotfix1 --> Hotfix2
+    Hotfix2 --> Hotfix3
+    Hotfix3 -- No --> Hotfix2
+    Hotfix3 -- Yes --> Hotfix4
+    Hotfix4 --> Hotfix5
+    Hotfix5 --> Hotfix6
+    Hotfix6 --> Hotfix7
+    Hotfix7 -- No --> Hotfix2
+    Hotfix7 -- Yes --> Hotfix8
+    Hotfix8 --> Hotfix9
+    Hotfix9 --> Deploy1
 ```
 
 [branches]: https://conventional-branch.github.io/
