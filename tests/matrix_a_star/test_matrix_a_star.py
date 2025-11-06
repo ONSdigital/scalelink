@@ -80,13 +80,13 @@ def test_calculate_njklm_values(spark):
       "col2": 5.0,
       "col3": 4.0,
       "col4": 0.0
-    }
+    }  # Use .toPandas() instead 
        
 
     # Act
     actual_output = ma.calculate_njklm_values(test_input)
     
-    test_output =actual_output.iloc[0].to_dict() 
+    test_output =actual_output.iloc[0].to_dict() # remove to_dic()
 
     # Assert
     assert test_output ==  expected_output
