@@ -24,11 +24,12 @@ Our repository has two permanent branches:
 1. **Feature branches:**
   - All new features and bugfixes are developed in separate branches created from the `develop` branch.
   - Any hotfixes are developed in separate branches created from the `main` branch.
-  - Branch naming conventions:
-    - `docs/<documentation-description>` - for updates to documentation only.
+  - [Conventional branch][branches] naming conventions:
     - `feat/<feature-description>` - feature branches, for introducing new features.
     - `fix/<bug-description>` - bugfixes, for resolving bugs.
     - `hotfix/<issue-description>` - hotfixes, for urgent fixes that go straight to production.
+    - `release/<release-number>` - for preparing a release.
+    - `chore/<chore-description>` - for non-code tasks, e.g. dependency or documentation updates.
   - [Conventional commit][commits] messages, including the following types:
     - `build` - for changes that affect the build system or external dependencies.
     - `ci` - for changes to CI configuration files and scripts, e.g. GitHub Actions, Dependabot.
@@ -65,8 +66,8 @@ Our repository has two permanent branches:
 
 ### Overview
 
-[GitHub Actions][github-actions] are triggered on pull request from any branch, including feature branches. This CI/CD pipeline
-ensures code does not enter the `develop` or `main` branches unless it has had certain checks.
+[GitHub Actions][github-actions] are triggered on merging to any branch. This CI/CD pipeline ensures code does not enter
+any parent branches unless it has had certain checks.
 
 ### Pull request workflow steps
 
@@ -90,7 +91,7 @@ ensures code does not enter the `develop` or `main` branches unless it has had c
 
 ### Overview
 
-The deployment process is automated using [GitHub Actions][github-actions]. This CI/CD pipeline is triggered upon merging
+The deployment process is automated using [GitHub Actions][github-actions]. This CI/CD pipeline is triggered upon pushing
 changes into the `main` branch. It is separated into two workflows: one for incrementing the version tag in GitHub and the other
 for deploying to PyPI.
 
@@ -112,12 +113,12 @@ for deploying to PyPI.
 
 2. **Build and verify package:**
    - Use `uv` via `hynek/build-and-inspect-python-package` to:
-         - Build the package.
-         - Upload the built wheel and the source distribution as GitHub Actions artifacts.
-         - Lint the wheel contents using `check-wheel-contents`.
-         - Lint the PyPI README using `Twine` and upload it as a GitHub Actions artifact.
-         - Print the tree of both SDist and `wheel`, allowing manual checking of the content list.
-         - Print and upload the packaging metadata as a GitHub Actions artifact.
+      - Build the package.
+      - Upload the built wheel and the source distribution as GitHub Actions artifacts.
+      - Lint the wheel contents using `check-wheel-contents`.
+      - Lint the PyPI README using `Twine` and upload it as a GitHub Actions artifact.
+      - Print the tree of both SDist and `wheel`, allowing manual checking of the content list.
+      - Print and upload the packaging metadata as a GitHub Actions artifact.
 
 3. **Download built package:**
    - Download the built package from GitHub Actions artifacts to `dist`.
@@ -241,7 +242,8 @@ graph TD
     M --> N
     N --> O
     O --> P
-    P --> A
+    P --> Q
+    Q ------------> A
     
     R --> S
     S --> T
@@ -253,9 +255,10 @@ graph TD
     X --> Y
     Y --> Z
     Z -- No --> T
-    Z -- Yes --> M
+    Z -- Yes ----------> M
 ```
 
+[branches]: https://conventional-branch.github.io/
 [commits]: https://www.markdownguide.org/basic-syntax/#links
 [sem-ver]: https://semver.org/
 [github-actions]: https://github.com/features/actions
