@@ -9,6 +9,8 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- GitHub Action that creates releases from tags.
+
 ### Changed
 
 ### Deprecated
@@ -21,12 +23,11 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Config for bump2version: `.bumpversion.cfg`
-- GitHub Action that creates releases from tags.
+- Config for bump2version: `.bumpversion.cfg`.
 
 ### Changed
 
-- GitHub workflow that increments tag version, fixing typo.
+- GitHub Action that increments release version, fixing typo.
 
 ### Deprecated
 
