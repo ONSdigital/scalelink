@@ -13,20 +13,18 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 - Utility functions and their unit tests.
 - Matrix A* functions and their unit tests.
 - Match score functions and their unit tests.
-- New unit tests:
-  - `test_cartesian_join_dataframes` in `tests/utils/utils.py`.
-  - `test_create_spark_session` in `tests/utils/test_utils_create_spark_session.py`.
-  - `test_get_input_variables` in `tests/utils/utils.py`.
-  - `test_get_deltas` in `tests/indicator_matrix/test_indicator_matrix.py`.
-  - `test_get_match_scores` in `tests/match_scores/test_match_scores.py`.
-  - `test_get_matrix_a_star` in `tests/matrix_a_star/test_matrix_a_star.py`.
-  - `test_calculate_njklm_values` in `tests/matrix_a_star/test_matrix_a_star.py`.
-  - `test_get_scaled_labelled_x_star` in `tests/matrix_a_star/test_matrix_a_star.py`.
+- New unit tests in:
+  - `tests/indicator_matrix/test_indicator_matrix.py`: `test_get_deltas`.
+  - `tests/match_scores/test_match_scores.py`: `test_get_match_scores`.
+  - `tests/matrix_a_star/test_matrix_a_star.py`: `test_get_matrix_a_star`, `test_calculate_njklm_values`, `test_get_scaled_labelled_x_star`.
+  - `tests/utils/test_utils.py`: `test_cartesian_join_dataframes`, `test_get_input_variables`.
+  - `tests/utils/test_utils_create_spark_session.py`: `test_create_spark_session`.
 - Run script, `main.py`, with updates to work on Spark 3.5.1.
 - Configs template, with updates to reflect updated `main.py`.
 - GitHub Action that creates releases from tags.
 - Python 3.11 support.
 - Type hints for all functions.
+- GitHub Action workflow to deploy repo as package in PyPI.
 
 ### Changed
 
