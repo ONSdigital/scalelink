@@ -6,15 +6,16 @@ on:
       - main
 
 jobs:
-  deploy:
+  # Increments repo version and pushes tag
+  increment-version:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
 
-      - name: Extract package version
-        id: package_version
+      - name: Extract repo version
+        id: repo_version
         run: |
-          echo "PACKAGE_VERSION=$(python setup.py --version)" >> $GITHUB_ENV
+          echo "PACKAGE_VERSION=$python setup.py --version)" >> $GITHUB_ENV
 
       - name: Bump version and push tag
         id: tag_version
