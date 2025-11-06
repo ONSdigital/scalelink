@@ -234,6 +234,7 @@ graph TD
     Hotfix9[Merge pull request]
     
     Start1 --> Feat1
+    Start2 --> Hotfix1
     
     Feat1 --> Feat2
     Feat2 --> Feat3
@@ -253,7 +254,7 @@ graph TD
     Dev4 --> Dev5
     Dev5 --> Dev6
     Dev6 -- No --> Start1
-    Dev6 -- Yes --> Dev7    
+    Dev6 -- Yes ---> Dev7    
     Dev7 --> Deploy1
     
     Deploy1 --> Deploy2
@@ -265,7 +266,7 @@ graph TD
     Hotfix1 --> Hotfix2
     Hotfix2 --> Hotfix3
     Hotfix3 -- No --> Hotfix2
-    Hotfix3 -- Yes --> Hotfix4
+    Hotfix3 -- Yes ---> Hotfix4
     Hotfix4 --> Hotfix5
     Hotfix5 --> Hotfix6
     Hotfix6 --> Hotfix7
