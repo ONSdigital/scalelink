@@ -56,6 +56,7 @@ def test_calculate_njklm_values(spark):
     Tests that calculate_njklm_values() gives the correct output when provided with
     appropriate inputs.
     """
+    # Arrange
     test_input = spark.createDataFrame(
         [
             (1.0, 2.0, 1.0, 0.0),
@@ -121,11 +122,24 @@ def test_get_matrix_a_star() -> None:
     pass
 
 
-def test_label_x_star() -> None:
+def test_get_scaled_labelled_x_star():
+    """
+    Tests that makes get_scaled_labelled_x_star returns the correct output
+    with appropriate inputs
+    """
+    # Arrange
+
+    # Act
+
+    # Assert
+
+
+def test_label_x_star():
     """
     Tests that label_x_star() gives the correct output when provided with
     appropriate inputs.
     """
+
     # Arrange
     test_input_x_star = [
         0.01,
