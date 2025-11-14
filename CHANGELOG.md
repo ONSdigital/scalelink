@@ -27,6 +27,9 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 - Function `create_spark_session` in `scalelink/utils/utils.py`, to make it less verbose.
 - Code contribution guidelines, to clarify that we are only accepting contributions from ONSdigital users currently.
 - Dependabot config, so that version updates are targeted to `develop` not `main`.
+- `README.md`:
+  - Added contact, dedication and icons for linter and formatter.
+  - Edited pre-requisites and acknowledgements.
 
 ### Deprecated
 
