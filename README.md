@@ -18,7 +18,7 @@ This work is authored by the Data Linkage team within the Methodology and Qualit
 
 The Scalelink method is a novel probabilistic data linkage method. It uses a scaling algorithm based on correspondence analysis. A key potential advantage is that it utilises linkage variable dependence. In contrast, the current gold-standard probabilistic data linkage method, the Fellegi-Sunter algorithm, assumes that linkage variables are independent, an assumption which is violated to at least some extent in all linkage problems. For example, forenames are correlated with middle names, surnames, age, gender, home address, etc.
 
-The Scalelink method is **experimental**. This implementation is has been open-sourced to facilitate further research regarding the suitability of the Scalelink method for real-world data linkage, particularly on Big Data. The authors **do not** currently endorse using the Scalelink method to produce linked datasets for research, analysis or statistics.
+The Scalelink method is **experimental**. This implementation has been open-sourced to facilitate further research regarding the suitability of the Scalelink method for real-world data linkage, particularly on Big Data. The authors **do not** currently endorse using the Scalelink method to produce linked datasets for research, analysis or statistics.
 
 ## Contact
 
