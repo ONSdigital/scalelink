@@ -122,18 +122,6 @@ def test_get_matrix_a_star() -> None:
     pass
 
 
-def test_get_scaled_labelled_x_star():
-    """
-    Tests that makes get_scaled_labelled_x_star returns the correct output
-    with appropriate inputs
-    """
-    # Arrange
-
-    # Act
-
-    # Assert
-
-
 def test_label_x_star():
     """
     Tests that label_x_star() gives the correct output when provided with
