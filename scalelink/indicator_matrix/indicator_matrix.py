@@ -55,21 +55,26 @@ my_indicator_matrix = im.compare_deltas(
 )
 """
 
+from typing import Any, Dict, List
+
+import spark
 from pyspark.ml.feature import NGram
 from pyspark.sql import functions as F
 
 
-def calculate_agreement_states(df, binary_agreement_cols, df_suffixes):
+def calculate_agreement_states(
+    df: spark.sql.DataFrame, binary_agreement_cols: List[str], df_suffixes: List[str]
+) -> spark.sql.DataFrame:
     """
     Takes a dataframe made by Cartesian join of two datasets to be linked and
         calculates the agreement state for each of the variables with binary
         agreement state in the dataframe.
 
     Args:
-        df (Spark DataFrame):
+        df:
             The dataframe containing the data for which agreement states will be
             calculated.
-        binary_agreement_cols (list of str):
+        binary_agreement_cols:
             A list containing the names of the pairs of columns containing the
             linkage variables with binary agreement state. These columns must
             follow the naming rules outlined in the dependencies.
@@ -90,7 +95,7 @@ def calculate_agreement_states(df, binary_agreement_cols, df_suffixes):
             will erroneously be assigned the agreement state True.
 
     Returns:
-        df_agreement (Spark DataFrame):
+        df_agreement:
             A dataframe consisting of df, plus an additional Boolean column for
             each pair of columns in binary_agreement_cols. The Boolean column
             contains the agreement state for the corresponding pair of linkage
@@ -110,7 +115,12 @@ def calculate_agreement_states(df, binary_agreement_cols, df_suffixes):
     return df_agreement
 
 
-def calculate_deltas(df, cutpoints, agreement_col_suffix, string_similarity_suffix):
+def calculate_deltas(
+    df: spark.sql.DataFrame,
+    cutpoints: Dict[str, List[float] | None],
+    agreement_col_suffix: str,
+    string_similarity_suffix: str,
+) -> spark.sql.DataFrame:
     """
     Takes a dataframe made by Cartesian join of two datasets to be linked that
         has had the agreement state for each variable with binary agreement state
@@ -119,23 +129,23 @@ def calculate_deltas(df, cutpoints, agreement_col_suffix, string_similarity_suff
         their agreement state is binary or not.
 
     Args:
-        df (Spark DataFrame):
+        df:
             The dataframe containing the IDs, linkage variables and agreement
             states for  from which the
             deltas will be calculated.
-        cutpoints (dict of str: list of float):
+        cutpoints:
             A dictionary with keys consisting of the linkage variable names and
             values consisting of lists containing the string comparison cutpoints
             for those variables. This should include both variables with binary
             agreement state (for which the key should be Null) and variables with
             partial agreement states (for which the key should be a list of
             float).
-        agreement_col_suffix (str):
+        agreement_col_suffix:
             The suffix that identifies agreement state columns. E.g., if the
             columns 'forename_df1' and 'forename_df2' were compared and their
             binary agreement state was stored in the column 'forename_agr_state',
             the agreement_col_suffix would be '_agr_state'.
-        string_similarity_suffix (str):
+        string_similarity_suffix:
             The suffix that identifies columns containing string similarity
             metrics, e.g., Levenshtein edit distance, Sorensen-Dice coefficient.
             E.g., if the columns 'forename_df1' and 'forename_df2' were compared
@@ -160,7 +170,7 @@ def calculate_deltas(df, cutpoints, agreement_col_suffix, string_similarity_suff
             the Scalelink method.
 
     Returns:
-        df_with_deltas (Spark DataFrame):
+        df_with_deltas:
             A dataframe consisting of df with one additional column per Scalelink
             delta. The number of additional columns corresponds to the Scalelink
             variable K. Each delta column will be a Boolean column and will have
@@ -217,28 +227,30 @@ def calculate_deltas(df, cutpoints, agreement_col_suffix, string_similarity_suff
     return df_with_deltas
 
 
-def calculate_sorensen_dice(df, col1, col2, new_col, decimal_places):
+def calculate_sorensen_dice(
+    df: spark.sql.DataFrame, col1: str, col2: str, new_col: str, decimal_places: int
+) -> spark.sql.DataFrame:
     """
     Takes two string columns, calculates the Sorensen-Dice coefficient for them
     and returns it in in a new column.
 
     Args:
-        df (Spark DataFrame):
+        df:
             The dataframe containing the two columns that the Sorensen-Dice
             coefficent will be calculated for.
-        col1 (str):
+        col1:
             The name of the first string column to be compared.
-        col2 (str):
+        col2:
             The name of the second string column to be compared.
-        new_col (str):
+        new_col:
             The name to be given to the column containing the Sorensen-Dice
             coefficients for the comparison of col1 and col2.
-        decimal_places (int):
+        decimal_places:
             The number of decimal places new_col should have. Must be a positive
             number.
 
     Returns:
-        df_compared (Spark DataFrame):
+        df_compared:
             A dataframe consisting of df with an additional float column called
             new_col which contains the Sorensen-Dice coefficients for the
             comparison of col1 and col2.
@@ -288,7 +300,9 @@ def calculate_sorensen_dice(df, col1, col2, new_col, decimal_places):
     return df_compared
 
 
-def compare_deltas(df, linkage_vars, delta_col_prefix):
+def compare_deltas(
+    df: spark.sql.DataFrame, linkage_vars: List[str], delta_col_prefix: str
+) -> spark.sql.DataFrame:
     """
     Takes a dataframe made by Cartesian join of two datasets to be linked that
         has had the Scalelink deltas calculated and compares the status of these
@@ -296,12 +310,12 @@ def compare_deltas(df, linkage_vars, delta_col_prefix):
         deltas.
 
     Args:
-        df (Spark DataFrame):
+        df:
             The dataframe containing the deltas from which the delta comparisons
             will be calculated.
-        linkage_vars (list of str):
+        linkage_vars:
             The names of the linkage variables.
-        delta_col_prefix (str):
+        delta_col_prefix:
             The prefix that identifies delta columns. E.g., if the columns
             'forename_df1' and 'forename_df2' were compared, resulting in a delta
             column called 'di_forename_1', the delta_col_prefix would be 'di_'.
@@ -310,7 +324,7 @@ def compare_deltas(df, linkage_vars, delta_col_prefix):
         The delta columns must be Boolean columns and must not be nullable.
 
     Returns:
-        df_delta_comparisons (Spark DataFrame):
+        df_delta_comparisons:
             A dataframe containing the delta comparison columns calculated from
             df only - none of the columns derived from df are present. Each delta
             comparison column will be a non-nullable integer column and will have
@@ -344,15 +358,17 @@ def compare_deltas(df, linkage_vars, delta_col_prefix):
     return df_delta_comparisons
 
 
-def compute_normalized_levenshtein(string1, string2):
+def compute_normalized_levenshtein(
+    string1: spark.sql.Column, string2: spark.sql.Column
+) -> spark.sql.Column:
     """
     Applies the normalized Levenshtein distance to two strings, reporting a score
         normalised to between 0 and 1.
 
     Args:
-        string1 (Pyspark Data Frame col: str)
+        string1:
             string to be compared to string2.
-        string2 (Pyspark Data Frame col: str)
+        string2:
             string to be compared to string1.
 
     Returns:
@@ -366,7 +382,9 @@ def compute_normalized_levenshtein(string1, string2):
     return levenshtein_normalized_distance
 
 
-def get_deltas(df_cartesian_join, input_variables):
+def get_deltas(
+    df_cartesian_join: spark.sql.DataFrame, input_variables: Dict[str, Any | None]
+) -> spark.sql.DataFrame:
     """
     Takes the dataframe created by Cartesian join of the two dataframes to be
         linked. Also takes the input variables, stored in a dictionary. From
@@ -374,10 +392,10 @@ def get_deltas(df_cartesian_join, input_variables):
         variables.
 
     Args:
-        df_cartesian_join (Spark DataFrame):
+        df_cartesian_join:
             A Spark DataFrame consisting of the Cartesian join of the two
             dataframes to be linked.
-        input_variables (dict of str, misc):
+        input_variables:
             A dictionary containing the other input variables required for
             the scaling algorithm. The keys are the name of the input variables
             and the values are the variables themselves. Produced by the utils
@@ -388,7 +406,7 @@ def get_deltas(df_cartesian_join, input_variables):
         coefficient.
 
     Returns:
-        df_deltas (Spark DataFrame):
+        df_deltas:
             A dataframe consisting of df_cartesian_join with additional Boolean
             columns containing Scalelink deltas (i.e, an indicator matrix) for
             the linkage variables.
@@ -431,20 +449,20 @@ def get_deltas(df_cartesian_join, input_variables):
     return df_deltas
 
 
-def make_bigrams(df, col):
+def make_bigrams(df: spark.sql.DataFrame, col: str) -> spark.sql.DataFrame:
     """
     Takes a dataframe containing a string column and returns it with a new
         column containing the bigrams of that string column.
 
     Args:
-        df (Spark DataFrame):
+        df:
             The dataframe containing the two columns that the Sorensen-Dice
             coefficent will be calculated for.
-        col (str):
+        col:
             The name of the first string column to be compared.
 
     Returns:
-        df_compared (Spark DataFrame):
+        df_compared:
             A dataframe consisting of df with an additional column containing a
             list of strings called 'col_bigrams', which contains the bigrams of
             col. Where the string in col was empty, Null or only contained a
