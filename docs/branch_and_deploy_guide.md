@@ -101,6 +101,7 @@ changes into the `main` branch.
 2. **Increment version:**
    - The version of the package is incremented.
    - The new version tag is pushed.
+   - A new GitHub release is made that refers to the new version tag.
   
 Further deployment steps will be added in due course.
 
