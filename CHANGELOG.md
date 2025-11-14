@@ -11,6 +11,8 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Unpinned `pytest` version as it was pinned due to version conflicts with `pytest-lazy-fixture`. However, this repo doesn't use that package.
+
 ### Deprecated
 
 ### Fixed
