@@ -18,6 +18,7 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
   - `create_spark_session` in `tests/utils/test_utils_create_spark_session.py`.
   - `get_input_variables` in `tests/utils/utils.py`.
   - `get_deltas` in `tests/indicator_matrix/test_indicator_matrix.py`.
+- GitHub Action that creates releases from tags.
 
 ### Changed
 
@@ -45,7 +46,7 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Config for bump2version: `.bumpversion.cfg`
+- Config for bump2version: `.bumpversion.cfg`.
 
 ### Changed
 
