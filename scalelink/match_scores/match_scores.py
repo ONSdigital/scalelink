@@ -23,22 +23,25 @@ Methods:
      - assign_match_score
 """
 
+from typing import Any, Dict, List
+
+import spark
 from pyspark.sql import functions as F
 
 
-def assign_match_score(df_with_weights):
+def assign_match_score(df_with_weights: spark.sql.DataFrame) -> spark.sql.DataFrame:
     """
     Takes a dataframe made by Cartesian join of two datasets to be linked, with
         Scalelink weights assigned and calculates match score for each row.
 
     Args:
-        df_with_weights (Spark DataFrame):
+        df_with_weights:
             A dataframe consisting of a row ID for the first dataset that was
             joined, a row ID for the second dataset that was joined and a column
             for each Scalelink weight for each linkage variable.
 
     Returns:
-        df_with_match_score (Spark DataFrame):
+        df_with_match_score:
             A dataframe consisting of df_with_weights with an additional column
             called match_score which contains the sum of the weights, row-wise.
     """
@@ -56,7 +59,14 @@ def assign_match_score(df_with_weights):
     return df_with_match_score
 
 
-def assign_weights(df_with_deltas, df1_id, df2_id, cutpoints, x_star_scaled, spark):
+def assign_weights(
+    df_with_deltas: spark.sql.DataFrame,
+    df1_id: str,
+    df2_id: str,
+    cutpoints: Dict[str, List[float] | None],
+    x_star_scaled: Dict[str, float],
+    spark: spark.sql.SparkSession,
+) -> spark.sql.DataFrame:
     """
     Takes a dataframe made by Cartesian join of two datasets to be linked, with
         Scalelink deltas (an indicator matrix calculated for the agreement states
@@ -68,17 +78,17 @@ def assign_weights(df_with_deltas, df1_id, df2_id, cutpoints, x_star_scaled, spa
     Args:
         df_with_deltas (Spark DataFrame):
             A dataframe produced by the calculate_deltas() function.
-        df1_id (str):
+        df1_id:
             The name of the column in df_with_deltas that contains the row ID
             for the first dataset that was joined.
-        df2_id (str):
+        df2_id:
             The name of the column in df_with_deltas that contains the row ID
             for the second dataset that was joined.
-        cutpoints (dict of str: float):
+        cutpoints:
             A dictionary with keys consisting of the linkage variable names and
             values consisting of the string comparison cutpoints for those
             variables.
-        x_star_scaled (dict of str: float):
+        x_star_scaled:
             A dictionary with keys consisting of linkage variable names and
             states and the values consisting of the scaled weights calculated for
             those variables and states.
@@ -86,7 +96,7 @@ def assign_weights(df_with_deltas, df1_id, df2_id, cutpoints, x_star_scaled, spa
             Name of the Spark session being used.
 
     Returns:
-        df_with_weights (Spark DataFrame):
+        df_with_weights:
             A dataframe consisting of df1_id and df2_id from df_with_deltas with
             weight columns (named after the linkage variables, suffixed with
             '_weight') containing appropriate weights from x_star_scaled for
@@ -147,7 +157,12 @@ def assign_weights(df_with_deltas, df1_id, df2_id, cutpoints, x_star_scaled, spa
     return df_with_weights
 
 
-def get_match_scores(df_deltas, x_star_scaled_labelled, input_variables, spark):
+def get_match_scores(
+    df_deltas: spark.sql.DataFrame,
+    x_star_scaled_labelled: Dict[str, float],
+    input_variables: Dict[str, Any],
+    spark: spark.sql.SparkSession,
+) -> spark.sql.DataFrame:
     """
     Takes a dataframe containing a Cartesian join of the two dataframes to be
         compared, with deltas calculated. Also takes the scaled, labelled weights
@@ -156,25 +171,25 @@ def get_match_scores(df_deltas, x_star_scaled_labelled, input_variables, spark):
         weights and matchscores appropriately assigned.
 
     Args:
-        df_deltas (Spark DataFrame):
+        df_deltas:
             A dataframe consisting of df_cartesian_join with additional Boolean
             columns containing Scalelink deltas (i.e, an indicator matrix) for
             the linkage variables.
-        x_star_scaled_labelled (dict of str: float):
+        x_star_scaled_labelled:
             A dictionary with keys consisting of linkage variable names and
             states and the values consisting of the scaled weights calculated for
             those variables and states.
-        input_variables (dict of str, misc):
+        input_variables:
             A dictionary containing the other input variables required for
             the scaling algorithm, including ID column names and string comparator
             cut-points. Dictionary keys are the names of the input variables and
             dictionary values are the values of the variables themselves.
             This may be produced by the utils function get_input_variables().
-        spark (PySpark SparkSession):
+        spark:
             Name of the Spark session being used.
 
     Returns:
-        df_weights_match_scores (Spark DataFrame):
+        df_weights_match_scores :
             A dataframe consisting of df1_id and df2_id from df_with_deltas with
             weight columns (named after the linkage variables, suffixed with
             '_weight') containing appropriate weights from x_star_scaled for
