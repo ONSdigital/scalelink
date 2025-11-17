@@ -33,7 +33,7 @@ import pytest
 from scalelink.matrix_a_star import matrix_a_star as ma
 
 
-def test_calculate_b():
+def test_calculate_b() -> None:
     """
     Tests that calculate_b() gives the correct output when provided with
     appropriate inputs.
@@ -51,11 +51,11 @@ def test_calculate_b():
 
 
 @pytest.mark.skip(reason="test shell")
-def test_calculate_njklm_values():
+def test_calculate_njklm_values() -> None:
     pass
 
 
-def test_calculate_q():
+def test_calculate_q() -> None:
     """
     Tests that calculate_q() gives the correct output when provided with
     appropriate inputs.
@@ -72,7 +72,7 @@ def test_calculate_q():
     assert test_output == expected_output
 
 
-def test_calculate_r():
+def test_calculate_r() -> None:
     """
     Tests that calculate_r() gives the correct output when provided with
     appropriate inputs.
@@ -90,11 +90,11 @@ def test_calculate_r():
 
 
 @pytest.mark.skip(reason="test shell")
-def test_get_matrix_a_star():
+def test_get_matrix_a_star() -> None:
     pass
 
 
-def test_label_x_star():
+def test_label_x_star() -> None:
     """
     Tests that label_x_star() gives the correct output when provided with
     appropriate inputs.
@@ -144,7 +144,7 @@ def test_label_x_star():
     assert test_output == expected_output
 
 
-def test_make_matrix_a():
+def test_make_matrix_a() -> None:
     """
     Tests that make_matrix_a() gives the correct output when provided with
     appropriate inputs.
@@ -209,7 +209,7 @@ def test_make_matrix_a():
     np.testing.assert_array_equal(test_output, expected_output)
 
 
-def test_make_matrix_a_star():
+def test_make_matrix_a_star() -> None:
     """
     Tests that make_matrix_a_star() gives the correct output when provided with
     appropriate inputs.
@@ -252,7 +252,7 @@ def test_make_matrix_a_star():
     np.testing.assert_array_equal(test_output, expected_output)
 
 
-def test_multiply_vectors_by_s():
+def test_multiply_vectors_by_s() -> None:
     """
     Tests that multiply_vectors_by_s() gives the correct output when provided
     with appropriate inputs.
@@ -271,7 +271,7 @@ def test_multiply_vectors_by_s():
     assert test_output == expected_output
 
 
-def test_scale_x_star():
+def test_scale_x_star() -> None:
     """
     Tests that scale_x_star() gives the correct output when provided with
     appropriate inputs.
@@ -318,7 +318,7 @@ def test_scale_x_star():
     assert test_output == expected_output
 
 
-def test_solve_for_x_star():
+def test_solve_for_x_star() -> None:
     """
     Tests that solve_for_x_star() gives the correct output when provided with
     appropriate inputs.
