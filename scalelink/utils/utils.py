@@ -59,22 +59,24 @@ Methods:
 
 import collections
 import configparser as cp
+from typing import Any, Dict, List
 
+import pyspark
 from pyspark.sql import SparkSession
 
 
-def define_binary_agreement_vars(cutpoints):
+def define_binary_agreement_vars(cutpoints: Dict[str, List[float] | None]) -> List[str]:
     """
     Defines the linkage variables that will have binary agreement state.
 
     Args:
-        cutpoints (dict of str: list of float):
+        cutpoints:
             A dictionary with keys consisting of the linkage variable names and
             values consisting of the string comparison cutpoints for those
             variables.
 
     Returns:
-        binary_agreement_vars (list of str):
+        binary_agreement_vars:
             A list containing the names of the linkage variables that will have
             binary agreement state.
     """
@@ -85,24 +87,26 @@ def define_binary_agreement_vars(cutpoints):
     return binary_agreement_vars
 
 
-def cartesian_join_dataframes(df1_path, df2_path, spark):
+def cartesian_join_dataframes(
+    df1_path: str, df2_path: str, spark: pyspark.sql.SparkSession
+) -> pyspark.sql.DataFrame:
     """
     Takes the filepaths to two dataframes. Reads these in, Cartesian joins them
         and returns the product of this join.
 
     Args:
-        df1_path (str):
+        df1_path:
             The filepath for the first dataframe.
-        df2_path (str):
+        df2_path:
             The filepath for the second dataframe.
-        spark (PySpark SparkSession):
+        spark:
             The Spark session being used.
 
     Dependencies
         pyspark
 
     Returns:
-        cartesian_join_df (Spark DataFrame):
+        cartesian_join_df:
             A dataframe containing the two input dataframes Cartesian joined
             together.
     """
@@ -112,22 +116,25 @@ def cartesian_join_dataframes(df1_path, df2_path, spark):
     return cartesian_join_df
 
 
-def create_spark_session(spark_session_name, spark_session_size):
+def create_spark_session(
+    spark_session_name: str, spark_session_size: str
+) -> pyspark.sql.SparkSession:
     """
     Creates a Spark Session.
 
     Args:
-        spark_session_name (str):
+        spark_session_name:
             The name to give the Spark session.
-        spark_session_size (str):
+        spark_session_size:
             The size of session to create - small (s), medium (m), large (l) or
             extra-large (xl).
 
     Dependencies:
-        SparkSession from pyspark.sql
+        pyspark.sql.SparkSession
 
     Returns:
-        A Spark session of the specified size.
+        spark:
+            A Spark session of the specified size and name.
     """
     session_configs = {
         "s": {
@@ -181,19 +188,19 @@ def create_spark_session(spark_session_name, spark_session_size):
     return spark
 
 
-def define_K(kj):
+def define_K(kj: Dict[str, int]) -> int:
     """
     Defines the variable K, as per Goldstein et al. (2017). This variable is the
     total number of agreement states across all linkage variables.
 
     Args:
-        kj (dict of str: int):
+        kj:
             A dictionary with keys consisting of the linkage variable names and
             values consisting of kj (number of agreement states) for each linkage
             variable.
 
     Returns:
-        K (int):
+        K:
             The total number of agreement states across all linkage variables.
     """
     K = 0
@@ -202,22 +209,22 @@ def define_K(kj):
     return K
 
 
-def define_kj(cutpoints):
+def define_kj(cutpoints: Dict[str, List[float] | None]) -> Dict[str, int]:
     """
     Defines the variable kj for each linkage variable, as per Goldstein et al.
     (2017). This variable is the number of agreement states.
 
     Args:
-        cutpoints (dict of str: list of float):
+        cutpoints:
             A dictionary with keys consisting of the linkage variable names and
             values consisting of the string comparison cutpoints for those
             variables.
 
     Dependencies:
-        collections as co
+        collections
 
     Returns:
-        kj (dict of str: int):
+        kj:
             A dictionary with keys consisting of the linkage variable names and
             values consisting of kj (number of agreement states) for each linkage
             variable.
@@ -231,35 +238,37 @@ def define_kj(cutpoints):
     return kj
 
 
-def define_p(linkage_vars):
+def define_p(linkage_vars: List[str]) -> int:
     """
     Defines the variable p, as per Goldstein et al (2017). This variable is the
     total number of linkage variables.
 
     Args:
-        linkage_vars (list of str):
+        linkage_vars:
             The names of the linkage variables.
 
     Returns:
-        p (int):
+        p:
             The total number of linkage variables.
     """
     p = len(linkage_vars)
     return p
 
 
-def define_partial_agreement_vars(cutpoints):
+def define_partial_agreement_vars(
+    cutpoints: Dict[str, List[float] | None],
+) -> List[str]:
     """
     Defines the linkage variables that will have partial agreement state.
 
     Args:
-        cutpoints (dict of str: list of float):
+        cutpoints:
             A dictionary with keys consisting of the linkage variable names and
             values consisting of the string comparison cutpoints for those
             variables.
 
     Returns:
-        partial_agreement_vars (list of str):
+        partial_agreement_vars:
             A list containing the names of the linkage variables that will have
             partial agreement state.
     """
@@ -270,27 +279,27 @@ def define_partial_agreement_vars(cutpoints):
     return partial_agreement_vars
 
 
-def format_cutpoints(linkage_vars, configs):
+def format_cutpoints(
+    linkage_vars: List[str], configs: cp.ConfigParser
+) -> Dict[str, float]:
     """
     Formats the string comparison cutpoints to be used for each linkage variable.
 
     Args:
-        linkage_vars (list of str):
+        linkage_vars:
             The names of the linkage variables.
-        configs (configparser.SectionProxy):
+        configs:
             The variable containing the imported config section.
 
+    Dependencies:
+        collections
+        configparser as cp
+
     Returns:
-        cutpoints_formatted (dict of str: float):
+        cutpoints_formatted:
             An ordered dictionary with keys consisting of the linkage variable
             names and values consisting of the string comparison cutpoints for
             those variables.
-
-    Dependencies:
-        collections as co
-
-    Dependencies:
-        The Python package configparser imported and aliased as cp.
     """
     cutpoints_formatted = collections.OrderedDict()
     for i in linkage_vars:
@@ -303,7 +312,7 @@ def format_cutpoints(linkage_vars, configs):
     return cutpoints_formatted
 
 
-def get_input_variables(config_path):
+def get_input_variables(config_path: str) -> Dict[str, Any]:
     """
     Takes the filepath to a config file. From this, returns a dictionary
         containing all of the input variables required for Scalelink.
@@ -450,24 +459,26 @@ def get_input_variables(config_path):
     return input_variables
 
 
-def get_s(input_variables, df_cartesian_join):
+def get_s(
+    input_variables: Dict[str, Any], df_cartesian_join: pyspark.sql.DataFrame
+) -> Dict[str:Any]:
     """
     Takes a dictionary of input variables and a dataframe consisting of the
         Cartesian join of the two dataframes to be linked. From this, calculates
         the Scalelink variable s and adds it to input_variables.
 
     Args:
-        input_variables (dict of str, misc):
+        input_variables:
             A dictionary containing the other input variables required for
             the scaling algorithm. The keys are the name of the input variables
             and the values are the variables themselves. Produced by the utils
             function get_input_variables().
-        df_cartesian_join (Spark DataFrame):
+        df_cartesian_join:
             A Spark DataFrame consisting of the Cartesian join of the two
             dataframes to be linked.
 
     Returns:
-        input_variables_with_s (dict of str, misc):
+        input_variables_with_s:
             A dictionary consisting of input_variables with an extra key:value
             pair. The key in this pair is 's' and the value is the Scalelink
             variable s, the total number of candidate pairs entering the scaling
@@ -479,7 +490,7 @@ def get_s(input_variables, df_cartesian_join):
     return input_variables_with_s
 
 
-def read_configs(config_path):
+def read_configs(config_path: str) -> cp.ConfigParser:
     """
     Reads in configs.
 
@@ -487,12 +498,12 @@ def read_configs(config_path):
         config_path (str):
             The filepath for the config file.
 
-    Returns:
-        configs (configparser.SectionProxy):
-            The configs from the config file.
-
     Dependencies:
         configparser as cp
+
+    Returns:
+        configs:
+            The configs from the config file.
     """
     config = cp.ConfigParser()
     config.read(config_path)
