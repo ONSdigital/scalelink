@@ -24,14 +24,16 @@ Methods:
 
 import configparser as cp
 import os
+import unittest
 from unittest.mock import Mock, patch
 
 import chispa as ch
+import pyspark
 
 from scalelink.utils import utils as ut
 
 
-def test_define_binary_agreement_vars():
+def test_define_binary_agreement_vars() -> None:
     """
     Tests that define_binary_agreement_vars gives the correct output when
     supplied with appropriate inputs.
@@ -48,7 +50,9 @@ def test_define_binary_agreement_vars():
     assert test_output == expected_output
 
 
-def test_cartesian_join_dataframes(spark, spark_mock):
+def test_cartesian_join_dataframes(
+    spark: pyspark.sql.SparkSession, spark_mock: unittest.mock.MagicMock
+) -> None:
     """
     Tests that cartesian_join_dataframes() gives the correct output when supplied
     with appropriate inputs.
@@ -95,7 +99,7 @@ def test_cartesian_join_dataframes(spark, spark_mock):
     ch.assert_df_equality(df1=test_output, df2=expected_output, ignore_row_order=True)
 
 
-def test_define_K():
+def test_define_K() -> None:
     """
     Tests that define_K() gives the correct output when supplied with appropriate
     inputs.
@@ -112,7 +116,7 @@ def test_define_K():
     assert test_output == expected_output
 
 
-def test_define_kj():
+def test_define_kj() -> None:
     """
     Tests that define_kj() gives the correct output when supplied with appropriate
     inputs.
@@ -133,7 +137,7 @@ def test_define_kj():
     assert test_output == expected_output
 
 
-def test_define_p():
+def test_define_p() -> None:
     """
     Tests that define_p() gives the correct output when provided with appropriate
     inputs.
@@ -154,7 +158,7 @@ def test_define_p():
     assert test_output_2 == expected_output_2
 
 
-def test_define_partial_agreement_vars():
+def test_define_partial_agreement_vars() -> None:
     """
     Tests that define_partial_agreement_vars() gives the correct output when
     provided with appropriate inputs.
@@ -171,7 +175,7 @@ def test_define_partial_agreement_vars():
     assert test_output == expected_output
 
 
-def test_format_cutpoints():
+def test_format_cutpoints() -> None:
     """
     Tests that format_cutpoints() gives the correct output when provided with
     appropriate inputs.
@@ -221,20 +225,20 @@ def test_format_cutpoints():
 @patch("scalelink.utils.utils.format_cutpoints")
 @patch("scalelink.utils.utils.read_configs")
 def test_get_input_variables(
-    mock_read_configs,
-    mock_format_cutpoints,
-    mock_define_binary_agreement_vars,
-    mock_define_partial_agreement_vars,
-    mock_define_p,
-    mock_define_kj,
-    mock_define_K,
-):
+    mock_read_configs: unittest.mock.MagicMock,
+    mock_format_cutpoints: unittest.mock.MagicMock,
+    mock_define_binary_agreement_vars: unittest.mock.MagicMock,
+    mock_define_partial_agreement_vars: unittest.mock.MagicMock,
+    mock_define_p: unittest.mock.MagicMock,
+    mock_define_kj: unittest.mock.MagicMock,
+    mock_define_K: unittest.mock.MagicMock,
+) -> None:
     """
     Tests that get_input_variables() gives the correct output when provided with
     appropriate inputs.
 
       Dependencies:
-        configparser installed as cp
+        configparser as cp
     """
     # Arrange
     test_input_filepath = "folder/subfolder/config_file.yaml"
@@ -303,7 +307,7 @@ def test_get_input_variables(
     mock_define_K.assert_called_once_with(kj=test_input_kj)
 
 
-def test_get_s(spark):
+def test_get_s(spark: pyspark.sql.SparkSession) -> None:
     """
     Tests that get_s() gives the correct output when provided with appropriate
     inputs.
@@ -336,13 +340,13 @@ def test_get_s(spark):
     assert test_output == expected_output
 
 
-def test_read_configs():
+def test_read_configs() -> None:
     """
     Tests that read_configs gives the correct output when provided with
     appropriate inputs.
 
     Dependencies:
-      configparser installed as cp
+      configparser as cp
     """
     # Arrange
     test_config_path = "test_config.ini"

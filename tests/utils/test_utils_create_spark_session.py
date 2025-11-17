@@ -14,7 +14,7 @@ modular scope. Hence, this test has to be held in a separate module from them.
 from scalelink.utils import utils as ut
 
 
-def test_create_spark_session():
+def test_create_spark_session() -> None:
     """
     Tests that create_spark_session() gives the correct output when supplied
     with appropriate inputs.
