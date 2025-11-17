@@ -72,7 +72,7 @@ from typing import Any, Dict, List
 
 import numpy as np
 import pandas as pd
-import spark
+import pyspark
 
 
 def calculate_b(K: int) -> List[int]:
@@ -98,7 +98,7 @@ def calculate_b(K: int) -> List[int]:
     return b
 
 
-def calculate_njklm_values(df: spark.sql.DataFrame) -> pd.DataFrame:
+def calculate_njklm_values(df: pyspark.sql.DataFrame) -> pd.DataFrame:
     """
     Takes a dataframe made by Cartesian join of two datasets to be linked that
         has had the Scalelink deltas and their comparisons calculated. Calculates
@@ -198,7 +198,7 @@ def calculate_r(cutpoints: Dict[str, List[float] | None]) -> List[int]:
 
 
 def get_matrix_a_star(
-    df_delta_comparisons: spark.sql.DataFrame, input_variables
+    df_delta_comparisons: pyspark.sql.DataFrame, input_variables
 ) -> np.array:
     """
     Takes a dataframe containing the delta comparisons for the two dataframes to

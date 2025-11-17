@@ -25,11 +25,11 @@ Methods:
 
 from typing import Any, Dict, List
 
-import spark
+import pyspark
 from pyspark.sql import functions as F
 
 
-def assign_match_score(df_with_weights: spark.sql.DataFrame) -> spark.sql.DataFrame:
+def assign_match_score(df_with_weights: pyspark.sql.DataFrame) -> pyspark.sql.DataFrame:
     """
     Takes a dataframe made by Cartesian join of two datasets to be linked, with
         Scalelink weights assigned and calculates match score for each row.
@@ -60,13 +60,13 @@ def assign_match_score(df_with_weights: spark.sql.DataFrame) -> spark.sql.DataFr
 
 
 def assign_weights(
-    df_with_deltas: spark.sql.DataFrame,
+    df_with_deltas: pyspark.sql.DataFrame,
     df1_id: str,
     df2_id: str,
     cutpoints: Dict[str, List[float] | None],
     x_star_scaled: Dict[str, float],
-    spark: spark.sql.SparkSession,
-) -> spark.sql.DataFrame:
+    spark: pyspark.sql.SparkSession,
+) -> pyspark.sql.DataFrame:
     """
     Takes a dataframe made by Cartesian join of two datasets to be linked, with
         Scalelink deltas (an indicator matrix calculated for the agreement states
@@ -158,11 +158,11 @@ def assign_weights(
 
 
 def get_match_scores(
-    df_deltas: spark.sql.DataFrame,
+    df_deltas: pyspark.sql.DataFrame,
     x_star_scaled_labelled: Dict[str, float],
     input_variables: Dict[str, Any],
-    spark: spark.sql.SparkSession,
-) -> spark.sql.DataFrame:
+    spark: pyspark.sql.SparkSession,
+) -> pyspark.sql.DataFrame:
     """
     Takes a dataframe containing a Cartesian join of the two dataframes to be
         compared, with deltas calculated. Also takes the scaled, labelled weights

@@ -57,14 +57,14 @@ my_indicator_matrix = im.compare_deltas(
 
 from typing import Any, Dict, List
 
-import spark
+import pyspark
 from pyspark.ml.feature import NGram
 from pyspark.sql import functions as F
 
 
 def calculate_agreement_states(
-    df: spark.sql.DataFrame, binary_agreement_cols: List[str], df_suffixes: List[str]
-) -> spark.sql.DataFrame:
+    df: pyspark.sql.DataFrame, binary_agreement_cols: List[str], df_suffixes: List[str]
+) -> pyspark.sql.DataFrame:
     """
     Takes a dataframe made by Cartesian join of two datasets to be linked and
         calculates the agreement state for each of the variables with binary
@@ -116,11 +116,11 @@ def calculate_agreement_states(
 
 
 def calculate_deltas(
-    df: spark.sql.DataFrame,
+    df: pyspark.sql.DataFrame,
     cutpoints: Dict[str, List[float] | None],
     agreement_col_suffix: str,
     string_similarity_suffix: str,
-) -> spark.sql.DataFrame:
+) -> pyspark.sql.DataFrame:
     """
     Takes a dataframe made by Cartesian join of two datasets to be linked that
         has had the agreement state for each variable with binary agreement state
@@ -228,8 +228,8 @@ def calculate_deltas(
 
 
 def calculate_sorensen_dice(
-    df: spark.sql.DataFrame, col1: str, col2: str, new_col: str, decimal_places: int
-) -> spark.sql.DataFrame:
+    df: pyspark.sql.DataFrame, col1: str, col2: str, new_col: str, decimal_places: int
+) -> pyspark.sql.DataFrame:
     """
     Takes two string columns, calculates the Sorensen-Dice coefficient for them
     and returns it in in a new column.
@@ -301,8 +301,8 @@ def calculate_sorensen_dice(
 
 
 def compare_deltas(
-    df: spark.sql.DataFrame, linkage_vars: List[str], delta_col_prefix: str
-) -> spark.sql.DataFrame:
+    df: pyspark.sql.DataFrame, linkage_vars: List[str], delta_col_prefix: str
+) -> pyspark.sql.DataFrame:
     """
     Takes a dataframe made by Cartesian join of two datasets to be linked that
         has had the Scalelink deltas calculated and compares the status of these
@@ -359,8 +359,8 @@ def compare_deltas(
 
 
 def compute_normalized_levenshtein(
-    string1: spark.sql.Column, string2: spark.sql.Column
-) -> spark.sql.Column:
+    string1: pyspark.sql.Column, string2: pyspark.sql.Column
+) -> pyspark.sql.Column:
     """
     Applies the normalized Levenshtein distance to two strings, reporting a score
         normalised to between 0 and 1.
@@ -383,8 +383,8 @@ def compute_normalized_levenshtein(
 
 
 def get_deltas(
-    df_cartesian_join: spark.sql.DataFrame, input_variables: Dict[str, Any | None]
-) -> spark.sql.DataFrame:
+    df_cartesian_join: pyspark.sql.DataFrame, input_variables: Dict[str, Any | None]
+) -> pyspark.sql.DataFrame:
     """
     Takes the dataframe created by Cartesian join of the two dataframes to be
         linked. Also takes the input variables, stored in a dictionary. From
@@ -449,7 +449,7 @@ def get_deltas(
     return df_deltas
 
 
-def make_bigrams(df: spark.sql.DataFrame, col: str) -> spark.sql.DataFrame:
+def make_bigrams(df: pyspark.sql.DataFrame, col: str) -> pyspark.sql.DataFrame:
     """
     Takes a dataframe containing a string column and returns it with a new
         column containing the bigrams of that string column.
