@@ -189,7 +189,7 @@ def get_match_scores(
             Name of the Spark session being used.
 
     Returns:
-        df_weights_match_scores :
+        df_weights_match_scores:
             A dataframe consisting of df1_id and df2_id from df_with_deltas with
             weight columns (named after the linkage variables, suffixed with
             '_weight') containing appropriate weights from x_star_scaled for
