@@ -30,6 +30,7 @@ Methods:
 import numpy as np
 import pandas as pd
 import pytest
+from pyspark.sql import types as T
 
 from scalelink.matrix_a_star import matrix_a_star as ma
 
@@ -57,31 +58,87 @@ def test_calculate_njklm_values(spark):
     appropriate inputs.
     """
     # Arrange
+
     test_input = spark.createDataFrame(
         [
-            (1.0, 2.0, 1.0, 0.0),
-            (0.0, 1.0, 1.0, 0.0),
-            (0.0, 1.0, 1.0, 0.0),
-            (0.0, 1.0, 1.0, 0.0),
+            (0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1),
+            (1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1),
+            (1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+            (0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0),
+            (0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1),
+            (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+            (0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
         ],
-        ["col1", "col2", "col3", "col4"],
+        T.StructType(
+            [
+                T.StructField("N_sex_1_sex_1", T.IntegerType(), False),
+                T.StructField("N_sex_1_sex_2", T.IntegerType(), False),
+                T.StructField("N_sex_1_forename_1", T.IntegerType(), False),
+                T.StructField("N_sex_1_forename_2", T.IntegerType(), False),
+                T.StructField("N_sex_1_forename_3", T.IntegerType(), False),
+                T.StructField("N_sex_2_sex_1", T.IntegerType(), False),
+                T.StructField("N_sex_2_sex_2", T.IntegerType(), False),
+                T.StructField("N_sex_2_forename_1", T.IntegerType(), False),
+                T.StructField("N_sex_2_forename_2", T.IntegerType(), False),
+                T.StructField("N_sex_2_forename_3", T.IntegerType(), False),
+                T.StructField("N_forename_1_sex_1", T.IntegerType(), False),
+                T.StructField("N_forename_1_sex_2", T.IntegerType(), False),
+                T.StructField("N_forename_1_forename_1", T.IntegerType(), False),
+                T.StructField("N_forename_1_forename_2", T.IntegerType(), False),
+                T.StructField("N_forename_1_forename_3", T.IntegerType(), False),
+                T.StructField("N_forename_2_sex_1", T.IntegerType(), False),
+                T.StructField("N_forename_2_sex_2", T.IntegerType(), False),
+                T.StructField("N_forename_2_forename_1", T.IntegerType(), False),
+                T.StructField("N_forename_2_forename_2", T.IntegerType(), False),
+                T.StructField("N_forename_2_forename_3", T.IntegerType(), False),
+                T.StructField("N_forename_3_sex_1", T.IntegerType(), False),
+                T.StructField("N_forename_3_sex_2", T.IntegerType(), False),
+                T.StructField("N_forename_3_forename_1", T.IntegerType(), False),
+                T.StructField("N_forename_3_forename_2", T.IntegerType(), False),
+                T.StructField("N_forename_3_forename_3", T.IntegerType(), False),
+            ]
+        ),
     )
     expected_output = spark.createDataFrame(
         [
-            (1.0, 5.0, 4.0, 0.0),
+            (2, 0, 1, 0, 1, 0, 4, 0, 1, 2, 1, 0, 2, 0, 0, 0, 1, 0, 1, 0, 1, 2, 0, 0, 3),
         ],
-        ["col1", "col2", "col3", "col4"],
+        [
+            "N_sex_1_sex_1",
+            "N_sex_1_sex_2",
+            "N_sex_1_forename_1",
+            "N_sex_1_forename_2",
+            "N_sex_1_forename_3",
+            "N_sex_2_sex_1",
+            "N_sex_2_sex_2",
+            "N_sex_2_forename_1",
+            "N_sex_2_forename_2",
+            "N_sex_2_forename_3",
+            "N_forename_1_sex_1",
+            "N_forename_1_sex_2",
+            "N_forename_1_forename_1",
+            "N_forename_1_forename_2",
+            "N_forename_1_forename_3",
+            "N_forename_2_sex_1",
+            "N_forename_2_sex_2",
+            "N_forename_2_forename_1",
+            "N_forename_2_forename_2",
+            "N_forename_2_forename_3",
+            "N_forename_3_sex_1",
+            "N_forename_3_sex_2",
+            "N_forename_3_forename_1",
+            "N_forename_3_forename_2",
+            "N_forename_3_forename_3",
+        ],
     )
 
     expected_output = expected_output.toPandas()
 
     # Act
-    actual_output = ma.calculate_njklm_values(test_input)
-    test_output = actual_output
+    test_output = ma.calculate_njklm_values(test_input)
 
     # Assert
     pd.testing.assert_frame_equal(test_output, expected_output)
-    # assert test_output ==  expected_output#
 
 def test_calculate_q() -> None:
     """
