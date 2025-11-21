@@ -36,7 +36,7 @@ from scalelink.utils import utils as ut
 def test_define_binary_agreement_vars() -> None:
     """
     Tests that define_binary_agreement_vars gives the correct output when
-    supplied with appropriate inputs.
+    provided with appropriate inputs.
     """
     # Arrange
     test_input = {"fn": [0.4, 0.7, 0.9], "sn": [0.75, 0.9], "sex": None, "dob": None}
@@ -54,8 +54,8 @@ def test_cartesian_join_dataframes(
     spark: pyspark.sql.SparkSession, spark_mock: unittest.mock.MagicMock
 ) -> None:
     """
-    Tests that cartesian_join_dataframes() gives the correct output when supplied
-    with appropriate inputs.
+    Tests that cartesian_join_dataframes() gives the correct output when
+    provided with appropriate inputs.
     """
     # Arrange
     mock_path = Mock()
@@ -101,8 +101,8 @@ def test_cartesian_join_dataframes(
 
 def test_define_K() -> None:
     """
-    Tests that define_K() gives the correct output when supplied with appropriate
-    inputs.
+    Tests that define_K() gives the correct output when provided with
+    appropriate inputs.
     """
     # Arrange
     test_input = {"fn": 2, "sn": 4, "sex": 2}
@@ -118,8 +118,8 @@ def test_define_K() -> None:
 
 def test_define_kj() -> None:
     """
-    Tests that define_kj() gives the correct output when supplied with appropriate
-    inputs.
+    Tests that define_kj() gives the correct output when provided with
+    appropriate inputs.
     """
     # Arrange
     test_input = {
@@ -139,8 +139,8 @@ def test_define_kj() -> None:
 
 def test_define_p() -> None:
     """
-    Tests that define_p() gives the correct output when provided with appropriate
-    inputs.
+    Tests that define_p() gives the correct output when provided with
+    appropriate inputs.
     """
     # Arrange
     test_input_1 = ["fn", "sn", "sex"]
@@ -217,6 +217,7 @@ def test_format_cutpoints() -> None:
     os.remove("test_config.ini")
 
 
+################################################################################
 @patch("scalelink.utils.utils.define_K")
 @patch("scalelink.utils.utils.define_kj")
 @patch("scalelink.utils.utils.define_p")
@@ -234,11 +235,11 @@ def test_get_input_variables(
     mock_define_K: unittest.mock.MagicMock,
 ) -> None:
     """
-    Tests that get_input_variables() gives the correct output when provided with
-    appropriate inputs.
+    Tests that get_input_variables() gives the correct output when provided
+    with appropriate inputs.
 
-      Dependencies:
-        configparser as cp
+    Dependencies:
+      configparser as cp
     """
     # Arrange
     test_input_filepath = "folder/subfolder/config_file.yaml"

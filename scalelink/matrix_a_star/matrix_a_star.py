@@ -1,7 +1,7 @@
 """Matrix A* functions.
 
-A series of functions that together produce Matrix A* and vector x*, as
-defined in the 2017 paper by Goldstein et al.
+A series of functions that together produce Matrix A* and vector x*, as defined
+in the 2017 paper by Goldstein et al.
 
 Methods:
   calculate_b:
@@ -23,8 +23,8 @@ Methods:
     linkage variable is 'agree'.
 
   get_matrix_a_star:
-    A method to produce the Scalelink variable Matrix A*. Works by running,
-    in order:
+    A method to produce the Scalelink variable Matrix A*. Works by running, in
+    order:
      - calcualte_njklm_values
      - make_matrix_a
      - calculate_q
@@ -57,12 +57,12 @@ Methods:
     multiplied equivalent (i.e. b_s, q_s or r_s).
 
   scale_x_star:
-    A method that scales vector x* so that all of its values are between 0
-    and 100.
+    A method that scales vector x* so that all of its values are between 0 and
+    100.
 
   solve_for_x_star:
-    A method that solves the matrix multiplication of Scalelink variables
-    Matrix A* and vector b (or b_s) to produce vector x*.
+    A method that solves the matrix multiplication of Scalelink variables Matrix
+    A* and vector b (or b_s) to produce vector x*.
 """
 
 import collections
@@ -77,20 +77,21 @@ import pyspark
 
 def calculate_b(K: int) -> List[int]:
     """
-    Takes the Scalelink variable K. From this, calculates the Scalelink vector b.
+    Takes the Scalelink variable K. From this, calculates the Scalelink vector
+    b.
 
     Args:
-        K:
-            The total number of agreement states across all linkage variables.
+      K:
+        The total number of agreement states across all linkage variables.
 
     Dependencies:
-        itertools
+      itertools
 
     Returns:
-        b:
-            The Scalelink vector b, a list of length K+2. It consists of K+1 0s
-            followed by a single 1. It is necessary for deriving weights from
-            Matrix A* by matrix multiplication.
+      b:
+        The Scalelink vector b, a list of length K+2. It consists of K+1 0s
+        followed by a single 1. It is necessary for deriving weights from
+        Matrix A* by matrix multiplication.
     """
     b = []
     b = list(itertools.repeat(0, int(K + 1)))
@@ -101,22 +102,22 @@ def calculate_b(K: int) -> List[int]:
 def calculate_njklm_values(df: pyspark.sql.DataFrame) -> pd.DataFrame:
     """
     Takes a dataframe made by Cartesian join of two datasets to be linked that
-        has had the Scalelink deltas and their comparisons calculated. Calculates
-        Njklm values from these delta comparisons.
+    has had the Scalelink deltas and their comparisons calculated. Calculates
+    Njklm values from these delta comparisons.
 
     Args:
-        df:
-            The dataframe containing the deltas comparisons from which the Njklm
-            values will be calculated.
+      df:
+        The dataframe containing the deltas comparisons from which the Njklm
+        values will be calculated.
 
     Dependencies:
-        pandas as pd
+      pandas as pd
 
     Returns:
-        df_njklm:
-            A dataframe containing the delta comparison column names as column
-            names and a single row consisting of the Njklm values (i.e. the sums
-            of these delta comparison columns).
+      df_njklm:
+        A dataframe containing the delta comparison column names as column names
+        and a single row consisting of the Njklm values (i.e. the sums of these
+        delta comparison columns).
     """
     df_njklm = df.groupBy().sum()
 
@@ -132,22 +133,22 @@ def calculate_njklm_values(df: pyspark.sql.DataFrame) -> pd.DataFrame:
 def calculate_q(cutpoints: Dict[str, List[float] | None]) -> List[int]:
     """
     Takes a dictionary containing linkage variable names and the string
-        comparison cutpoints for those variables. From this, calculates the
-        Scalelink vector q.
+    comparison cutpoints for those variables. From this, calculates the
+    Scalelink vector q.
 
     Args:
-        cutpoints:
-            A dictionary with keys consisting of the linkage variable names and
-            values consisting of the string comparison cutpoints for those
-            variables.
+      cutpoints:
+        A dictionary with keys consisting of the linkage variable names and
+        values consisting of the string comparison cutpoints for those
+        variables.
 
     Dependencies:
-        itertools
+      itertools
 
     Returns:
-        q:
-            The Scalelink vector q, a list containing 0s and 1s representing the
-            scenario when the agreement state of every variable is 'disagree'.
+      q:
+        The Scalelink vector q, a list containing 0s and 1s representing the
+        scenario when the agreement state of every variable is 'disagree'.
     """
     q = []
 
@@ -166,22 +167,22 @@ def calculate_q(cutpoints: Dict[str, List[float] | None]) -> List[int]:
 def calculate_r(cutpoints: Dict[str, List[float] | None]) -> List[int]:
     """
     Takes a dictionary containing linkage variable names and the string
-        comparison cutpoints for those variables. From this, calculates the
-        Scalelink vector r.
+    comparison cutpoints for those variables. From this, calculates the
+    Scalelink vector r.
 
     Args:
-        cutpoints:
-            A dictionary with keys consisting of the linkage variable names and
-            values consisting of the string comparison cutpoints for those
-            variables.
+      cutpoints:
+        A dictionary with keys consisting of the linkage variable names and
+        values consisting of the string comparison cutpoints for those
+        variables.
 
     Dependencies:
-        itertools
+      itertools
 
     Returns:
-        r:
-            The Scalelink vector r, a list containing 0s and 1s representing the
-            scenario when the agreement state of every variable is 'agree'.
+      r:
+        The Scalelink vector r, a list containing 0s and 1s representing the
+        scenario when the agreement state of every variable is 'agree'.
     """
     r = []
 
@@ -202,31 +203,31 @@ def get_matrix_a_star(
 ) -> np.array:
     """
     Takes a dataframe containing the delta comparisons for the two dataframes to
-        be linked. Also takes the input variables, stored in a dictionary. From
-        this, creates a Numpy array consisting of Matrix A*, as defined in
-        Goldstein et al. (2017).
+    be linked. Also takes the input variables, stored in a dictionary. From
+    this, creates a Numpy array consisting of Matrix A*, as defined in
+    Goldstein et al. (2017).
 
     Args:
-        df_delta_comparisons:
-            A dataframe containing the delta comparison columns for the two
-            dataframes to be linked. Delta comparisons are 1 when both deltas are
-            True and are 0 in all other circumstances.
-        input_variables (dict of str, misc):
-            A dictionary containing the other input variables required for
-            the scaling algorithm. The keys are the name of the input variables
-            and the values are the variables themselves. Produced by the utils
-            function get_inputs().
+      df_delta_comparisons:
+        A dataframe containing the delta comparison columns for the two
+        dataframes to be linked. Delta comparisons are 1 when both deltas are
+        True and are 0 in all other circumstances.
+      input_variables:
+        A dictionary containing the other input variables required for the
+        scaling algorithm. The keys are the name of the input variables and the
+        values are the variables themselves. Produced by the utils function
+        get_inputs().
 
     Dependencies:
-        pandas as pd
-        numpy as np
+      pandas as pd
+      numpy as np
 
     Returns:
-        matrix_a_star:
-            An array containing Matrix A*, as per Goldstein et al (2017), i.e.
-            Matrix A with additional rows and columns added that are derived from
-            vectors q and r (or q_s and q_r if Matrix A* is expected to not be
-            well conditioned).
+      matrix_a_star:
+        An array containing Matrix A*, as per Goldstein et al (2017), i.e.
+        Matrix A with additional rows and columns added that are derived from
+        vectors q and r (or q_s and q_r if Matrix A* is expected to not be
+        well conditioned).
     """
     df_njklm = calculate_njklm_values(df=df_delta_comparisons)
 
@@ -254,29 +255,28 @@ def get_scaled_labelled_x_star(
 ) -> Dict[str, float]:
     """
     Takes a Numpy array containing Matrix A*, as defined in Goldstein et al.
-        (2017). Also takes the input variables, stored in a dictionary. From
-        this, creates a dictionary consisting of scaled, labelled weights.
+    (2017). Also takes the input variables, stored in a dictionary. From this,
+    creates a dictionary consisting of scaled, labelled weights.
 
     Args:
-        matrix_a_star:
-            An array containing Matrix A*, as per Goldstein et al (2017).
-        input_variables (dict of str, misc):
-            A dictionary containing the other input variables required for
-            the scaling algorithm. The keys are the name of the input variables
-            and the values are the variables themselves. Produced by the utils
-            function get_inputs().
+      matrix_a_star:
+        An array containing Matrix A*, as per Goldstein et al (2017).
+      input_variables:
+        A dictionary containing the other input variables required for the
+        scaling algorithm. The keys are the name of the input variables and the
+        values are the variables themselves. Produced by the utils function
+        get_inputs().
 
     Dependencies:
-        itertools
-        numpy as np
-        re
+      itertools
+      numpy as np
+      re
 
     Returns:
-        x_star_scaled_labelled:
-            A dictionary with keys consisting of linkage variable names and
-            states and the values consisting of the scaled weights calculated for
-            those variables and states.
-
+      x_star_scaled_labelled:
+        A dictionary with keys consisting of linkage variable names and states
+        and the values consisting of the scaled weights calculated for those
+        variables and states.
     """
     b_s = multiply_vectors_by_s(
         vector=calculate_b(K=input_variables["K"]), s=input_variables["s"]
@@ -298,30 +298,29 @@ def label_x_star(
 ) -> Dict[str, float]:
     """
     Takes Scalelink vector x* and a list of linkage variable names and their
-        string comparison cutpoints. From this, converts x* into a dictionary,
-        adding labels so it is clear which variable and agreement state each
-        weight relates to.
+    string comparison cutpoints. From this, converts x* into a dictionary,
+    adding labels so it is clear which variable and agreement state each weight
+    relates to.
 
     Args:
-        x_star:
-            A list containing x*, i.e. the unscaled weights resulting from the
-            scaling algorithm.
-        cutpoints (dict of str: list of float):
-            A dictionary with keys consisting of the linkage variable names and
-            values consisting of lists containing the string comparison cutpoints
-            for those variables. This should include both variables with binary
-            agreement state (for which the key should be Null) and variables with
-            partial agreement states (for which the key should be a list of
-            float).
+      x_star:
+        A list containing x*, i.e. the unscaled weights resulting from the
+        scaling algorithm.
+      cutpoints:
+        A dictionary with keys consisting of the linkage variable names and
+        values consisting of lists containing the string comparison cutpoints
+        for those variables. This should include both variables with binary
+        agreement state (for which the key should be Null) and variables with
+        partial agreement states (for which the key should be a list of float).
 
     Dependencies:
-        collections
+      collections
 
     Returns:
-        x_star_labelled:
-            A dictionary with keys consisting of linkage variable names and
-            states and the values consisting of the raw weights calculated for
-            those variables and states.
+      x_star_labelled:
+        A dictionary with keys consisting of linkage variable names and states
+        and the values consisting of the raw weights calculated for those
+        variables and states.
     """
     # Create labels
     labels = []
@@ -351,26 +350,26 @@ def label_x_star(
 def make_matrix_a(Njklm: pd.DataFrame, K: int, p: int) -> np.array:
     """
     Takes Scalelink Njklm values, variable K and variable p. From this, makes
-        Scalelink Matrix A.
+    Scalelink Matrix A.
 
     Args:
-        df_njklm:
-            A dataframe containing the delta comparison column names as column
-            names and a single row consisting of the Njklm values (i.e. the sums
-            of these delta comparison columns).
-        K:
-            The total number of agreement states across all linkage variables.
-        p:
-            The total number of linkage variables.
+      df_njklm:
+        A dataframe containing the delta comparison column names as column names
+        and a single row consisting of the Njklm values (i.e. the sums of these
+        delta comparison columns).
+      K:
+        The total number of agreement states across all linkage variables.
+      p:
+        The total number of linkage variables.
 
     Dependencies:
-        numpy as np
-        pandas as pd
+      numpy as np
+      pandas as pd
 
     Returns:
-        matrix_a:
-            An array containing multiples of the Njk and Njklm values, as per
-            Goldstein et al (2017).
+      matrix_a:
+        An array containing multiples of the Njk and Njklm values, as per
+        Goldstein et al (2017).
     """
     # Declare vector of rows for Njklm values
     Njklm_rows = [None] * K
@@ -401,30 +400,30 @@ def make_matrix_a_star(matrix_a: np.array, q: List[int], r: List[int]) -> np.arr
     Matrix A*.
 
     Args:
-        matrix_a:
-            An array containing multiples of the Njk and Njklm values, as per
-            Goldstein et al (2017).
-        q:
-            The Scalelink vector q, a list containing 0s and 1s representing the
-            scenario when the agreement state of every variable is 'disagree'.
-            If Matrix A* is expected to not be well conditioned, use q_s instead,
-            i.e., q multiplied element-wise by s.
+      matrix_a:
+        An array containing multiples of the Njk and Njklm values, as per
+        Goldstein et al (2017).
+      q:
+        The Scalelink vector q, a list containing 0s and 1s representing the
+        scenario when the agreement state of every variable is 'disagree'. If
+        Matrix A* is expected to not be well conditioned, use q_s instead, i.e.,
+        q multiplied element-wise by s.
 
-        r:
-            The Scalelink vector r, a list containing 0s and 1s representing the
-            scenario when the agreement state of every variable is 'agree'. If
-            Matrix A* is expected to not be well conditioned, use r_s instead,
-            i.e., r multiplied element-wise by s.
+      r:
+        The Scalelink vector r, a list containing 0s and 1s representing the
+        scenario when the agreement state of every variable is 'agree'. If
+        Matrix A* is expected to not be well conditioned, use r_s instead, i.e.,
+        r multiplied element-wise by s.
 
     Dependencies:
-        numpy as np
+      numpy as np
 
     Returns:
-        matrix_a_star (Numpy array):
-            An array containing Matrix A*, as per Goldstein et al (2017), i.e.
-            Matrix A with additional rows and columns added that are derived from
-            vectors q and r (or q_s and q_r if Matrix A* is expected to not be
-            well conditioned).
+      matrix_a_star:
+        An array containing Matrix A*, as per Goldstein et al (2017), i.e.
+        Matrix A with additional rows and columns added that are derived from
+        vectors q and r (or q_s and q_r if Matrix A* is expected to not be well
+        conditioned).
     """
     # Define additional rows and columns
     additional_columns = [[i * -1 for i in q], [i * -1 for i in r]]
@@ -448,20 +447,20 @@ def make_matrix_a_star(matrix_a: np.array, q: List[int], r: List[int]) -> np.arr
 def multiply_vectors_by_s(vector: List[int], s: int) -> List[int]:
     """
     Takes Scalelink vector (q, r or b) and the Scalelink variable s. Multiplies
-        the vector by s, element-wise, to give q_s, r_s or b_s. These are used in
-        place of q, r and b when Matrix A* is not well conditioned.
+    the vector by s, element-wise, to give q_s, r_s or b_s. These are used in
+    place of q, r and b when Matrix A* is not well conditioned.
 
     Args:
-        vector:
-            A Scalelink vector (q, r or b) consisting of a list containing 0s and
-            1s.
-        s:
-            A Scalelink variable consisting of the total number of candidate
-            pairs entering the scaling algorithm.
+      vector:
+        A Scalelink vector (q, r or b) consisting of a list containing 0s and
+        1s.
+      s:
+        A Scalelink variable consisting of the total number of candidate pairs
+        entering the scaling algorithm.
 
     Returns:
-        vector_by_s:
-            The Scalelink vector with every value multiplied by s.
+      vector_by_s:
+        The Scalelink vector with every value multiplied by s.
     """
     vector_by_s = [(i * s) for i in vector]
 
@@ -471,25 +470,25 @@ def multiply_vectors_by_s(vector: List[int], s: int) -> List[int]:
 def scale_x_star(x_star_labelled: Dict[str, float]) -> Dict[str, float]:
     """
     Takes the labelled version of the Scalelink vector x* and scales it. This is
-        a two-step process. First, on a linkage variable basis, the disagreement
-        weight is subtracted from each weight. Next, each weight is multiplied by
-        100. This results in weights scaled to between 0 and 100.
+    a two-step process. First, on a linkage variable basis, the disagreement
+    weight is subtracted from each weight. Next, each weight is multiplied by
+    100. This results in weights scaled to between 0 and 100.
 
     Args:
-        x_star_labelled:
-            A dictionary with keys consisting of linkage variable names and
-            states and the values consisting of the raw weights calculated for
-            those variables and states.
+      x_star_labelled:
+        A dictionary with keys consisting of linkage variable names and states
+        and the values consisting of the raw weights calculated for those
+        variables and states.
 
     Dependencies:
-        collections
-        re
+      collections
+      re
 
     Returns:
-        x_star_scaled:
-            A dictionary with keys consisting of linkage variable names and
-            states and the values consisting of the scaled weights calculated for
-            those variables and states.
+      x_star_scaled:
+        A dictionary with keys consisting of linkage variable names and states
+        and the values consisting of the scaled weights calculated for those
+        variables and states.
     """
     x_star_scaled = collections.OrderedDict()
     for x_star_key, x_star_value in x_star_labelled.items():
@@ -515,26 +514,26 @@ def scale_x_star(x_star_labelled: Dict[str, float]) -> Dict[str, float]:
 def solve_for_x_star(matrix_a_star: np.array, b: List[int]) -> List[float]:
     """
     Takes Scalelink Matrix A* and vector b. From this, solves the matrix to make
-        Scalelink vector x*.
+    Scalelink vector x*.
 
     Args:
-        matrix_a_star:
-            An array containing Matrix A*, as per Goldstein et al (2017), i.e.
-            Matrix A with additional rows and columns added that are derived from
-            vectors q and r (or q_s and q_r if Matrix A* is expected to not be
-            well conditioned).
-        b:
-            The Scalelink vector b, a list of length K where every element is 0
-            except the last element. If Matrix A* is expected to not be well
-            conditioned, use b_s instead, i.e., b multiplied element-wise by s.
+      matrix_a_star:
+        An array containing Matrix A*, as per Goldstein et al (2017), i.e.
+        Matrix A with additional rows and columns added that are derived from
+        vectors q and r (or q_s and q_r if Matrix A* is expected to not be well
+        conditioned).
+      b:
+        The Scalelink vector b, a list of length K where every element is 0
+        except the last element. If Matrix A* is expected to not be well
+        conditioned, use b_s instead, i.e., b multiplied element-wise by s.
 
     Dependencies:
-        numpy as np
+      numpy as np
 
     Returns:
-        x_star:
-            A list containing x*, i.e. the unscaled weights resulting from the
-            scaling algorithm.
+      x_star:
+        A list containing x*, i.e. the unscaled weights resulting from the
+        scaling algorithm.
     """
     inverse_matrix_a_star = np.linalg.inv(matrix_a_star)
     x_star = np.dot(inverse_matrix_a_star, np.asarray(b)).tolist()

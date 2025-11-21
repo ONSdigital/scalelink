@@ -97,7 +97,7 @@ def test_calculate_sorensen_dice(
     sorensen_dice_output_df: pyspark.sql.DataFrame,
 ) -> None:
     """
-    Tests that calculate_sorensen_dice gives the correct output when supplied
+    Tests that calculate_sorensen_dice gives the correct output when provided
     with appropriate inputs.
 
     Dependencies:
@@ -231,7 +231,7 @@ def test_compare_deltas(spark: pyspark.sql.SparkSession) -> None:
 def test_compute_normalized_levenshtein(spark: pyspark.sql.SparkSession) -> None:
     """
     Tests that compute_normalized_levenshtein gives the correct output when
-    supplied with appropriate inputs.
+    provided with appropriate inputs.
 
     Dependencies:
       chispa as ch
@@ -336,7 +336,8 @@ def test_get_deltas(
     agreement_states_output_df: pyspark.sql.DataFrame,
 ) -> None:
     """
-    Tests that get_deltas gives the correct output when supplied with appropriate inputs.
+    Tests that get_deltas gives the correct output when provided with appropriate
+    inputs.
     """
     # Arrange
     test_input_df = sorensen_dice_input_df
@@ -378,7 +379,7 @@ def test_get_deltas(
 
 def test_make_bigrams(spark: pyspark.sql.SparkSession) -> None:
     """
-    Tests that make_bigrams gives the correct output when supplied with
+    Tests that make_bigrams gives the correct output when provided with
     appropriate inputs.
 
     Dependencies:
