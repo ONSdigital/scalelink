@@ -23,7 +23,7 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 - Configs template, with updates to reflect updated `main.py`.
 - GitHub Action that creates releases from tags.
 - Python 3.11 support.
-
+- Type hints for all functions.
 ### Changed
 
 - Dependabot updates including:
@@ -48,6 +48,7 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 - Unit tests:
   - `test_cartesian_join_dataframes` in `tests/utils/utils.py`.
   - `test_get_s` in `tests/utils/utils.py`.
+- Formatting of all docstrings.
 
 ### Removed
 
