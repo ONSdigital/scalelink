@@ -23,7 +23,7 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Dependabot updates including:
-  - In GitHub Actions, bump actions/checkout from v4 to v5.
+  - In GitHub Actions, bump actions/checkout from v4 to v6.
   - In GitHub Actions, bump actions/setup-python from v5 to v6.
 - Function `create_spark_session` in `scalelink/utils/utils.py`, to make it less verbose.
 - Code contribution guidelines, to clarify that we are only accepting contributions from ONSdigital users currently.
