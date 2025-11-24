@@ -282,7 +282,7 @@ def test_compute_normalised_levenshtein(spark: pyspark.sql.SparkSession) -> None
             ("6", "string", None, None),
             ("7", None, None, None),
         ],
-        ("id", "string_1", "string_2", "normalized_levenshtein_output"),
+        ("id", "string_1", "string_2", "normalised_levenshtein_output"),
     )
 
     expected_output_2 = spark.createDataFrame(
@@ -296,15 +296,15 @@ def test_compute_normalised_levenshtein(spark: pyspark.sql.SparkSession) -> None
 
     # Act
     test_output_1 = test_input_1.withColumn(
-        "normalized_levenshtein_output",
-        im.compute_normalized_levenshtein(test_input_1.string_1, test_input_1.string_2),
+        "normalised_levenshtein_output",
+        im.compute_normalised_levenshtein(test_input_1.string_1, test_input_1.string_2),
     )
 
     test_output_2 = test_input_2.join(
         test_input_3,
         (
             (
-                im.compute_normalized_levenshtein(
+                im.compute_normalised_levenshtein(
                     test_input_2.string_1, test_input_3.string_2
                 )
                 > 0.7
