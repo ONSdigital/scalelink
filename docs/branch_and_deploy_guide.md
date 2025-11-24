@@ -101,6 +101,7 @@ changes into the `main` branch.
 2. **Increment version:**
    - The version of the package is incremented.
    - The new version tag is pushed.
+   - A new GitHub release is made that refers to the new version tag.
   
 Further deployment steps will be added in due course.
 
@@ -140,8 +141,8 @@ As `scalelink` maintainers, ensuring a seamless transition from `develop` to `ma
     This step ensures users and developers can easily find and access the specific versions of `scalelink` through their respective release pages and download links, maintaining comprehensive and navigable documentation.
 
 - **Final review and push:**
- - Review the changes one more time, ensuring that the version bump and `CHANGELOG.md` updates are correctly applied.
- - Push the commit(s) to the `develop` branch. This action updates the branch with the version change and changelog updates.
+  - Review the changes one more time, ensuring that the version bump and `CHANGELOG.md` updates are correctly applied.
+  - Push the commit(s) to the `develop` branch. This action updates the branch with the version change and changelog updates.
 
 ### Merging and deployment
 

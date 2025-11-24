@@ -14,12 +14,18 @@ jobs:
       - name: Extract package version
         id: package_version
         run: |
-          echo "PACKAGE_VERSION=$python setup.py --version)" >> $GITHUB_ENV
-      
+          echo "PACKAGE_VERSION=$(python setup.py --version)" >> $GITHUB_ENV
+
       - name: Bump version and push tag
         id: tag_version
-        uses: mathieudutour/github-tag-action@v6.2
+        uses: mathieudutour/github-tag-action@v6.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           custom_tag: ${{ env.PACKAGE_VERSION }}
-      
+
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}      

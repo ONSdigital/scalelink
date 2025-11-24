@@ -1,6 +1,7 @@
 # Contribution guide
 
-We welcome contributions to the `scalelink` repository. To contribute, please follow these guidelines.
+We welcome contributions to the `scalelink` repository. However, currently we are only accepting contributions from users within `ONSdigital`.
+To contribute, please follow these guidelines.
 
 ## Submitting changes
 
