@@ -228,9 +228,9 @@ def test_compare_deltas(spark: pyspark.sql.SparkSession) -> None:
     ch.assert_df_equality(df1=test_output, df2=expected_output, ignore_row_order=True)
 
 
-def test_compute_normalized_levenshtein(spark: pyspark.sql.SparkSession) -> None:
+def test_compute_normalised_levenshtein(spark: pyspark.sql.SparkSession) -> None:
     """
-    Tests that compute_normalized_levenshtein gives the correct output when
+    Tests that compute_normalised_levenshtein gives the correct output when
     provided with appropriate inputs.
 
     Dependencies:
