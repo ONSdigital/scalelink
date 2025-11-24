@@ -450,7 +450,7 @@ def get_input_variables(config_path: str) -> Dict[str, Any]:
 
 def get_s(
     input_variables: Dict[str, Any], df_cartesian_join: pyspark.sql.DataFrame
-) -> Dict[str:Any]:
+) -> Dict[str, Any]:
     """
     Takes a dictionary of input variables and a dataframe consisting of the
     Cartesian join of the two dataframes to be linked. From this, calculates the
