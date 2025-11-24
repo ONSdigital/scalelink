@@ -22,7 +22,7 @@ Methods:
      - assign_match_score
 """
 
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Union
 
 import pyspark
 from pyspark.sql import functions as F
@@ -62,7 +62,7 @@ def assign_weights(
     df_with_deltas: pyspark.sql.DataFrame,
     df1_id: str,
     df2_id: str,
-    cutpoints: Dict[str, List[float] | None],
+    cutpoints: Dict[str, Union[List[float], None]],
     x_star_scaled: Dict[str, float],
     spark: pyspark.sql.SparkSession,
 ) -> pyspark.sql.DataFrame:

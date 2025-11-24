@@ -58,13 +58,15 @@ Methods:
 
 import collections
 import configparser as cp
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Union
 
 import pyspark
 from pyspark.sql import SparkSession
 
 
-def define_binary_agreement_vars(cutpoints: Dict[str, List[float] | None]) -> List[str]:
+def define_binary_agreement_vars(
+    cutpoints: Dict[str, Union[List[float], None]],
+) -> List[str]:
     """
     Defines the linkage variables that will have binary agreement state.
 
@@ -208,7 +210,7 @@ def define_K(kj: Dict[str, int]) -> int:
     return K
 
 
-def define_kj(cutpoints: Dict[str, List[float] | None]) -> Dict[str, int]:
+def define_kj(cutpoints: Dict[str, Union[List[float], None]]) -> Dict[str, int]:
     """
     Defines the variable kj for each linkage variable, as per Goldstein et al.
     (2017). This variable is the number of agreement states.
@@ -255,7 +257,7 @@ def define_p(linkage_vars: List[str]) -> int:
 
 
 def define_partial_agreement_vars(
-    cutpoints: Dict[str, List[float] | None],
+    cutpoints: Dict[str, Union[List[float], None]],
 ) -> List[str]:
     """
     Defines the linkage variables that will have partial agreement state.

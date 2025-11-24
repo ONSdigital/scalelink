@@ -68,7 +68,7 @@ Methods:
 import collections
 import itertools
 import re
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Union
 
 import numpy as np
 import pandas as pd
@@ -130,7 +130,7 @@ def calculate_njklm_values(df: pyspark.sql.DataFrame) -> pd.DataFrame:
     return df_njklm
 
 
-def calculate_q(cutpoints: Dict[str, List[float] | None]) -> List[int]:
+def calculate_q(cutpoints: Dict[str, Union[List[float], None]]) -> List[int]:
     """
     Takes a dictionary containing linkage variable names and the string
     comparison cutpoints for those variables. From this, calculates the
@@ -164,7 +164,7 @@ def calculate_q(cutpoints: Dict[str, List[float] | None]) -> List[int]:
     return q
 
 
-def calculate_r(cutpoints: Dict[str, List[float] | None]) -> List[int]:
+def calculate_r(cutpoints: Dict[str, Union[List[float], None]]) -> List[int]:
     """
     Takes a dictionary containing linkage variable names and the string
     comparison cutpoints for those variables. From this, calculates the
@@ -199,7 +199,7 @@ def calculate_r(cutpoints: Dict[str, List[float] | None]) -> List[int]:
 
 
 def get_matrix_a_star(
-    df_delta_comparisons: pyspark.sql.DataFrame, input_variables
+    df_delta_comparisons: pyspark.sql.DataFrame, input_variables: Dict[str, Any]
 ) -> np.array:
     """
     Takes a dataframe containing the delta comparisons for the two dataframes to
@@ -294,7 +294,7 @@ def get_scaled_labelled_x_star(
 
 
 def label_x_star(
-    x_star: List[float], cutpoints: Dict[str, List[float] | None]
+    x_star: List[float], cutpoints: Dict[str, Union[List[float], None]]
 ) -> Dict[str, float]:
     """
     Takes Scalelink vector x* and a list of linkage variable names and their

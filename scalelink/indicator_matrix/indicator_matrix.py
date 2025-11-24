@@ -55,7 +55,7 @@ my_indicator_matrix = im.compare_deltas(
 )
 """
 
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Union
 
 import pyspark
 from pyspark.ml.feature import NGram
@@ -117,7 +117,7 @@ def calculate_agreement_states(
 
 def calculate_deltas(
     df: pyspark.sql.DataFrame,
-    cutpoints: Dict[str, List[float] | None],
+    cutpoints: Dict[str, Union[List[float], None]],
     agreement_col_suffix: str,
     string_similarity_suffix: str,
 ) -> pyspark.sql.DataFrame:
@@ -379,7 +379,7 @@ def compute_normalised_levenshtein(
 
 
 def get_deltas(
-    df_cartesian_join: pyspark.sql.DataFrame, input_variables: Dict[str, Any | None]
+    df_cartesian_join: pyspark.sql.DataFrame, input_variables: Dict[str, Any]
 ) -> pyspark.sql.DataFrame:
     """
     Takes the dataframe created by Cartesian join of the two dataframes to be
