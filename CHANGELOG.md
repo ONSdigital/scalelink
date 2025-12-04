@@ -20,6 +20,7 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
   - `test_create_spark_session` in `tests/utils/test_utils_create_spark_session.py`.
   - `test_get_input_variables` in `tests/utils/utils.py`.
   - `test_get_deltas` in `tests/indicator_matrix/test_indicator_matrix.py`.
+- GitHub Action that creates releases from tags.
 - Python 3.11 support.
 
 ### Changed
@@ -33,6 +34,9 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 - Unit tests:
   - `test_create_spark_session` in `tests/utils/test_utils_create_spark_session.py`.
   - `test_get_input_variables` in `tests/utils/utils.py`.
+- `README.md`:
+  - Added contact, dedication and icons for linter and formatter.
+  - Edited pre-requisites and acknowledgements.
 
 ### Deprecated
 
@@ -51,7 +55,7 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Config for bump2version: `.bumpversion.cfg`
+- Config for bump2version: `.bumpversion.cfg`.
 
 ### Changed
 
