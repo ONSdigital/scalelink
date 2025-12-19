@@ -18,7 +18,7 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
   - `create_spark_session` in `tests/utils/test_utils_create_spark_session.py`.
   - `get_input_variables` in `tests/utils/utils.py`.
   - `get_deltas` in `tests/indicator_matrix/test_indicator_matrix.py`.
-  - `get_match_scores` in `test/match_scores/match_scores.py`.
+  - `get_match_scores` in `test/match_scores/test_match_scores.py`.
 
 ### Changed
 
