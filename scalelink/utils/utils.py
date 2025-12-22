@@ -334,25 +334,35 @@ def get_input_variables(config_path: str) -> Dict[str, Any]:
           spark_session_size (str):
             The specified Spark session size for this run. Can be 's', 'm', 'l'
             or 'xl'.
+          bucket_name (str):
+            The name of the S3 bucket where the various filepaths can be found.
+            Must not include the "s://" prefix.
+          ssl_file (str):
+            The path, including file name and extension, for the SSL Certificate
+            to be used by the Boto3 client.
           df1_path (str):
-            The filepath for df1.
+            The filepath for df1, excluding the S3 bucket name.
           df2_path (str):
-            The filepath for df2.
+            The filepath for df2, excluding the S3 bucket name.
           df_candidates_path (str):
-            The filepath for the dataset of candidate pairs, if a specific set
-            of candidate pairs (e.g., from blocking) is to be used instead of
-            getting candidate pairs by Cartesian join of df1 and df2.
+            The filepath for the dataset of candidate pairs, excluding the S3
+            bucket name.
+            Only use if a specific set of candidate pairs (e.g. from blocking) is
+            to be used instead of getting candidate pairs by Cartesian join of
+            df1 and df2.
           checkpoint_path (str):
-            The filepath where checkpoints will be written.
+            The filepath where checkpoints will be written, excluding the S3
+            bucket name.
           output_path (str):
-            The filepath where the linked dataset will be written.
+            The filepath where the linked dataset will be written, excluding the
+            S3 bucket name.
           df1_id (str):
             The name of the ID variable in df1.
           df2_id (str):
             The name of the ID variable in df2.
           linkage_vars (list of str):
-            A list containing the names of the linkage variables, excluding
-            their suffixes.
+            A list containing the names of the linkage variables, excluding their
+            suffixes.
           df1_suffix (str):
             The suffix given to all linkage variables in df1.
           df2_suffix (str):
@@ -371,8 +381,8 @@ def get_input_variables(config_path: str) -> Dict[str, Any]:
             The total number of linkage variables.
           kj (dict of str: int):
             A dictionary with keys consisting of the linkage variable names and
-            values consisting of kj (number of agreement states) for each
-            linkage variable.
+            values consisting of kj (number of agreement states) for each linkage
+            variable.
           K (int):
             The total number of agreement states across all linkage variables.
           s (int):
