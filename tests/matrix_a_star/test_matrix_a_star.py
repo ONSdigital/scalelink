@@ -3,7 +3,7 @@
 Methods:
   calculate_b
 
-  calculate_njklm_values - test shell only, currently
+  calculate_njklm_values
 
   calculate_q
 
@@ -26,9 +26,10 @@ Methods:
   solve_for_x_star
 """
 
+from unittest.mock import call, patch
+
 import numpy as np
 import pandas as pd
-import pytest
 
 from scalelink.matrix_a_star import matrix_a_star as ma
 
@@ -50,9 +51,23 @@ def test_calculate_b() -> None:
     assert test_output == expected_output
 
 
-@pytest.mark.skip(reason="test shell")
-def test_calculate_njklm_values() -> None:
-    pass
+def test_calculate_njklm_values(
+    spark: pyspark.sql.SparkSession, compare_deltas_output: pyspark.sql.DataFrame, calculate_njklm_values_output: pd.DataFrame
+) -> None:
+    """
+    Tests that calculate_njklm_values() gives the correct output when
+    provided with appropriate inputs.
+    """
+    # Arrange
+    test_input = compare_deltas_output
+
+    expected_output = calculate_njklm_values_output
+
+    # Act
+    test_output = ma.calculate_njklm_values(test_input)
+
+    # Assert
+    pd.testing.assert_frame_equal(test_output, expected_output)
 
 
 def test_calculate_q() -> None:
@@ -89,33 +104,71 @@ def test_calculate_r() -> None:
     assert test_output == expected_output
 
 
-# @patch("scalelink.matrix_a_star.matrix_a_star.make_matrix_a_star")
-# @patch("scalelink.matrix_a_star.matrix_a_star.calculate_r")
-# @patch("scalelink.matrix_a_star.matrix_a_star.multiply_vectors_by_s")
-# @patch("scalelink.matrix_a_star.matrix_a_star.calculate_q")
-# @patch("scalelink.matrix_a_star.matrix_a_star.make_matrix_a")
-# @patch("scalelink.matrix_a_star.matrix_a_star.calculate_njklm_values")
-# def test_get_matrix_a_star(
-#  mock_calculate_njklm_values,
-#  mock_make_matrix_a,
-#  mock_calculate_q,
-#  mock_multiply_vectors_by_s,
-#  mock_calculate_r,
-#  mock_make_matrix_a_star,
-#  calculate_njklm_values_input,
-#  calculate_njklm_values_output,
-# ):
-#    """
-#    Tests that get_matrix_a_star() gives the correct output when provided
-#    with appropriate inputs.
-#    """
-#    # Arrange
-#
-#
-#    # Act
-#    _ = ma.get_matrix_a_star(df_delta_comparisons, input_variables)
-#
-#    # Assert
+@patch("scalelink.matrix_a_star.matrix_a_star.make_matrix_a_star")
+@patch("scalelink.matrix_a_star.matrix_a_star.calculate_r")
+@patch("scalelink.matrix_a_star.matrix_a_star.multiply_vectors_by_s")
+@patch("scalelink.matrix_a_star.matrix_a_star.calculate_q")
+@patch("scalelink.matrix_a_star.matrix_a_star.make_matrix_a")
+@patch("scalelink.matrix_a_star.matrix_a_star.calculate_njklm_values")
+def test_get_matrix_a_star(
+    mock_calculate_njklm_values: unittest.mock.MagicMock,
+    mock_make_matrix_a: unittest.mock.MagicMock,
+    mock_calculate_q: unittest.mock.MagicMock,
+    mock_multiply_vectors_by_s: unittest.mock.MagicMock,
+    mock_calculate_r: unittest.mock.MagicMock,
+    mock_make_matrix_a_star: unittest.mock.MagicMock,
+    spark_mock: unittest.mock.MagicMock,
+    compare_deltas_output: pyspark.sql.DataFrame,
+    calculate_njklm_values_output: pd.DataFrame,
+    make_matrix_a_output: np.array,
+) -> None:
+    """
+    Tests that get_matrix_a_star() gives the correct output when provided
+    with appropriate inputs.
+    """
+    # Arrange
+    test_input_df = compare_deltas_output
+    test_input_dict = {
+        "cutpoints": {"sex": None, "fn": [0.75, 0.9]},
+        "p": 2,
+        "K": 5,
+        "s": 7,
+    }
+    test_qs_input = [1, 0, 1, 0, 0]
+    test_qs_output = [7, 0, 7, 0, 0]
+    test_rs_input = [0, 1, 0, 0, 1]
+    test_rs_output = [0, 7, 0, 0, 7]
+
+    mock_calculate_njklm_values.return_value = calculate_njklm_values_output
+    mock_make_matrix_a.return_value = make_matrix_a_output
+    mock_calculate_q.return_value = test_qs_input
+    mock_multiply_vectors_by_s.side_effect = [test_qs_output, test_rs_output]
+    mock_calculate_r.return_value = test_rs_input
+
+    # Act
+    _ = ma.get_matrix_a_star(
+        df_delta_comparisons=test_input_df, input_variables=test_input_dict
+    )
+
+    # Assert
+    mock_calculate_njklm_values.assert_called_once_with(df=compare_deltas_output)
+    mock_make_matrix_a.assert_called_once_with(
+        Njklm=calculate_njklm_values_output,
+        K=test_input_dict["K"],
+        p=test_input_dict["p"],
+    )
+    mock_calculate_q.assert_called_once_with(cutpoints=test_input_dict["cutpoints"])
+    mock_multiply_vectors_by_s.assert_has_calls(
+        [
+            call(vector=test_qs_input, s=test_input_dict["s"]),
+            call(vector=test_rs_input, s=test_input_dict["s"]),
+        ],
+        any_order=False,
+    )
+    mock_calculate_r.assert_called_once_with(cutpoints=test_input_dict["cutpoints"])
+    mock_make_matrix_a_star.assert_called_once_with(
+        matrix_a=make_matrix_a_output, q=test_qs_output, r=test_rs_output
+    )
 
 
 def test_label_x_star() -> None:
@@ -168,7 +221,7 @@ def test_label_x_star() -> None:
     assert test_output == expected_output
 
 
-def test_make_matrix_a() -> None:
+def test_make_matrix_a(calculate_njklm_values_output, make_matrix_a_output):
     """
     Tests that make_matrix_a() gives the correct output when provided with
     appropriate inputs.
@@ -178,51 +231,12 @@ def test_make_matrix_a() -> None:
       pandas as pd
     """
     # Arrange
-    test_input_Njklm = pd.DataFrame(
-        data=[
-            [2, 0, 1, 0, 1, 0, 4, 0, 1, 2, 1, 0, 2, 0, 0, 0, 1, 0, 1, 0, 1, 2, 0, 0, 3]
-        ],
-        columns=[
-            "N_sex_1_sex_1",
-            "N_sex_1_sex_2",
-            "N_sex_1_forename_1",
-            "N_sex_1_forename_2",
-            "N_sex_1_forename_3",
-            "N_sex_2_sex_1",
-            "N_sex_2_sex_2",
-            "N_sex_2_forename_1",
-            "N_sex_2_forename_2",
-            "N_sex_2_forename_3",
-            "N_forename_1_sex_1",
-            "N_forename_1_sex_2",
-            "N_forename_1_forename_1",
-            "N_forename_1_forename_2",
-            "N_forename_1_forename_3",
-            "N_forename_2_sex_1",
-            "N_forename_2_sex_2",
-            "N_forename_2_forename_1",
-            "N_forename_2_forename_2",
-            "N_forename_2_forename_3",
-            "N_forename_3_sex_1",
-            "N_forename_3_sex_2",
-            "N_forename_3_forename_1",
-            "N_forename_3_forename_2",
-            "N_forename_3_forename_3",
-        ],
-    )
+    test_input_Njklm = calculate_njklm_values_output
 
     test_input_K = 5
     test_input_p = 2
 
-    expected_output = np.array(
-        [
-            [0.5, 0.0, -0.25, 0.0, -0.25],
-            [0.0, 1.0, 0.0, -0.25, -0.5],
-            [-0.25, 0.0, 0.5, 0.0, 0.0],
-            [0.0, -0.25, 0.0, 0.25, 0.0],
-            [-0.25, -0.5, 0.0, 0.0, 0.75],
-        ]
-    )
+    expected_output = make_matrix_a_output
 
     # Act
     test_output = ma.make_matrix_a(
@@ -233,7 +247,7 @@ def test_make_matrix_a() -> None:
     np.testing.assert_array_equal(test_output, expected_output)
 
 
-def test_make_matrix_a_star() -> None:
+def test_make_matrix_a_star(make_matrix_a_output):
     """
     Tests that make_matrix_a_star() gives the correct output when provided with
     appropriate inputs.
@@ -242,15 +256,7 @@ def test_make_matrix_a_star() -> None:
       numpy as np
     """
     # Arrange
-    test_input_matrix_a = np.array(
-        [
-            [0.5, 0, -0.25, 0, -0.25],
-            [0, 1, 0, -0.25, -0.5],
-            [-0.25, 0, 0.5, 0, 0],
-            [0, -0.25, 0, 0.25, 0],
-            [-0.25, -0.5, 0, 0, 0.75],
-        ]
-    )
+    test_input_matrix_a = make_matrix_a_output
 
     test_input_q = [1, 0, 1, 0, 0]
     test_input_r = [0, 1, 0, 0, 1]

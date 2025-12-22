@@ -120,7 +120,7 @@ def test_calculate_sorensen_dice(
     ch.assert_df_equality(df1=test_output, df2=expected_output, ignore_row_order=True)
 
 
-def test_compare_deltas(spark: pyspark.sql.SparkSession) -> None:
+def test_compare_deltas(spark: pyspark.sql.SparkSession, compare_deltas_output: pyspark.sql.DataFrame) -> None:
     """
     Tests that compare_deltas gives the correct output when provided with
     appropriate inputs.
@@ -178,46 +178,7 @@ def test_compare_deltas(spark: pyspark.sql.SparkSession) -> None:
         ],
     )
 
-    expected_output = spark.createDataFrame(
-        [
-            (0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1),
-            (1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1),
-            (1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-            (0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0),
-            (0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1),
-            (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-            (0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-        ],
-        T.StructType(
-            [
-                T.StructField("N_sex_1_sex_1", T.IntegerType(), False),
-                T.StructField("N_sex_1_sex_2", T.IntegerType(), False),
-                T.StructField("N_sex_1_forename_1", T.IntegerType(), False),
-                T.StructField("N_sex_1_forename_2", T.IntegerType(), False),
-                T.StructField("N_sex_1_forename_3", T.IntegerType(), False),
-                T.StructField("N_sex_2_sex_1", T.IntegerType(), False),
-                T.StructField("N_sex_2_sex_2", T.IntegerType(), False),
-                T.StructField("N_sex_2_forename_1", T.IntegerType(), False),
-                T.StructField("N_sex_2_forename_2", T.IntegerType(), False),
-                T.StructField("N_sex_2_forename_3", T.IntegerType(), False),
-                T.StructField("N_forename_1_sex_1", T.IntegerType(), False),
-                T.StructField("N_forename_1_sex_2", T.IntegerType(), False),
-                T.StructField("N_forename_1_forename_1", T.IntegerType(), False),
-                T.StructField("N_forename_1_forename_2", T.IntegerType(), False),
-                T.StructField("N_forename_1_forename_3", T.IntegerType(), False),
-                T.StructField("N_forename_2_sex_1", T.IntegerType(), False),
-                T.StructField("N_forename_2_sex_2", T.IntegerType(), False),
-                T.StructField("N_forename_2_forename_1", T.IntegerType(), False),
-                T.StructField("N_forename_2_forename_2", T.IntegerType(), False),
-                T.StructField("N_forename_2_forename_3", T.IntegerType(), False),
-                T.StructField("N_forename_3_sex_1", T.IntegerType(), False),
-                T.StructField("N_forename_3_sex_2", T.IntegerType(), False),
-                T.StructField("N_forename_3_forename_1", T.IntegerType(), False),
-                T.StructField("N_forename_3_forename_2", T.IntegerType(), False),
-                T.StructField("N_forename_3_forename_3", T.IntegerType(), False),
-            ]
-        ),
-    )
+    expected_output = compare_deltas_output
 
     # Act
     test_output = im.compare_deltas(
