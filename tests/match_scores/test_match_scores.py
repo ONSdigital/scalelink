@@ -5,11 +5,12 @@ Methods:
 
   test_assign_weights
 
-  test_get_match_scores - test shell only, currently
+  test_get_match_scores
 """
 
+from unittest.mock import patch
+
 import chispa as ch
-import pytest
 
 from scalelink.match_scores import match_scores as ms
 
@@ -48,7 +49,12 @@ def test_assign_match_score(spark):
     ch.assert_df_equality(df1=test_output, df2=expected_output, ignore_row_order=True)
 
 
-def test_assign_weights(spark):
+def test_assign_weights(
+    spark,
+    assign_weights_input_df,
+    assign_weights_input_x_star,
+    assign_weights_output_df,
+):
     """
     Tests that assign_weights() gives the correct output when provided with
     appropriate inputs.
@@ -57,87 +63,9 @@ def test_assign_weights(spark):
         chispa as ch
     """
     # Arrange
-    test_input_df = spark.createDataFrame(
-        [
-            (
-                "1-01",
-                "2-01",
-                1,
-                1,
-                "SARAH",
-                "SAARAH",
-                True,
-                0.8889,
-                False,
-                True,
-                False,
-                False,
-                True,
-            ),
-            (
-                "1-02",
-                "2-02",
-                1,
-                2,
-                "ALEECHA",
-                "ALEESHA",
-                False,
-                0.6667,
-                True,
-                False,
-                False,
-                True,
-                False,
-            ),
-            (
-                "1-03",
-                "2-03",
-                2,
-                1,
-                "TOM",
-                "GRACE",
-                False,
-                0.0000,
-                True,
-                False,
-                True,
-                False,
-                False,
-            ),
-        ],
-        [
-            "id_df1",
-            "id_df2",
-            "sex_df1",
-            "sex_df2",
-            "forename_df1",
-            "forename_df2",
-            "sex_agr_state",
-            "forename_sorensen_dice",
-            "di_sex_1",
-            "di_sex_2",
-            "di_forename_1",
-            "di_forename_2",
-            "di_forename_3",
-        ],
-    )
-
-    test_input_x_star = {
-        "sex_disagree": 0.0,
-        "sex_agree": 75.0,
-        "forename_disagree": 0.0,
-        "forename_partially_agree_1": 33.0,
-        "forename_agree": 91.0,
-    }
-
-    expected_output = spark.createDataFrame(
-        [
-            ("1-01", "2-01", 75.0, 91.0),
-            ("1-02", "2-02", 0.0, 33.0),
-            ("1-03", "2-03", 0.0, 0.0),
-        ],
-        ["id_df1", "id_df2", "sex_weight", "forename_weight"],
-    )
+    test_input_df = assign_weights_input_df
+    test_input_x_star = assign_weights_input_x_star
+    expected_output = assign_weights_output_df
 
     # Act
     test_output = ms.assign_weights(
@@ -153,6 +81,50 @@ def test_assign_weights(spark):
     ch.assert_df_equality(df1=test_output, df2=expected_output, ignore_row_order=True)
 
 
-@pytest.mark.skip(reason="test shell")
-def test_get_match_scores():
-    pass
+@patch("scalelink.match_scores.match_scores.assign_match_score")
+@patch("scalelink.match_scores.match_scores.assign_weights")
+def test_get_match_scores(
+    mock_assign_weights,
+    mock_assign_match_score,
+    spark_mock,
+    assign_weights_input_df,
+    assign_weights_input_x_star,
+    assign_weights_output_df,
+):
+    """
+    Tests that get_match_scores() gives the correct output when provided with
+    appropriate inputs.
+    """
+    # Arrange
+    test_input_df = assign_weights_input_df
+    test_input_x_star = assign_weights_input_x_star
+    test_input_ids = ["df1_id", "df2_id"]
+    test_input_cutpoints = {"sex": None, "forename": [0.5, 0.8]}
+
+    mock_assign_weights.return_value = assign_weights_output_df
+    mock_assign_match_score.return_value = spark_mock.sql.DataFrame
+
+    # Act
+    _ = ms.get_match_scores(
+        df_deltas=test_input_df,
+        x_star_scaled_labelled=test_input_x_star,
+        input_variables={
+            "df1_id": test_input_ids[0],
+            "df2_id": test_input_ids[1],
+            "cutpoints": test_input_cutpoints,
+        },
+        spark=spark_mock,
+    )
+
+    # Assert
+    mock_assign_weights.assert_called_once_with(
+        df_with_deltas=test_input_df,
+        df1_id=test_input_ids[0],
+        df2_id=test_input_ids[1],
+        cutpoints=test_input_cutpoints,
+        x_star_scaled=test_input_x_star,
+        spark=spark_mock,
+    )
+    mock_assign_match_score.assert_called_once_with(
+        df_with_weights=assign_weights_output_df
+    )
