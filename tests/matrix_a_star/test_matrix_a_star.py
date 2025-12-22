@@ -4,13 +4,13 @@
 Methods:
   calculate_b
 
-  calculate_njklm_values - test shell only, currently
+  calculate_njklm_values
 
   calculate_q
 
   calculate_r
 
-  get_matrix_a_star
+  get_matrix_a_star - test shell only, currently
 
   get_scaled_labelled_x_star - test shell only, currently
 
@@ -30,7 +30,6 @@ Methods:
 import numpy as np
 import pandas as pd
 import pytest
-from pyspark.sql import types as T
 
 from scalelink.matrix_a_star import matrix_a_star as ma
 
@@ -52,58 +51,17 @@ def test_calculate_b() -> None:
     assert test_output == expected_output
 
 
-def test_calculate_njklm_values(spark):
+def test_calculate_njklm_values(spark, compare_deltas_output):
     """
-    Tests that calculate_njklm_values() gives the correct output when provided with
-    appropriate inputs.
+    Tests that calculate_njklm_values() gives the correct output when
+    provided with appropriate inputs.
     """
     # Arrange
-
-    test_input = spark.createDataFrame(
-        [
-            (0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1),
-            (1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1),
-            (1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-            (0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0),
-            (0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1),
-            (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-            (0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-        ],
-        T.StructType(
-            [
-                T.StructField("N_sex_1_sex_1", T.IntegerType(), False),
-                T.StructField("N_sex_1_sex_2", T.IntegerType(), False),
-                T.StructField("N_sex_1_forename_1", T.IntegerType(), False),
-                T.StructField("N_sex_1_forename_2", T.IntegerType(), False),
-                T.StructField("N_sex_1_forename_3", T.IntegerType(), False),
-                T.StructField("N_sex_2_sex_1", T.IntegerType(), False),
-                T.StructField("N_sex_2_sex_2", T.IntegerType(), False),
-                T.StructField("N_sex_2_forename_1", T.IntegerType(), False),
-                T.StructField("N_sex_2_forename_2", T.IntegerType(), False),
-                T.StructField("N_sex_2_forename_3", T.IntegerType(), False),
-                T.StructField("N_forename_1_sex_1", T.IntegerType(), False),
-                T.StructField("N_forename_1_sex_2", T.IntegerType(), False),
-                T.StructField("N_forename_1_forename_1", T.IntegerType(), False),
-                T.StructField("N_forename_1_forename_2", T.IntegerType(), False),
-                T.StructField("N_forename_1_forename_3", T.IntegerType(), False),
-                T.StructField("N_forename_2_sex_1", T.IntegerType(), False),
-                T.StructField("N_forename_2_sex_2", T.IntegerType(), False),
-                T.StructField("N_forename_2_forename_1", T.IntegerType(), False),
-                T.StructField("N_forename_2_forename_2", T.IntegerType(), False),
-                T.StructField("N_forename_2_forename_3", T.IntegerType(), False),
-                T.StructField("N_forename_3_sex_1", T.IntegerType(), False),
-                T.StructField("N_forename_3_sex_2", T.IntegerType(), False),
-                T.StructField("N_forename_3_forename_1", T.IntegerType(), False),
-                T.StructField("N_forename_3_forename_2", T.IntegerType(), False),
-                T.StructField("N_forename_3_forename_3", T.IntegerType(), False),
-            ]
-        ),
-    )
-    expected_output = spark.createDataFrame(
-        [
-            (2, 0, 1, 0, 1, 0, 4, 0, 1, 2, 1, 0, 2, 0, 0, 0, 1, 0, 1, 0, 1, 2, 0, 0, 3),
-        ],
-        [
+    test_input = compare_deltas_output
+    
+    expected_output = pd.DataFrame(
+        [[2, 0, 1, 0, 1, 0, 4, 0, 1, 2, 1, 0, 2, 0, 0, 0, 1, 0, 1, 0, 1, 2, 0, 0, 3]],
+        columns=[
             "N_sex_1_sex_1",
             "N_sex_1_sex_2",
             "N_sex_1_forename_1",
@@ -131,8 +89,6 @@ def test_calculate_njklm_values(spark):
             "N_forename_3_forename_3",
         ],
     )
-
-    expected_output = expected_output.toPandas()
 
     # Act
     test_output = ma.calculate_njklm_values(test_input)
@@ -176,6 +132,11 @@ def test_calculate_r() -> None:
 
 @pytest.mark.skip(reason="test shell")
 def test_get_matrix_a_star() -> None:
+    pass
+
+
+@pytest.mark.skip(reason="test shell")
+def test_get_scaled_labelled_x_star():
     pass
 
 
