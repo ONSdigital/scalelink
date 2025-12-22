@@ -8,11 +8,11 @@ Methods:
   test_get_match_scores
 """
 
+from typing import Dict
 from unittest.mock import patch
 
 import chispa as ch
 import pyspark
-import pytest
 
 from scalelink.match_scores import match_scores as ms
 
@@ -56,7 +56,7 @@ def test_assign_weights(
     assign_weights_input_df: pyspark.sql.DataFrame,
     assign_weights_input_x_star: Dict[str, float],
     assign_weights_output_df: pyspark.sql.DataFrame,
-):
+) -> None:
     """
     Tests that assign_weights() gives the correct output when provided with
     appropriate inputs.
@@ -92,7 +92,7 @@ def test_get_match_scores(
     assign_weights_input_df,
     assign_weights_input_x_star,
     assign_weights_output_df,
-):
+) -> None:
     """
     Tests that get_match_scores() gives the correct output when provided with
     appropriate inputs.
