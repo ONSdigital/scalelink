@@ -89,9 +89,33 @@ def test_calculate_r() -> None:
     assert test_output == expected_output
 
 
-@pytest.mark.skip(reason="test shell")
-def test_get_matrix_a_star() -> None:
-    pass
+# @patch("scalelink.matrix_a_star.matrix_a_star.make_matrix_a_star")
+# @patch("scalelink.matrix_a_star.matrix_a_star.calculate_r")
+# @patch("scalelink.matrix_a_star.matrix_a_star.multiply_vectors_by_s")
+# @patch("scalelink.matrix_a_star.matrix_a_star.calculate_q")
+# @patch("scalelink.matrix_a_star.matrix_a_star.make_matrix_a")
+# @patch("scalelink.matrix_a_star.matrix_a_star.calculate_njklm_values")
+# def test_get_matrix_a_star(
+#  mock_calculate_njklm_values,
+#  mock_make_matrix_a,
+#  mock_calculate_q,
+#  mock_multiply_vectors_by_s,
+#  mock_calculate_r,
+#  mock_make_matrix_a_star,
+#  calculate_njklm_values_input,
+#  calculate_njklm_values_output,
+# ):
+#    """
+#    Tests that get_matrix_a_star() gives the correct output when provided
+#    with appropriate inputs.
+#    """
+#    # Arrange
+#
+#
+#    # Act
+#    _ = ma.get_matrix_a_star(df_delta_comparisons, input_variables)
+#
+#    # Assert
 
 
 def test_label_x_star() -> None:
