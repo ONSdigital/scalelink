@@ -217,7 +217,6 @@ def test_format_cutpoints() -> None:
     os.remove("test_config.ini")
 
 
-################################################################################
 @patch("scalelink.utils.utils.define_K")
 @patch("scalelink.utils.utils.define_kj")
 @patch("scalelink.utils.utils.define_p")
