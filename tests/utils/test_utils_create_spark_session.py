@@ -37,7 +37,7 @@ def test_create_spark_session():
             "spark.executor.cores": "1",
             "spark.dynamicAllocation.maxExecutors": "3",
             "spark.sql.shuffle.partitions": "12",
-            "spark.shuffle.service.enabled": "true",
+            "spark.shuffle.service.enabled": "false",
             "spark.ui.showConsoleProgress": "false",
         },
         "m": {
@@ -46,7 +46,7 @@ def test_create_spark_session():
             "spark.executor.cores": "3",
             "spark.dynamicAllocation.maxExecutors": "3",
             "spark.sql.shuffle.partitions": "18",
-            "spark.shuffle.service.enabled": "true",
+            "spark.shuffle.service.enabled": "false",
             "spark.ui.showConsoleProgress": "false",
         },
         "l": {
@@ -55,7 +55,7 @@ def test_create_spark_session():
             "spark.executor.cores": "5",
             "spark.dynamicAllocation.maxExecutors": "5",
             "spark.sql.shuffle.partitions": "200",
-            "spark.shuffle.service.enabled": "true",
+            "spark.shuffle.service.enabled": "false",
             "spark.ui.showConsoleProgress": "false",
         },
         "xl": {
@@ -64,7 +64,7 @@ def test_create_spark_session():
             "spark.executor.cores": "5",
             "spark.dynamicAllocation.maxExecutors": "12",
             "spark.sql.shuffle.partitions": "240",
-            "spark.shuffle.service.enabled": "true",
+            "spark.shuffle.service.enabled": "false",
             "spark.ui.showConsoleProgress": "false",
         },
     }
