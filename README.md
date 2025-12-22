@@ -11,7 +11,7 @@ This work is authored by the Data Linkage team within the Methodology and Qualit
 
 ## Pre-requisites
 
-- Python 3.8-3.10
+- Python 3.10-3.11
 - Spark 3.5.1
 
 ## Method
