@@ -30,6 +30,7 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
   - In GitHub Actions, bump actions/checkout from v4 to v6.
   - In GitHub Actions, bump actions/setup-python from v5 to v6.
   - Unpin `pytest` version.
+  - Change `pyspark` version requirements (specify as requiring <4.0.0).
 - Function `create_spark_session` in `scalelink/utils/utils.py`, to make it less verbose.
 - Code contribution guidelines, to clarify that we are only accepting contributions from ONSdigital users currently.
 - Dependabot config, so that version updates are targeted to `develop` not `main`.
