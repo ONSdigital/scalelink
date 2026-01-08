@@ -460,7 +460,7 @@ def make_bigrams(df: pyspark.sql.DataFrame, col: str) -> pyspark.sql.DataFrame:
       NGram from pyspark.ml.feature
 
     Returns:
-      df_compared:
+      df_with_bigrams:
         A dataframe consisting of df with an additional column containing a list
         of strings called 'col_bigrams', which contains the bigrams of col.
         Where the string in col was empty, Null or only contained a single
