@@ -104,7 +104,7 @@ def cartesian_join_dataframes(
         The Spark session being used.
 
     Dependencies
-      pyspark
+      pyspark.sql.SparkSession
 
     Returns:
       cartesian_join_df:
