@@ -457,7 +457,7 @@ def make_bigrams(df: pyspark.sql.DataFrame, col: str) -> pyspark.sql.DataFrame:
         The name of the first string column to be compared.
 
     Dependencies:
-      from pyspark.ml.feature import NGram
+      NGram from pyspark.ml.feature
 
     Returns:
       df_compared:
