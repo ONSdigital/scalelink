@@ -367,7 +367,7 @@ def compute_normalised_levenshtein(
         Second string column to be compared.
 
     Returns:
-      levenshtein_normalized_distance:
+      levenshtein_normalised_distance:
         Normalised Levenshtein distance between the two input columns.
     """
     levenshtein_normalised_distance = 1 - (
