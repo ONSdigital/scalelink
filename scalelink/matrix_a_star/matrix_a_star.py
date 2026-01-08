@@ -232,7 +232,7 @@ def get_matrix_a_star(
     df_njklm = calculate_njklm_values(df=df_delta_comparisons)
 
     matrix_a = make_matrix_a(
-        Njklm=df_njklm, K=input_variables["K"], p=input_variables["p"]
+        df_Njklm=df_njklm, K=input_variables["K"], p=input_variables["p"]
     )
 
     q_s = multiply_vectors_by_s(
@@ -347,13 +347,13 @@ def label_x_star(
     return x_star_labelled
 
 
-def make_matrix_a(Njklm: pd.DataFrame, K: int, p: int) -> np.array:
+def make_matrix_a(df_Njklm: pd.DataFrame, K: int, p: int) -> np.array:
     """
     Takes Scalelink Njklm values, variable K and variable p. From this, makes
     Scalelink Matrix A.
 
     Args:
-      df_njklm:
+      df_Njklm:
         A dataframe containing the delta comparison column names as column names
         and a single row consisting of the Njklm values (i.e. the sums of these
         delta comparison columns).
@@ -377,9 +377,9 @@ def make_matrix_a(Njklm: pd.DataFrame, K: int, p: int) -> np.array:
     # Fill vector of rows, row by row, with Njklm values
     for i in range(0, K):
         if i == 0:
-            Njklm_rows[i] = Njklm.values.tolist()[0][i : (i + K)]
+            Njklm_rows[i] = df_Njklm.values.tolist()[0][i : (i + K)]
         else:
-            Njklm_rows[i] = Njklm.values.tolist()[0][(i * K) : ((i * K) + K)]
+            Njklm_rows[i] = df_Njklm.values.tolist()[0][(i * K) : ((i * K) + K)]
 
     # Convert vector of rows to Numpy array
     Njklm_array = -np.array(Njklm_rows)

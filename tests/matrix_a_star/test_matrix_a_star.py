@@ -202,7 +202,7 @@ def test_make_matrix_a() -> None:
 
     # Act
     test_output = ma.make_matrix_a(
-        Njklm=test_input_Njklm, K=test_input_K, p=test_input_p
+        df_Njklm=test_input_Njklm, K=test_input_K, p=test_input_p
     )
 
     # Assert
