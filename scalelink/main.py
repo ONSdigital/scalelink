@@ -26,7 +26,10 @@ def run_scalelink(config_path: str = "scalelink/configs.ini") -> pyspark.sql.Dat
             template found at scalelink/configs_template.ini in this repo.
 
     Dependencies:
-        shutil
+        boto3
+        pyspark
+        raz_client
+        delete_folder from rdsa_utils.cdp.helpers.s3_utils
 
     Returns:
         df_weights_match_scores (Spark DataFrame):
