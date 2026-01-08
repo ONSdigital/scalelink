@@ -247,8 +247,8 @@ def calculate_sorensen_dice(
         number.
 
     Dependencies:
-      from pyspark.ml.feature import NGram
-      from scalelink.indicator_matrix.indicator_matrix import make_bigrams.
+      NGram from pyspark.ml.feature
+      make_bigrams from scalelink.indicator_matrix.indicator_matrix
 
     Provisos:
       Duplicate bigrams are not counted distinctly. Therefore, 'AA' and 'AAAA'
