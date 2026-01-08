@@ -503,6 +503,6 @@ def read_configs(config_path: str) -> cp.ConfigParser:
       configs:
         The configs from the config file.
     """
-    config = cp.ConfigParser()
-    config.read(config_path)
-    return config
+    configs = cp.ConfigParser()
+    configs.read(config_path)
+    return configs
