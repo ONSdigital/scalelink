@@ -16,33 +16,33 @@ from scalelink.utils import utils as ut
 def run_scalelink(config_path: str = "scalelink/configs.ini") -> pyspark.sql.DataFrame:
     """
     Takes a path for the location of the config file. From this, runs the entire
-        scaling method as per Goldstein et al. (2017) on the specified datasets,
-        using the specified linkage variables.
+      scaling method as per Goldstein et al. (2017) on the specified datasets,
+      using the specified linkage variables.
 
     Args:
-        config_path (str):
-            The filepath for the config file. The default is a file called
-            configs.ini in the head of this repo. The contents should follow the
-            template found at scalelink/configs_template.ini in this repo.
+      config_path:
+        The filepath for the config file. The default is a file called
+        configs.ini in the head of this repo. The contents should follow the
+        template found at scalelink/configs_template.ini in this repo.
 
     Dependencies:
-        boto3
-        pyspark
-        raz_client
-        delete_folder from rdsa_utils.cdp.helpers.s3_utils
+      boto3
+      pyspark
+      raz_client
+      delete_folder from rdsa_utils.cdp.helpers.s3_utils
 
     Returns:
-        df_weights_match_scores (Spark DataFrame):
-            A dataframe either derived from the Cartesian join of the two input
-            dataframes or derived from the dataset located at df_candidates_path.
-            The columns present on this dataset are:
-             - The ID column of each dataset.
-             - Weight columns (named after the linkage variables, suffixed with
-               '_weight') containing weights for each linkage variable and row.
-             - A column called match_score which contains the sum of the weights,
-               row-wise.
-        This dataframe is also written to the output_path specified in the config
-        file.
+      df_weights_match_scores:
+        A dataframe either derived from the Cartesian join of the two input
+        dataframes or derived from the dataset located at df_candidates_path.
+          The columns present on this dataset are:
+           - The ID column of each dataset.
+           - Weight columns (named after the linkage variables, suffixed with
+             '_weight') containing weights for each linkage variable and row.
+           - A column called match_score which contains the sum of the weights,
+             row-wise.
+      This dataframe is also written to the output_path specified in the config
+      file.
     """
     input_variables = ut.get_input_variables(config_path=config_path)
 
