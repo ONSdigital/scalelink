@@ -62,7 +62,7 @@ def test_assign_weights(
     appropriate inputs.
 
     Dependencies:
-        chispa as ch
+      chispa as ch
     """
     # Arrange
     test_input_df = assign_weights_input_df
