@@ -150,8 +150,8 @@ def test_make_matrix_a() -> None:
     appropriate inputs.
 
     Dependencies:
-        numpy as np
-        pandas as pd
+      numpy as np
+      pandas as pd
     """
     # Arrange
     test_input_Njklm = pd.DataFrame(
@@ -215,7 +215,7 @@ def test_make_matrix_a_star() -> None:
     appropriate inputs.
 
     Dependencies:
-        numpy as np
+      numpy as np
     """
     # Arrange
     test_input_matrix_a = np.array(
@@ -324,7 +324,7 @@ def test_solve_for_x_star() -> None:
     appropriate inputs.
 
     Dependencies:
-        numpy as np
+      numpy as np
     """
     # Arrange
     test_input_matrix_a_star = np.array([[2, 1], [1, 1]])
