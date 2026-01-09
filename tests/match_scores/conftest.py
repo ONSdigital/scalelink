@@ -1,8 +1,11 @@
+from typing import Dict
+
+import pyspark
 import pytest
 
 
 @pytest.fixture(scope="module")
-def assign_weights_input_df(spark):
+def assign_weights_input_df(spark: pyspark.sql.SparkSession) -> pyspark.sql.DataFrame:
     return spark.createDataFrame(
         [
             (
@@ -70,7 +73,7 @@ def assign_weights_input_df(spark):
 
 
 @pytest.fixture(scope="module")
-def assign_weights_input_x_star():
+def assign_weights_input_x_star() -> Dict[str, float]:
     return {
         "sex_disagree": 0.0,
         "sex_agree": 75.0,
@@ -81,7 +84,7 @@ def assign_weights_input_x_star():
 
 
 @pytest.fixture(scope="module")
-def assign_weights_output_df(spark):
+def assign_weights_output_df(spark: pyspark.sql.SparkSession) -> pyspark.sql.DataFrame:
     return spark.createDataFrame(
         [
             ("1-01", "2-01", 75.0, 91.0),

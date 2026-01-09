@@ -16,17 +16,21 @@ Methods:
   test_make_bigrams
 """
 
+import unittest
 from unittest.mock import patch
 
 import chispa as ch
+import pyspark
 from pyspark.sql import types as T
 
 from scalelink.indicator_matrix import indicator_matrix as im
 
 
 def test_calculate_agreement_states(
-    spark, sorensen_dice_output_df, agreement_states_output_df
-):
+    spark: pyspark.sql.SparkSession,
+    sorensen_dice_output_df: pyspark.sql.DataFrame,
+    agreement_states_output_df: pyspark.sql.DataFrame,
+) -> None:
     """
     Tests that calculate_agreement_states gives the correct output when provided
     with appropriate inputs.
@@ -55,8 +59,10 @@ def test_calculate_agreement_states(
 
 
 def test_calculate_deltas(
-    spark, agreement_states_output_df, calculate_deltas_output_df
-):
+    spark: pyspark.sql.SparkSession,
+    agreement_states_output_df: pyspark.sql.DataFrame,
+    calculate_deltas_output_df: pyspark.sql.DataFrame,
+) -> None:
     """
     Tests that calculate_deltas gives the correct output when provided with
     appropriate inputs.
@@ -86,10 +92,12 @@ def test_calculate_deltas(
 
 
 def test_calculate_sorensen_dice(
-    spark, sorensen_dice_input_df, sorensen_dice_output_df
-):
+    spark: pyspark.sql.SparkSession,
+    sorensen_dice_input_df: pyspark.sql.DataFrame,
+    sorensen_dice_output_df: pyspark.sql.DataFrame,
+) -> None:
     """
-    Tests that calculate_sorensen_dice gives the correct output when supplied
+    Tests that calculate_sorensen_dice gives the correct output when provided
     with appropriate inputs.
 
     Dependencies:
@@ -112,7 +120,7 @@ def test_calculate_sorensen_dice(
     ch.assert_df_equality(df1=test_output, df2=expected_output, ignore_row_order=True)
 
 
-def test_compare_deltas(spark):
+def test_compare_deltas(spark: pyspark.sql.SparkSession) -> None:
     """
     Tests that compare_deltas gives the correct output when provided with
     appropriate inputs.
@@ -220,10 +228,10 @@ def test_compare_deltas(spark):
     ch.assert_df_equality(df1=test_output, df2=expected_output, ignore_row_order=True)
 
 
-def test_compute_normalized_levenshtein(spark):
+def test_compute_normalised_levenshtein(spark: pyspark.sql.SparkSession) -> None:
     """
-    Tests that compute_normalized_levenshtein gives the correct output when
-    supplied with appropriate inputs.
+    Tests that compute_normalised_levenshtein gives the correct output when
+    provided with appropriate inputs.
 
     Dependencies:
       chispa as ch
@@ -274,7 +282,7 @@ def test_compute_normalized_levenshtein(spark):
             ("6", "string", None, None),
             ("7", None, None, None),
         ],
-        ("id", "string_1", "string_2", "normalized_levenshtein_output"),
+        ("id", "string_1", "string_2", "normalised_levenshtein_output"),
     )
 
     expected_output_2 = spark.createDataFrame(
@@ -288,15 +296,15 @@ def test_compute_normalized_levenshtein(spark):
 
     # Act
     test_output_1 = test_input_1.withColumn(
-        "normalized_levenshtein_output",
-        im.compute_normalized_levenshtein(test_input_1.string_1, test_input_1.string_2),
+        "normalised_levenshtein_output",
+        im.compute_normalised_levenshtein(test_input_1.string_1, test_input_1.string_2),
     )
 
     test_output_2 = test_input_2.join(
         test_input_3,
         (
             (
-                im.compute_normalized_levenshtein(
+                im.compute_normalised_levenshtein(
                     test_input_2.string_1, test_input_3.string_2
                 )
                 > 0.7
@@ -319,16 +327,17 @@ def test_compute_normalized_levenshtein(spark):
 @patch("scalelink.indicator_matrix.indicator_matrix.calculate_agreement_states")
 @patch("scalelink.indicator_matrix.indicator_matrix.calculate_sorensen_dice")
 def test_get_deltas(
-    mock_calculate_sorensen_dice,
-    mock_calculate_agreement_states,
-    mock_calculate_deltas,
-    spark_mock,
-    sorensen_dice_input_df,
-    sorensen_dice_output_df,
-    agreement_states_output_df,
-):
+    mock_calculate_sorensen_dice: unittest.mock.MagicMock,
+    mock_calculate_agreement_states: unittest.mock.MagicMock,
+    mock_calculate_deltas: unittest.mock.MagicMock,
+    spark_mock: unittest.mock.MagicMock,
+    sorensen_dice_input_df: pyspark.sql.DataFrame,
+    sorensen_dice_output_df: pyspark.sql.DataFrame,
+    agreement_states_output_df: pyspark.sql.DataFrame,
+) -> None:
     """
-    Tests that get_deltas gives the correct output when supplied with appropriate inputs.
+    Tests that get_deltas gives the correct output when provided with appropriate
+    inputs.
     """
     # Arrange
     test_input_df = sorensen_dice_input_df
@@ -368,9 +377,9 @@ def test_get_deltas(
     )
 
 
-def test_make_bigrams(spark):
+def test_make_bigrams(spark: pyspark.sql.SparkSession) -> None:
     """
-    Tests that make_bigrams gives the correct output when supplied with
+    Tests that make_bigrams gives the correct output when provided with
     appropriate inputs.
 
     Dependencies:

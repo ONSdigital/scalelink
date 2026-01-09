@@ -1,8 +1,9 @@
+import pyspark
 import pytest
 
 
 @pytest.fixture(scope="module")
-def sorensen_dice_input_df(spark):
+def sorensen_dice_input_df(spark: pyspark.sql.SparkSession) -> pyspark.sql.DataFrame:
     return spark.createDataFrame(
         [
             (1, 1, "SARAH", "SAARAH"),
@@ -23,7 +24,7 @@ def sorensen_dice_input_df(spark):
 
 
 @pytest.fixture(scope="module")
-def sorensen_dice_output_df(spark):
+def sorensen_dice_output_df(spark: pyspark.sql.SparkSession) -> pyspark.sql.DataFrame:
     return spark.createDataFrame(
         [
             (1, 1, "SARAH", "SAARAH", 0.8889),
@@ -45,7 +46,9 @@ def sorensen_dice_output_df(spark):
 
 
 @pytest.fixture(scope="module")
-def agreement_states_output_df(spark):
+def agreement_states_output_df(
+    spark: pyspark.sql.SparkSession,
+) -> pyspark.sql.DataFrame:
     return spark.createDataFrame(
         [
             (1, 1, "SARAH", "SAARAH", 0.8889, True),
@@ -68,7 +71,9 @@ def agreement_states_output_df(spark):
 
 
 @pytest.fixture(scope="module")
-def calculate_deltas_output_df(spark):
+def calculate_deltas_output_df(
+    spark: pyspark.sql.SparkSession,
+) -> pyspark.sql.DataFrame:
     return spark.createDataFrame(
         [
             (1, 1, "SARAH", "SAARAH", 0.8889, True, False, True, False, False, True),
