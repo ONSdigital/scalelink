@@ -229,10 +229,10 @@ def get_matrix_a_star(
         vectors q and r (or q_s and q_r if Matrix A* is expected to not be
         well conditioned).
     """
-    df_njklm = calculate_njklm_values(df=df_delta_comparisons)
+    df_Njklm = calculate_njklm_values(df=df_delta_comparisons)
 
     matrix_a = make_matrix_a(
-        df_Njklm=df_njklm, K=input_variables["K"], p=input_variables["p"]
+        df_Njklm=df_Njklm, K=input_variables["K"], p=input_variables["p"]
     )
 
     q_s = multiply_vectors_by_s(
