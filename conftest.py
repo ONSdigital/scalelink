@@ -51,7 +51,7 @@ def spark_mock():
 
 
 @pytest.fixture(scope="module")
-def compare_deltas_output(spark):
+def compare_deltas_output(spark: pyspark.sql.SparkSession) -> pyspark.sql.DataFrame:
     """
     Sets up the expected output for test_compare_deltas, which is also the
     test input for test_calculate_njklm_values.

@@ -29,6 +29,7 @@ Methods:
 
 import numpy as np
 import pandas as pd
+import pyspark
 import pytest
 
 from scalelink.matrix_a_star import matrix_a_star as ma
@@ -51,7 +52,9 @@ def test_calculate_b() -> None:
     assert test_output == expected_output
 
 
-def test_calculate_njklm_values(spark, compare_deltas_output):
+def test_calculate_njklm_values(
+    spark: pyspark.sql.SparkSession, compare_deltas_output: pyspark.sql.DataFrame
+) -> None:
     """
     Tests that calculate_njklm_values() gives the correct output when
     provided with appropriate inputs.
@@ -136,7 +139,7 @@ def test_get_matrix_a_star() -> None:
 
 
 @pytest.mark.skip(reason="test shell")
-def test_get_scaled_labelled_x_star():
+def test_get_scaled_labelled_x_star() -> None:
     pass
 
 
