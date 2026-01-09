@@ -114,20 +114,20 @@ def calculate_njklm_values(df: pyspark.sql.DataFrame) -> pd.DataFrame:
       pandas as pd
 
     Returns:
-      df_njklm:
+      df_Njklm:
         A dataframe containing the delta comparison column names as column names
         and a single row consisting of the Njklm values (i.e. the sums of these
         delta comparison columns).
     """
-    df_njklm = df.groupBy().sum()
+    df_Njklm = df.groupBy().sum()
 
     # Convert column names from 'sum(col1)' to 'col1'
-    for col in df_njklm.columns:
-        df_njklm = df_njklm.withColumnRenamed(col, col[4 : (len(col) - 1)])
+    for col in df_Njklm.columns:
+        df_Njklm = df_Njklm.withColumnRenamed(col, col[4 : (len(col) - 1)])
 
-    df_njklm = df_njklm.toPandas()
+    df_Njklm = df_Njklm.toPandas()
 
-    return df_njklm
+    return df_Njklm
 
 
 def calculate_q(cutpoints: Dict[str, Union[List[float], None]]) -> List[int]:
