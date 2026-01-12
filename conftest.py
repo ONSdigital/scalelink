@@ -3,6 +3,7 @@ This file is run by pytest before all tests are discovered.
 Therefore, any fixtures defined here are available to all tests.
 """
 
+import unittest
 from unittest.mock import Mock
 
 import pyspark
@@ -27,7 +28,7 @@ def spark() -> pyspark.sql.SparkSession:
 
 
 @pytest.fixture(scope="function")
-def spark_mock():
+def spark_mock() -> unittest.mock.MagicMock:
     """
     Sets up a mock version of Spark.
 

@@ -144,12 +144,11 @@ def test_get_scaled_labelled_x_star() -> None:
     pass
 
 
-def test_label_x_star():
+def test_label_x_star() -> None:
     """
     Tests that label_x_star() gives the correct output when provided with
     appropriate inputs.
     """
-
     # Arrange
     test_input_x_star = [
         0.01,
