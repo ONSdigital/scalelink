@@ -493,7 +493,7 @@ def read_configs(config_path: str) -> cp.ConfigParser:
     Reads in configs.
 
     Args:
-      config_path (str):
+      config_path:
         The filepath for the config file.
 
     Dependencies:
