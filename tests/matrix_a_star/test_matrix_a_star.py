@@ -61,7 +61,7 @@ def test_calculate_njklm_values(
     """
     # Arrange
     test_input = compare_deltas_output
-    
+
     expected_output = pd.DataFrame(
         [[2, 0, 1, 0, 1, 0, 4, 0, 1, 2, 1, 0, 2, 0, 0, 0, 1, 0, 1, 0, 1, 2, 0, 0, 3]],
         columns=[
@@ -98,6 +98,7 @@ def test_calculate_njklm_values(
 
     # Assert
     pd.testing.assert_frame_equal(test_output, expected_output)
+
 
 def test_calculate_q() -> None:
     """
