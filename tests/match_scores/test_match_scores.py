@@ -8,6 +8,7 @@ Methods:
   test_get_match_scores
 """
 
+import unittest
 from typing import Dict
 from unittest.mock import patch
 
@@ -86,12 +87,12 @@ def test_assign_weights(
 @patch("scalelink.match_scores.match_scores.assign_match_score")
 @patch("scalelink.match_scores.match_scores.assign_weights")
 def test_get_match_scores(
-    mock_assign_weights,
-    mock_assign_match_score,
-    spark_mock,
-    assign_weights_input_df,
-    assign_weights_input_x_star,
-    assign_weights_output_df,
+    mock_assign_weights: unittest.mock.MagicMock,
+    mock_assign_match_score: unittest.mock.MagicMock,
+    spark_mock: unittest.mock.MagicMock,
+    assign_weights_input_df: pyspark.sql.DataFrame,
+    assign_weights_input_x_star: Dict[str, float],
+    assign_weights_output_df: pyspark.sql.DataFrame,
 ) -> None:
     """
     Tests that get_match_scores() gives the correct output when provided with

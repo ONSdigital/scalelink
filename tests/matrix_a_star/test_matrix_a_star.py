@@ -26,10 +26,12 @@ Methods:
   solve_for_x_star
 """
 
+import unittest
 from unittest.mock import call, patch
 
 import numpy as np
 import pandas as pd
+import pyspark
 
 from scalelink.matrix_a_star import matrix_a_star as ma
 
@@ -52,7 +54,9 @@ def test_calculate_b() -> None:
 
 
 def test_calculate_njklm_values(
-    spark: pyspark.sql.SparkSession, compare_deltas_output: pyspark.sql.DataFrame, calculate_njklm_values_output: pd.DataFrame
+    spark: pyspark.sql.SparkSession,
+    compare_deltas_output: pyspark.sql.DataFrame,
+    calculate_njklm_values_output: pd.DataFrame,
 ) -> None:
     """
     Tests that calculate_njklm_values() gives the correct output when
@@ -221,7 +225,9 @@ def test_label_x_star() -> None:
     assert test_output == expected_output
 
 
-def test_make_matrix_a(calculate_njklm_values_output, make_matrix_a_output):
+def test_make_matrix_a(
+    calculate_njklm_values_output: pd.DataFrame, make_matrix_a_output: np.array
+) -> None:
     """
     Tests that make_matrix_a() gives the correct output when provided with
     appropriate inputs.
@@ -247,7 +253,7 @@ def test_make_matrix_a(calculate_njklm_values_output, make_matrix_a_output):
     np.testing.assert_array_equal(test_output, expected_output)
 
 
-def test_make_matrix_a_star(make_matrix_a_output):
+def test_make_matrix_a_star(make_matrix_a_output: np.array) -> None:
     """
     Tests that make_matrix_a_star() gives the correct output when provided with
     appropriate inputs.
