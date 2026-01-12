@@ -20,11 +20,7 @@ import unittest
 from unittest.mock import patch
 
 import chispa as ch
-<<<<<<< HEAD
 import pyspark
-from pyspark.sql import types as T
-=======
->>>>>>> 52c947d (refactor: improve test_calculate_njklm_values as per qa request)
 
 from scalelink.indicator_matrix import indicator_matrix as im
 
@@ -123,11 +119,9 @@ def test_calculate_sorensen_dice(
     ch.assert_df_equality(df1=test_output, df2=expected_output, ignore_row_order=True)
 
 
-<<<<<<< HEAD
-def test_compare_deltas(spark: pyspark.sql.SparkSession) -> None:
-=======
-def test_compare_deltas(spark, compare_deltas_output):
->>>>>>> 52c947d (refactor: improve test_calculate_njklm_values as per qa request)
+def test_compare_deltas(
+    spark: pyspark.sql.SparkSession, compare_deltas_output: pyspark.sql.DataFrame
+) -> None:
     """
     Tests that compare_deltas gives the correct output when provided with
     appropriate inputs.

@@ -3,7 +3,6 @@ This file is run by pytest before all tests are discovered.
 Therefore, any fixtures defined here are available to all tests.
 """
 
-import unittest
 from unittest.mock import Mock
 
 import pyspark
@@ -28,17 +27,12 @@ def spark() -> pyspark.sql.SparkSession:
 
 
 @pytest.fixture(scope="function")
-<<<<<<< HEAD
-def spark_mock() -> unittest.mock.MagicMock:
-    # From https://bargsten.org/python/mocking-spark-instance/
-=======
 def spark_mock():
     """
     Sets up a mock version of Spark.
 
     Copied from https://bargsten.org/python/mocking-spark-instance/
     """
->>>>>>> 52c947d (refactor: improve test_calculate_njklm_values as per qa request)
     spark_mock = Mock()
     type(spark_mock).write = spark_mock
     type(spark_mock).read = spark_mock
