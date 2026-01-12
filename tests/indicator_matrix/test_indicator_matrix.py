@@ -21,7 +21,6 @@ from unittest.mock import patch
 
 import chispa as ch
 import pyspark
-from pyspark.sql import types as T
 
 from scalelink.indicator_matrix import indicator_matrix as im
 
@@ -120,7 +119,9 @@ def test_calculate_sorensen_dice(
     ch.assert_df_equality(df1=test_output, df2=expected_output, ignore_row_order=True)
 
 
-def test_compare_deltas(spark: pyspark.sql.SparkSession, compare_deltas_output: pyspark.sql.DataFrame) -> None:
+def test_compare_deltas(
+    spark: pyspark.sql.SparkSession, compare_deltas_output: pyspark.sql.DataFrame
+) -> None:
     """
     Tests that compare_deltas gives the correct output when provided with
     appropriate inputs.
