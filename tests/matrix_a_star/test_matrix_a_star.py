@@ -1,15 +1,16 @@
 """Matrix A* functions unit tests.
 
+
 Methods:
   calculate_b
 
-  calculate_njklm_values - test shell only, currently
+  calculate_njklm_values
 
   calculate_q
 
   calculate_r
 
-  get_matrix_a_star
+  get_matrix_a_star - test shell only, currently
 
   get_scaled_labelled_x_star - test shell only, currently
 
@@ -28,6 +29,7 @@ Methods:
 
 import numpy as np
 import pandas as pd
+import pyspark
 import pytest
 
 from scalelink.matrix_a_star import matrix_a_star as ma
@@ -50,9 +52,52 @@ def test_calculate_b() -> None:
     assert test_output == expected_output
 
 
-@pytest.mark.skip(reason="test shell")
-def test_calculate_njklm_values() -> None:
-    pass
+def test_calculate_njklm_values(
+    spark: pyspark.sql.SparkSession, compare_deltas_output: pyspark.sql.DataFrame
+) -> None:
+    """
+    Tests that calculate_njklm_values() gives the correct output when
+    provided with appropriate inputs.
+    """
+    # Arrange
+    test_input = compare_deltas_output
+
+    expected_output = pd.DataFrame(
+        [[2, 0, 1, 0, 1, 0, 4, 0, 1, 2, 1, 0, 2, 0, 0, 0, 1, 0, 1, 0, 1, 2, 0, 0, 3]],
+        columns=[
+            "N_sex_1_sex_1",
+            "N_sex_1_sex_2",
+            "N_sex_1_forename_1",
+            "N_sex_1_forename_2",
+            "N_sex_1_forename_3",
+            "N_sex_2_sex_1",
+            "N_sex_2_sex_2",
+            "N_sex_2_forename_1",
+            "N_sex_2_forename_2",
+            "N_sex_2_forename_3",
+            "N_forename_1_sex_1",
+            "N_forename_1_sex_2",
+            "N_forename_1_forename_1",
+            "N_forename_1_forename_2",
+            "N_forename_1_forename_3",
+            "N_forename_2_sex_1",
+            "N_forename_2_sex_2",
+            "N_forename_2_forename_1",
+            "N_forename_2_forename_2",
+            "N_forename_2_forename_3",
+            "N_forename_3_sex_1",
+            "N_forename_3_sex_2",
+            "N_forename_3_forename_1",
+            "N_forename_3_forename_2",
+            "N_forename_3_forename_3",
+        ],
+    )
+
+    # Act
+    test_output = ma.calculate_njklm_values(test_input)
+
+    # Assert
+    pd.testing.assert_frame_equal(test_output, expected_output)
 
 
 def test_calculate_q() -> None:
@@ -91,6 +136,11 @@ def test_calculate_r() -> None:
 
 @pytest.mark.skip(reason="test shell")
 def test_get_matrix_a_star() -> None:
+    pass
+
+
+@pytest.mark.skip(reason="test shell")
+def test_get_scaled_labelled_x_star() -> None:
     pass
 
 
