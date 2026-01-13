@@ -157,7 +157,7 @@ def test_get_matrix_a_star(
     # Assert
     mock_calculate_njklm_values.assert_called_once_with(df=compare_deltas_output)
     mock_make_matrix_a.assert_called_once_with(
-        Njklm=calculate_njklm_values_output,
+        df_Njklm=calculate_njklm_values_output,
         K=test_input_dict["K"],
         p=test_input_dict["p"],
     )
