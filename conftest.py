@@ -29,7 +29,11 @@ def spark() -> pyspark.sql.SparkSession:
 
 @pytest.fixture(scope="function")
 def spark_mock() -> unittest.mock.MagicMock:
-    # From https://bargsten.org/python/mocking-spark-instance/
+    """
+    Sets up a mock version of Spark.
+
+    Copied from https://bargsten.org/python/mocking-spark-instance/
+    """
     spark_mock = Mock()
     type(spark_mock).write = spark_mock
     type(spark_mock).read = spark_mock

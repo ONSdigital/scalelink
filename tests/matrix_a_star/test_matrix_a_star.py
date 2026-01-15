@@ -1,5 +1,6 @@
 """Matrix A* functions unit tests.
 
+
 Methods:
   calculate_b
 
@@ -32,6 +33,7 @@ from unittest.mock import call, patch
 import numpy as np
 import pandas as pd
 import pyspark
+import pytest
 
 from scalelink.matrix_a_star import matrix_a_star as ma
 
@@ -64,7 +66,6 @@ def test_calculate_njklm_values(
     """
     # Arrange
     test_input = compare_deltas_output
-
     expected_output = calculate_njklm_values_output
 
     # Act
@@ -173,6 +174,11 @@ def test_get_matrix_a_star(
     mock_make_matrix_a_star.assert_called_once_with(
         matrix_a=make_matrix_a_output, q=test_qs_output, r=test_rs_output
     )
+
+
+@pytest.mark.skip(reason="test shell")
+def test_get_scaled_labelled_x_star() -> None:
+    pass
 
 
 def test_label_x_star() -> None:
