@@ -45,7 +45,7 @@ def calculate_njklm_values_output() -> pd.DataFrame:
 def make_matrix_a_output() -> np.array:
     """
     Sets up the expected ouput for make_matrix_a, which is also the test input
-    for  and used by test_get_matrix_a_star.
+    for and used by test_get_matrix_a_star.
     """
     return np.array(
         [
