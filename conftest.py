@@ -49,7 +49,7 @@ def spark_mock() -> unittest.mock.MagicMock:
 def compare_deltas_output(spark: pyspark.sql.SparkSession) -> pyspark.sql.DataFrame:
     """
     Sets up the expected output for test_compare_deltas, which is also the
-    test input for test_calculate_njklm_values.
+    test input for test_calculate_njklm_values and test_get_matrix_a_star.
     """
     return spark.createDataFrame(
         [

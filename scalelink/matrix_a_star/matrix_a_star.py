@@ -23,13 +23,13 @@ Methods:
     linkage variable is 'agree'.
 
   get_matrix_a_star:
-    A method to produce the Scalelink variable Matrix A*. Works by running, in
-    order:
-     - calcualte_njklm_values
+    A method to produce the Scalelink variable Matrix A*. Works by running,
+    in order:
+     - calculate_njklm_values
      - make_matrix_a
      - calculate_q
      - multiply_vectors_by_s
-     - calcualte_r
+     - calculate_r
      - multiply_vectors_by_s
      - make_matrix_a_star
 
