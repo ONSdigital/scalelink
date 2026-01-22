@@ -10,7 +10,9 @@ jobs:
     name: Increment repo version, push tag and create release
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - name: Check out repository
+        id: version-repo-checkout
+        uses: actions/checkout@v7
 
       - name: Extract repo version
         id: version-extract
