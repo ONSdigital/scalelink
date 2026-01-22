@@ -10,6 +10,10 @@ jobs:
   release-build:
     name: Build and verify release distributions
     runs-on: ubuntu-latest
+    permissions:
+      # allows the provenance attestation to work
+      attestations: write
+      id-token: write
     steps:
       - name: Check out repository
         id: build-repo-checkout
@@ -21,6 +25,8 @@ jobs:
       - name: Build and lint dist
         id: build-dist
         uses: hynek/build-and-inspect-python-package@v2
+        with:
+          attest-build-provenance-github: 'true'
   
   # Publish to PyPI
   release-publish:
@@ -28,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: release-build
     permissions:
-      # IMPORTANT: this permission is mandatory for trusted publishing
+      # mandatory for PyPI Trusted Publishing
       id-token: write
     environment:
       name: pypi
