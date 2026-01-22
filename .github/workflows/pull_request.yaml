@@ -8,9 +8,9 @@ on:
     types: [opened, synchronize, reopened, ready_for_review, labeled, unlabeled]
 
 jobs:
-  # Enforces that only `develop` and hotfix branches can merge into `main`
-  # Source: https://stackoverflow.com/questions/71120146/
-  check_branch:
+  check-branch:
+    # Source: https://stackoverflow.com/questions/71120146/
+    name: Enforce only develop and hotfix can merge into main
     runs-on: ubuntu-latest
     steps:
       - name: Check branch
@@ -19,17 +19,17 @@ jobs:
           echo "ERROR: You can only merge to main from develop or hotfix branches."
           exit 1
   
-  # Enforces the update of the changelog file on every pull request
   changelog:
+    name: Check for changelog update
     runs-on: ubuntu-latest
+    needs: check-branch
     steps:
-      # Checks for updates to CHANGELOG.md
-      # https://github.com/marketplace/actions/changelog-enforcer
       - uses: dangoslen/changelog-enforcer@v3
   
-  # Enforces the running of the pre-commit hooks on every pull request
   pre-commit:
+    name: Run pre-commit hooks
     runs-on: ubuntu-latest
+    needs: changelog
     steps:
       - name: Check out repository
         uses: actions/checkout@v7
@@ -40,10 +40,10 @@ jobs:
       - name: Run pre-commit hooks
         uses: pre-commit/action@v3.0.1
 
-  # Enforces the running of all unit tests on every pull request
   test:
-    needs: changelog
+    name: Run unit tests
     runs-on: ubuntu-latest
+    needs: pre-commit
     strategy:
       matrix:
         python-version: ["3.10", "3.11"]

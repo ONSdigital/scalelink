@@ -1,4 +1,4 @@
-name: "Deploy PyPI workflow"
+name: Deploy PyPI workflow
 
 on:
   push:
@@ -6,20 +6,20 @@ on:
       - main
 
 jobs:
-  # Build and lint release distribution
+  # Build and lint release distributions
   release-build:
-    name: Build and verify release
+    name: Build and verify release distributions
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
-          python-version: ["3.8", "3.9", "3.10"]
+          python-version: ["3.10", "3.11"]
 
       - uses: hynek/build-and-inspect-python-package@v2
   
   # Publish to PyPI
-  pypi-publish:
+  release-publish:
     name: Upload release to PyPI
     runs-on: ubuntu-latest
     needs: release-build
@@ -35,5 +35,5 @@ jobs:
           name: release-dists
           path: dist/
 
-      - name: Publish release distributions to PyPI
+      - name: Publish release distributions on PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
