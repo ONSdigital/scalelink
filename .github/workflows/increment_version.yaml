@@ -21,6 +21,9 @@ jobs:
 
       - name: Bump version and push tag
         id: version-tag
+        permissions:
+          contents: write
+          actions: write
         uses: mathieudutour/github-tag-action@v6.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
