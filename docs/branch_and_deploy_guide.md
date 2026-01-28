@@ -48,9 +48,7 @@ Our repository has two permanent branches:
    - Remember to update the changelog.
 
 3. **Version bumping:**
-   - Before merging `develop` into `main`, update the package version following [semantic versioning principles][sem-ver].
-   - Use `bump2version` to bump the `scalelink` package version. E.g. `bump2version patch` for a patch update,
-     `bump2version minor` for a minor update or `bump2version major` for a major update.
+   - Before merging `develop` into `main`, manually update the package version in `pyproject.toml` following [semantic versioning principles][sem-ver].
    - Remember to update the changelog.
 
 4. **Merging to main:**
@@ -102,14 +100,14 @@ without the version being incremented and a release being published on PyPI.
 2. **Extract repo version:**
    - Extract the version of the repo from the location specified in `setup.py`.
 
-3. **Bump version and push tag:**
-   - Bump the repository version by pushing a new tag.
+3. **Push version tag:**
+   - Push a new tag containing the repo version.
    
 4. **Create GitHub release:**
    - Create a new GitHub release using the new tag and changelog.
 
 5. **Build and verify package:**
-   - Use `uv` via `hynek/build-and-inspect-python-package` to:
+   - Use `hynek/build-and-inspect-python-package` to:
       - Build the package.
       - Upload the built wheel and the source distribution as GitHub Actions artifacts.
       - Lint the wheel contents using `check-wheel-contents`.
@@ -129,73 +127,93 @@ As `scalelink` maintainers, ensuring a seamless transition from `develop` to `ma
 
 ### Preparation
 
-- **Initiate merge request:**
-  - Navigate to the GitHub repository's page and access the "Pull Requests" section.
-  - Click on "New Pull Request" to start the merging process. Select the `develop` branch as the source and the `main` branch as the target.
-  - Title the merge request with a relevant name that succinctly describes the set of features, fixes or improvements being merged. Example: "Release 1.2.0: Feature Enhancements and Bug Fixes".
-  - Add a suitable description, using the Pull Request Template.
+1. **Initiate merge request:**
+   - Navigate to the GitHub repository's page and access the "Pull Requests" section.
+   - Click on "New Pull Request" to start the merging process. Select the `develop` branch as the source and the `main` branch as the target.
+   - Title the merge request with a relevant name that succinctly describes the set of features, fixes or improvements being merged. Example: "Release 1.2.0: Feature Enhancements and Bug Fixes".
+   - Add a suitable description, using the Pull Request Template.
+  
+### Carry out test build
+
+1. **Build and lint the package locally:**
+   - Ensure the `build` dependencies are installed, by opening the terminal and running: `pip install .[build]`.
+   - Change directory to the repo by running: `cd scalelink`
+   - Build the package locally by running: `python -m build`.
+   - Lint the built wheel using [`check-wheel-contents`][check-wheel-contents] by running: `check-wheel-contents dist/<wheel filename>`.
+      - If this returns 'OK', the wheel has passed all checks and you can continue.
+      - Else, a message will be printed for each check that has failed (plus, if applicable, a list of filepaths that caused the failure). In this instance, backtrack and carry out the necessary bugfixes until this passes.
+   - Lint the PyPI README using [`twine`][twine] by running: `twine check dist/*`.
+      - If this returns 'PASSED' for both the `.whl` and `.tar.gz` files in `dist/`, you can continue.
+      - Else, backtrack and bugfix the README until this passes.
+
+2. **Upload the test build to Test PyPI:**
+   - Ensure that your username and password is set for Test PyPI upload using `twine`.
+   - Upload by running: `twine upload -r testpypi dist/*`
+
+3. **Download from Test PyPI:**
+   - 
 
 ### Review and approval
 
 These steps must be carried out by someone other than the pull request initiator.
 
-- **Review changes:**
-  - Utilise GitHub's User Interface (UI) to review the changes introduced. This is critical for spotting any potential issues before they make it into `main` branch.
-  - Cross-reference the changes against the `CHANGELOG.md` file to ensure all updates, fixes and new features are properly documented.
-  - Ensure all checks via GitHub Actions pass.
+1. **Review changes:**
+   - Utilise GitHub's User Interface (UI) to review the changes introduced. This is critical for spotting any potential issues before they make it into `main` branch.
+   - Cross-reference the changes against the `CHANGELOG.md` file to ensure all updates, fixes and new features are properly documented.
+   - Ensure all checks via GitHub Actions pass.
 
-- **Approve changes:**
-  - Once satisfied with the review, click on the "Review changes" button in GitHub and select "Approve" from the options. This indicates that the changes have been reviewed and are considered ready for merging. If you're reviewing multiple files, click on the "Viewed" checkbox for each file as you review them. This helps manage and streamline the review process by marking files that have already been checked.
+2. **Approve changes:**
+   - Once satisfied with the review, click on the "Review changes" button in GitHub and select "Approve" from the options. This indicates that the changes have been reviewed and are considered ready for merging. If you're reviewing multiple files, click on the "Viewed" checkbox for each file as you review them. This helps manage and streamline the review process by marking files that have already been checked.
 
 ### Version management and documentation
 
-- **Bump version:**
-  - Before merging, it's essential to update the package version.
-  - Check out and pull the `develop` branch to your local environment.
-  - Then, use the `bump2version` command line tool to increment the version according to the nature of the changes (patch, minor or major). For example, run `bump2version patch` for a patch update.
+1. **Bump version:**
+   - Before merging, it's essential to update the package version.
+   - Check out and pull the `develop` branch to your local environment.
+   - Manually update the package version in `pyproject.toml` following [semantic versioning principles][sem-ver].
 
-- **Update `CHANGELOG.md`:**
-  - Continue to work in the `develop` branch.
-  - In the `CHANGELOG.md` file, create a new header/section for the newly bumped version.
-  - Move all entries from the "Unreleased" section to the new version section. This action effectively transfers the documentation of changes from being pending release to being part of the new version's official changelog.
-  - Ensure the "Unreleased" section is left empty after this process, ready for documenting future changes.
-  - Update the "Release links" section at the bottom of the document. Add links to the new version's GitHub Release page and its PyPi listing, following the existing format. **Note: this repo does not currently have a PyPi listing.**
-    This step ensures users and developers can easily find and access the specific versions of `scalelink` through their respective release pages and download links, maintaining comprehensive and navigable documentation.
-  - Commit and push all changes to the remote `develop` branch.
+2. **Update `CHANGELOG.md`:**
+   - Continue to work in the `develop` branch.
+   - In the `CHANGELOG.md` file, create a new header/section for the newly bumped version.
+   - Move all entries from the "Unreleased" section to the new version section. This action effectively transfers the documentation of changes from being pending release to being part of the new version's official changelog.
+   - Ensure the "Unreleased" section is left empty after this process, ready for documenting future changes.
+   - Update the "Release links" section at the bottom of the document. Add links to the new version's GitHub Release page and its PyPi listing, following the existing format. **Note: this repo does not currently have a PyPi listing.**
+     This step ensures users and developers can easily find and access the specific versions of `scalelink` through their respective release pages and download links, maintaining comprehensive and navigable documentation.
+   - Commit and push all changes to the remote `develop` branch.
 
-- **Final review:**
-  - Arrange for the reviewer to review the changes one more time, ensuring that the version bump and `CHANGELOG.md` updates are correctly applied.
+3. **Final review:**
+   - Arrange for the reviewer to review the changes one more time, ensuring that the version bump and `CHANGELOG.md` updates are correctly applied.
 
 ### Merging and deployment
 
-- **Merge to main:**
-  - With all preparations complete and changes reviewed, proceed to merge the `develop` branch into the `main` branch.
-  - This action can be done through the GitHub UI by completing the pull request initiated in the Preparation section of this guide.
-  - Merging to `main` automatically triggers the GitHub Actions workflow for deployment.
+1. **Merge to main:**
+   - With all preparations complete and changes reviewed, proceed to merge the `develop` branch into the `main` branch.
+   - This action can be done through the GitHub UI by completing the pull request initiated in the Preparation section of this guide.
+   - Merging to `main` automatically triggers the GitHub Actions workflow for deployment.
   
 ### Synchronising develop branch post-merge
 
 After the pull request from `develop` to `main` has merged, it is crucial to synchronise the `develop` branch with the changes in `main`. Perform the following steps in your local environment to ensure that `develop` stays up-to-date:
 
-- **Switch to `develop` branch:**
-  - Use `git checkout develop` to switch from your current feature branch to the `develop` branch.
+1. **Switch to `develop` branch:**
+   - Use `git checkout develop` to switch from your current feature branch to the `develop` branch.
  
-- **Merge `main` into `develop`:**
-  - Run `git merge main` whilst on the `develop` branch to merge the changes from the `main` branch into `develop`.
+2. **Merge `main` into `develop`:**
+   - Run `git merge main` whilst on the `develop` branch to merge the changes from the `main` branch into `develop`.
  
-- **Push updated `develop`:**
-  - After merging, push the updated `develop` branch back to the remote repository using `git push origin develop`.
+3. **Push updated `develop`:**
+   - After merging, push the updated `develop` branch back to the remote repository using `git push origin develop`.
 
 By adhering to these steps, you'll make the transition from development to production smooth and efficient, ensuring the codebase remains stable and the release process flows seamlessly. As maintainers, your pivotal role guarantees the
 `scalelink` package's reliability and efficiency for all users.
 
 ## Post-merge feature branch synchronisation: All developers
 
-- **Pull changes from `main`:**
-  - Ensure your feature branch is checked out, using `git checkout <my-feature-branch>`.
-  - Execute `git pull origin main` to fetch and merge the latest changes from the `main` branch to your current feature branch.
-  - If you are currently working on more than one feature branch, use `git checkout <my-feature-branch>` to switch to your next feature branch. Then, execute `git pull origin main` to fetch and merge the latest changes from the `main` 
-    branch to it. Repeat this until all of your current feature branches have been updated.
+1. **Pull changes from `main`:**
+   - Ensure your feature branch is checked out, using `git checkout <my-feature-branch>`.
+   - Execute `git pull origin main` to fetch and merge the latest changes from the `main` branch to your current feature branch.
+   - If you are currently working on more than one feature branch, use `git checkout <my-feature-branch>` to switch to your next feature branch. Then, execute `git pull origin main` to fetch and merge the latest changes from the `main` 
+     branch to it. Repeat this until all of your current feature branches have been updated.
 
 ## Git workflow diagram
 
@@ -283,6 +301,8 @@ graph TD
 ```
 
 [branches]: https://conventional-branch.github.io/
+[check-wheel-contents]: https://pypi.org/project/check-wheel-contents/
 [commits]: https://www.markdownguide.org/basic-syntax/#links
-[sem-ver]: https://semver.org/
 [github-actions]: https://github.com/features/actions
+[sem-ver]: https://semver.org/
+[twine]: https://twine.readthedocs.io/en/stable/
