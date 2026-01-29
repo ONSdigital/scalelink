@@ -12,7 +12,7 @@ Methods:
 
   get_matrix_a_star
 
-  get_scaled_labelled_x_star - test shell only, currently
+  get_scaled_labelled_x_star
 
   label_x_star
 
@@ -28,12 +28,12 @@ Methods:
 """
 
 import unittest
+from typing import List
 from unittest.mock import call, patch
 
 import numpy as np
 import pandas as pd
 import pyspark
-import pytest
 
 from scalelink.matrix_a_star import matrix_a_star as ma
 
@@ -176,9 +176,60 @@ def test_get_matrix_a_star(
     )
 
 
-@pytest.mark.skip(reason="test shell")
-def test_get_scaled_labelled_x_star() -> None:
-    pass
+@patch("scalelink.matrix_a_star.matrix_a_star.scale_x_star")
+@patch("scalelink.matrix_a_star.matrix_a_star.label_x_star")
+@patch("scalelink.matrix_a_star.matrix_a_star.solve_for_x_star")
+@patch("scalelink.matrix_a_star.matrix_a_star.multiply_vectors_by_s")
+@patch("scalelink.matrix_a_star.matrix_a_star.calculate_b")
+def test_get_scaled_labelled_x_star(
+    mock_calculate_b: unittest.mock.MagicMock,
+    mock_multiply_vectors_by_s: unittest.mock.MagicMock,
+    mock_solve_for_x_star: unittest.mock.MagicMock,
+    mock_label_x_star: unittest.mock.MagicMock,
+    mock_scale_x_star: unittest.mock.MagicMock,
+    make_input_matrix_a_star: np.array,
+    make_input_b: List[int],
+    make_solve_for_x_star_output: List[float],
+) -> None:
+    """
+    Tests that get_scaled_labelled_x_star() gives the correct output when provided
+    with appropriate inputs.
+    """
+    # Arrange
+    test_input_dict = {
+        "cutpoints": {"sex": None, "fn": [0.75, 0.9]},
+        "K": 3,
+        "s": 7,
+    }
+    test_b_output = [0, 0, 0, 0, 1]
+    test_label_x_star_output = {
+        "sex_disagree": 2,
+        "sex_agree": 1,
+    }
+
+    mock_calculate_b.return_value = test_b_output
+    mock_multiply_vectors_by_s.return_value = make_input_b
+    mock_solve_for_x_star.return_value = make_solve_for_x_star_output
+    mock_label_x_star.return_value = test_label_x_star_output
+
+    # Act
+    _ = ma.get_scaled_labelled_x_star(
+        matrix_a_star=make_input_matrix_a_star, input_variables=test_input_dict
+    )
+
+    # Assert
+    mock_calculate_b.assert_called_once_with(K=test_input_dict["K"])
+    mock_multiply_vectors_by_s.assert_called_once_with(
+        vector=test_b_output,
+        s=test_input_dict["s"],
+    )
+    mock_solve_for_x_star.assert_called_once_with(
+        matrix_a_star=make_input_matrix_a_star, b=make_input_b
+    )
+    mock_label_x_star.assert_called_once_with(
+        x_star=make_solve_for_x_star_output, cutpoints=test_input_dict["cutpoints"]
+    )
+    mock_scale_x_star.assert_called_once_with(x_star_labelled=test_label_x_star_output)
 
 
 def test_label_x_star() -> None:
@@ -360,7 +411,11 @@ def test_scale_x_star() -> None:
     assert test_output == expected_output
 
 
-def test_solve_for_x_star() -> None:
+def test_solve_for_x_star(
+    make_input_matrix_a_star: np.array,
+    make_input_b: List[int],
+    make_solve_for_x_star_output: List[float],
+) -> None:
     """
     Tests that solve_for_x_star() gives the correct output when provided with
     appropriate inputs.
@@ -369,11 +424,11 @@ def test_solve_for_x_star() -> None:
       numpy as np
     """
     # Arrange
-    test_input_matrix_a_star = np.array([[2, 1], [1, 1]])
+    test_input_matrix_a_star = make_input_matrix_a_star
 
-    test_input_b = [5, 3]
+    test_input_b = make_input_b
 
-    expected_output = [2, 1]
+    expected_output = make_solve_for_x_star_output
 
     # Act
     test_output = ma.solve_for_x_star(
