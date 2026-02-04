@@ -206,14 +206,19 @@ def test_get_scaled_labelled_x_star(
         "sex_disagree": 2,
         "sex_agree": 1,
     }
+    test_scale_x_star_output = {
+        "sex_disagree": 0.0,
+        "sex_agree": -100.0,
+    }
 
     mock_calculate_b.return_value = test_b_output
     mock_multiply_vectors_by_s.return_value = make_input_b
     mock_solve_for_x_star.return_value = make_solve_for_x_star_output
     mock_label_x_star.return_value = test_label_x_star_output
+    mock_scale_x_star.return_value = test_scale_x_star_output
 
     # Act
-    _ = ma.get_scaled_labelled_x_star(
+    expected_output = ma.get_scaled_labelled_x_star(
         matrix_a_star=make_input_matrix_a_star, input_variables=test_input_dict
     )
 
@@ -230,6 +235,7 @@ def test_get_scaled_labelled_x_star(
         x_star=make_solve_for_x_star_output, cutpoints=test_input_dict["cutpoints"]
     )
     mock_scale_x_star.assert_called_once_with(x_star_labelled=test_label_x_star_output)
+    assert mock_scale_x_star.return_value == expected_output
 
 
 def test_label_x_star() -> None:
