@@ -137,7 +137,7 @@ As `scalelink` maintainers, ensuring a seamless transition from `develop` to `ma
 
 1. **Build and lint the package locally:**
    - Ensure the `build` dependencies are installed, by opening the terminal and running: `pip install .[build]`.
-   - Change directory to the repo by running: `cd scalelink`
+   - Change directory to the repo by running: `cd scalelink`.
    - Build the package locally by running: `python -m build`.
    - Lint the built wheel using [`check-wheel-contents`][check-wheel-contents] by running: `check-wheel-contents dist/<wheel filename>`.
       - If this returns 'OK', the wheel has passed all checks and you can continue.
@@ -147,11 +147,28 @@ As `scalelink` maintainers, ensuring a seamless transition from `develop` to `ma
       - Else, backtrack and bugfix the README until this passes.
 
 2. **Upload the test build to Test PyPI:**
-   - Ensure that your username and password is set for Test PyPI upload using `twine`.
-   - Upload by running: `twine upload -r testpypi dist/*`
+   - Upload by running: `twine upload -r testpypi dist/*`.
+   - When prompted, input your Test PyPI API token.
+   
+3. **Check the package styling:**
+   - Check the uploaded package on Test PyPI by following the link provided in the terminal.
+   - Review the styling of the information from `README.md`. Make a note of any changes that need to be implemented prior to uploading to PyPI.
 
-3. **Download from Test PyPI:**
-   - 
+3. **Download from Test PyPI and test:**
+   - In your local environment, download the test build from Test PyPI by running: `pip install -i https://test.pypi.org/simple/ scalelink==<version>`.
+   - Test that the package runs correctly using a script containing the following:
+   
+    ```python
+    from scalelink import run_scalelink
+    output = run_scalelink(config_path = "<filepath/to/config/file>")
+    ```
+
+   - Again, make a note of any changes that need to be implemented prior to uploading to PyPI.
+
+5. **Fix build issues:**
+   - If there are any build issues, make a new feature branch and address them.
+   - Once this feature branch is QA'd and merged to `develop`, repeat the [Carry out test build](#carry-out-test-build) instructions until no build issues remain.
+   - Only once no build issues remain can you move on to the next section.
 
 ### Review and approval
 
