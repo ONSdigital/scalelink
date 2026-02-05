@@ -33,9 +33,9 @@ jobs:
         id: version-release
         uses: ncipollo/release-action@v1
         with:
-          tag: ${{ steps.tag_version.outputs.new_tag }}
-          name: Release ${{ steps.tag_version.outputs.new_tag }}
-          body: ${{ steps.tag_version.outputs.changelog }}
+          tag: ${{ steps.version-tag.outputs.new_tag }}
+          name: Release ${{ steps.version-tag.outputs.new_tag }}
+          body: ${{ steps.version-tag.outputs.changelog }}
 
   release-build:
     name: Build and verify release distributions
