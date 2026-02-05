@@ -1,9 +1,12 @@
 # scalelink
 
+[![Deploy to PyPI](https://github.com/ONSdigital/scalelink/actions/workflows/deploy_pypi.yaml/badge.svg?branch=main)](https://github.com/ONSdigital/scalelink/actions/workflows/deploy_pypi.yaml)
+[![PyPI version](https://badge.fury.io/py/scalelink.svg)](https://pypi.org/project/scalelink/)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/scalelink.svg)](#)
 [![Code style: ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-An implementation of the probabilistic data linkage method **Scalelink**, described in [Goldstein *et al*. (2017)][scalelink].
+An implementation of the probabilistic data linkage method Scalelink, described in [Goldstein *et al*. (2017)][scalelink].
 
 This implementation has been created in response to recommendation six of the [Joined Up Data in Government: The Future of Data Linking Methods][guidance] cross-government review.
 
@@ -11,8 +14,8 @@ This work is authored by the Data Linkage team within the Methodology and Qualit
 
 ## Pre-requisites
 
-- Python 3.10-3.11
-- Spark 3.5.1
+- Python 3.10 or 3.11
+- PySpark >=3.0.0, <4.0.0
 
 ## Method
 
@@ -22,7 +25,7 @@ The Scalelink method is **experimental**. This implementation has been open-sour
 
 ## Contact
 
-For questions, support or feedback about `scalelink`, please email [DataLinkage@ons.gov.uk](mailto:DataLinkage@ons.gov.uk).
+For questions, support or feedback about the `scalelink` package, please email [DataLinkage@ons.gov.uk](mailto:DataLinkage@ons.gov.uk).
 
 ## Acknowledgements
 
