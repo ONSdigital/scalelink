@@ -25,6 +25,7 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 - Python 3.11 support.
 - Type hints for all functions.
 - GitHub Action workflow to deploy repo as package in PyPI.
+- User Guide.
 
 ### Changed
 
@@ -42,8 +43,13 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
   - `test_get_input_variables` in `tests/utils/utils.py`.
   - Additional assert statements in unit tests of parent functions.
 - `README.md`:
-  - Added contact, dedication and icons for linter and formatter.
+  - Added installation and use, contact, dedication and icons.
   - Edited pre-requisites and acknowledgements.
+- Branch and Deploy Guide:
+  - Updated description of GitHub Actions.
+  - Updated deployment instructions.
+- Build method, from using `setuptools` with `setup.py`, `setup.cfg` and `requirements.txt` to using `hatchling` with `pyproject.toml`.
+- Location of config template, so it is included in build.
 
 ### Deprecated
 
@@ -58,6 +64,7 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - Python 3.8 and 3.9 support.
+- Use of `bump2version`, as it's no longer supported.
 
 ## [0.1.1] 2025-07-18
 
