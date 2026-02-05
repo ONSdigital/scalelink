@@ -16,11 +16,17 @@ jobs:
       - name: Check out repository
         id: version-repo-checkout
         uses: actions/checkout@v4
+        
+      - name: Check version
+        id: version-check
+        uses: maybe-hello-world/pyproject-check-version@v4
+        with:
+          pyproject-path: "./pyproject.toml"
 
-      - name: Extract repo version
-        id: version-extract
+      - name: Set version as env variable
+        id: version-set
         run: |
-          echo "PACKAGE_VERSION=$python setup.py --version)" >> $GITHUB_ENV
+          echo "PACKAGE_VERSION=${{ steps.versioncheck.outputs.local_version }}" >> $GITHUB_ENV
 
       - name: Bump version and push tag
         id: version-tag
