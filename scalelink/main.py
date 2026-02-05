@@ -32,17 +32,17 @@ def run_scalelink(config_path: str = "scalelink/configs.ini") -> pyspark.sql.Dat
       delete_folder from rdsa_utils.cdp.helpers.s3_utils
 
     Returns:
-      df_weights_match_scores:
-        A dataframe either derived from the Cartesian join of the two input
-        dataframes or derived from the dataset located at df_candidates_path.
-          The columns present on this dataset are:
-           - The ID column of each dataset.
-           - Weight columns (named after the linkage variables, suffixed with
-             '_weight') containing weights for each linkage variable and row.
-           - A column called match_score which contains the sum of the weights,
-             row-wise.
-      This dataframe is also written to the output_path specified in the config
-      file.
+      None.
+      However, writes a linked dataframe either derived from the Cartesian join of
+        the two input dataframes or derived from the dataset located at
+        df_candidates_path.
+        The columns present on this dataset are:
+          - The ID column of each dataset.
+          - Weight columns (named after the linkage variables, suffixed with
+            '_weight') containing weights for each linkage variable and row.
+          - A column called match_score which contains the sum of the weights,
+            row-wise.
+        It is written to the output_path specified in the config file.
     """
     input_variables = ut.get_input_variables(config_path=config_path)
 
@@ -120,8 +120,7 @@ def run_scalelink(config_path: str = "scalelink/configs.ini") -> pyspark.sql.Dat
     )
 
     print("Your checkpoint files have been tidied up")
-
-    return df_weights_match_scores
+    print("The Scalelink linkage is now complete")
 
 
 if __name__ == "__main__":
