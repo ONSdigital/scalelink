@@ -1,3 +1,5 @@
+from typing import List
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -56,3 +58,30 @@ def make_matrix_a_output() -> np.array:
             [-0.25, -0.5, 0.0, 0.0, 0.75],
         ]
     )
+
+
+@pytest.fixture(scope="module")
+def make_input_matrix_a_star() -> np.array:
+    """
+    Sets up the input matrix_a_star for test_solve_for_x_star, and it is also
+    one of the test inputs for test_get_scaled_labelled_x_star.
+    """
+    return np.array([[2, 1], [1, 1]])
+
+
+@pytest.fixture(scope="module")
+def make_input_b() -> List[int]:
+    """
+    Sets up the input b vector for test_solve_for_x_star, and it is also
+    one of the test inputs for test_get_scaled_labelled_x_star.
+    """
+    return [5, 3]
+
+
+@pytest.fixture(scope="module")
+def make_solve_for_x_star_output() -> List[float]:
+    """
+    Sets up the expected ouput for test_solve_for_x_star, and it is also
+    one of the test inputs for test_get_scaled_labelled_x_star.
+    """
+    return [2, 1]

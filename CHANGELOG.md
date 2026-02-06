@@ -21,6 +21,7 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
   - `test_get_match_scores` in `tests/match_scores/test_match_scores.py`.
   - `test_get_matrix_a_star` in `tests/matrix_a_star/test_matrix_a_star.py`.
   - `test_calculate_njklm_values` in `tests/matrix_a_star/test_matrix_a_star.py`.
+  - `test_get_scaled_labelled_x_star` in `tests/matrix_a_star/test_matrix_a_star.py`.
 - Run script, `main.py`, with updates to work on Spark 3.5.1.
 - Configs template, with updates to reflect updated `main.py`.
 - GitHub Action that creates releases from tags.
