@@ -251,12 +251,18 @@ graph TD
     Feat8[Merge pull request]
     
     Dev1{Develop branch: Ready for release?}
-    Dev2[Update package version - semver major or minor update]
-    Dev3[Raise pull request to merge develop branch into main branch]
-    Dev4[Trigger automated checks via GitHub Actions]
-    Dev5[Review pull request]
-    Dev6{Develop branch: approve pull request?}
-    Dev7[Merge pull request]
+    Dev2[Manually create build dist locally]
+    Dev3[Deploy build to Test PyPI]
+    Dev4[Check descrition and metadata is correct on Test PyPI]
+    Dev5[Download build from Test PyPI and check it runs correctly]
+    Dev6{Deployment: are there any errors?}  
+    Dev7[Update change log]
+    Dev8[Update package version - semver major or minor update]
+    Dev9[Raise pull request to merge develop branch into main branch]
+    Dev10[Trigger automated checks via GitHub Actions]
+    Dev11[Review pull request]
+    Dev12{Develop branch: approve pull request?}
+    Dev13[Merge pull request]
     
     Deploy1[Trigger automated deployment via GitHub Actions]
     Deploy2[Create GitHub Release with version tag]
@@ -273,48 +279,63 @@ graph TD
     Hotfix7{Hotfix branch: approve pull request?}
     Hotfix8[Update package version - semver patch update]
     Hotfix9[Merge pull request]
+    
+    subgraph sg1
+      Hotfix1 --> Hotfix2
+      Hotfix2 --> Hotfix3
+      Hotfix3 -- No --> Hotfix2
+      Hotfix3 -- Yes --> Hotfix4
+      Hotfix4 --> Hotfix5
+      Hotfix5 --> Hotfix6
+      Hotfix6 --> Hotfix7
+      Hotfix7 -- No --> Hotfix2
+      Hotfix7 -- Yes --> Hotfix8
+      Hotfix8 --> Hotfix9
+    end
+    
+    subgraph sg2 [Deploy]
+      Deploy1 --> Deploy2
+      Deploy2 --> Deploy3
+      Deploy3 --> Deploy4
+      Deploy4 --> Deploy5
+    end
 
-    Start1 --> Feat1
+    subgraph sg3 [Prepare to deploy]
+      Dev1 -- Yes --> Dev2
+      Dev2 --> Dev3
+      Dev3 --> Dev4
+      Dev4 --> Dev5
+      Dev5 --> Dev6
+      Dev6 -- No --> Dev7
+      Dev7 --> Dev8
+      Dev8 --> Dev9
+      Dev9 --> Dev10
+      Dev10 --> Dev11
+      Dev11 --> Dev12
+      Dev12 -- Yes --> Dev13
+    end
+
+    subgraph sg4 [Develop features]
+      Feat1 --> Feat2
+      Feat2 --> Feat3
+      Feat3 -- No --> Feat2
+      Feat3 -- Yes --> Feat4
+      Feat4 --> Feat5
+      Feat5 --> Feat6
+      Feat6 --> Feat7
+      Feat7 -- No --> Feat2
+      Feat7 -- Yes ---> Feat8
+    end
+    
     Start2 --> Hotfix1
-
-    Feat1 --> Feat2
-    Feat2 --> Feat3
-    Feat3 -- No --> Feat2
-    Feat3 -- Yes --> Feat4
-    Feat4 --> Feat5
-    Feat5 --> Feat6
-    Feat6 --> Feat7
-    Feat7 -- No --> Feat2
-    Feat7 -- Yes ---> Feat8
-    Feat8 --> Dev1
-
+    Hotfix9 --> Deploy1
+    Deploy5 --> Start1
     Dev1 -- No --> Start1
-    Dev1 -- Yes --> Dev2
-    Dev2 --> Dev3
-    Dev3 --> Dev4
-    Dev4 --> Dev5
-    Dev5 --> Dev6
-    Dev6 -- No --> Start1
-    Dev6 -- Yes ---> Dev7
-    Dev7 --> Deploy1
-    
-    Deploy1 --> Deploy2
-    Deploy2 --> Deploy3
-    Deploy3 --> Deploy4
-    Deploy4 --> Deploy5
-    Deploy5 ------------> Start1
-    
-    Hotfix1 --> Hotfix2
-    Hotfix2 --> Hotfix3
-    Hotfix3 -- No --> Hotfix2
-    Hotfix3 -- Yes --> Hotfix4
-    Hotfix4 --> Hotfix5
-    Hotfix5 --> Hotfix6
-    Hotfix6 --> Hotfix7
-    Hotfix7 -- No --> Hotfix2
-    Hotfix7 -- Yes --> Hotfix8
-    Hotfix8 --> Hotfix9
-    Hotfix9 ----------> Deploy1
+    Dev6 -- Yes --> Start1
+    Dev12 -- No --> Start1
+    Dev13 --> Deploy1
+    Start1 --> Feat1
+    Feat8 --> Dev1
 ```
 
 [branches]: https://conventional-branch.github.io/
