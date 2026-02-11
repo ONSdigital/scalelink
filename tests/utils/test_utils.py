@@ -286,7 +286,7 @@ def test_get_input_variables(
     mock_define_kj.return_value = test_input_kj
 
     # Act
-    _ = ut.get_input_variables(config_path=test_input_filepath)
+    result = ut.get_input_variables(config_path=test_input_filepath)
 
     # Assert
     mock_read_configs.assert_called_once_with(config_path=test_input_filepath)
@@ -305,6 +305,18 @@ def test_get_input_variables(
     )
     mock_define_kj.assert_called_once_with(cutpoints=test_input_formatted_cutpoints)
     mock_define_K.assert_called_once_with(kj=test_input_kj)
+    assert result["cutpoints"] is mock_format_cutpoints.return_value
+    assert (
+        result["binary_agreement_vars"]
+        is mock_define_binary_agreement_vars.return_value
+    )
+    assert (
+        result["partial_agreement_vars"]
+        is mock_define_partial_agreement_vars.return_value
+    )
+    assert result["p"] is mock_define_p.return_value
+    assert result["kj"] is mock_define_kj.return_value
+    assert result["K"] is mock_define_K.return_value
 
 
 def test_get_s(spark: pyspark.sql.SparkSession) -> None:
