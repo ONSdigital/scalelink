@@ -65,6 +65,7 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 
 - Python 3.8 and 3.9 support.
 - Use of `bump2version`, as it's no longer supported.
+- Use of `hotfix` branches by this project. Updated Branch and Deploy Guide and Pull Request GitHub Action workflow to reflec this.
 
 ## [0.1.1] 2025-07-18
 

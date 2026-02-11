@@ -10,14 +10,14 @@ on:
 jobs:
   check-branch:
     # Source: https://stackoverflow.com/questions/71120146/
-    name: Enforce only develop and hotfix can merge into main
+    name: Enforce only develop can merge into main
     runs-on: ubuntu-latest
     steps:
       - name: Check branch
         id: check-branch
-        if: ${{github.base_ref == 'main' && (github.head_ref != 'develop' || startsWith(github.head_ref, 'hotfix'))}}
+        if: ${{github.base_ref == 'main' && (github.head_ref != 'develop')}}
         run: |
-          echo "ERROR: You can only merge to main from develop or hotfix branches."
+          echo "ERROR: You can only merge to main from develop."
           exit 1
   
   changelog:
