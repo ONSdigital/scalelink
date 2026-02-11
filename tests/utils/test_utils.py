@@ -280,10 +280,34 @@ def test_get_input_variables(
         "pc2_cutpoints": [0.9],
     }
     test_input_kj = {"fn": 3, "mn": 3, "sn": 3, "dob": 2, "sex": 2, "pc1": 2, "pc2": 2}
+    test_input_K = 17
 
     mock_read_configs.return_value = test_input_config
     mock_format_cutpoints.return_value = test_input_formatted_cutpoints
     mock_define_kj.return_value = test_input_kj
+    mock_define_K.return_value = test_input_K
+
+    expected = {
+        "spark_session_size": test_input_config["run_spec"]["spark_session_size"],
+        "bucket_name": test_input_config["filepaths"]["bucket_name"],
+        "ssl_file": test_input_config["filepaths"]["ssl_file"],
+        "df1_path": test_input_config["filepaths"]["df1_path"],
+        "df2_path": test_input_config["filepaths"]["df2_path"],
+        "df_candidates_path": test_input_config["filepaths"]["df_candidates_path"],
+        "checkpoint_path": test_input_config["filepaths"]["checkpoint_path"],
+        "output_path": test_input_config["filepaths"]["output_path"],
+        "df1_id": test_input_config["variables"]["df1_id"],
+        "df2_id": test_input_config["variables"]["df2_id"],
+        "df1_suffix": test_input_config["variables"]["df1_suffix"],
+        "df2_suffix": test_input_config["variables"]["df2_suffix"],
+        "linkage_vars": test_input_formatted_linkage_vars,
+        "cutpoints": mock_format_cutpoints.return_value,
+        "binary_agreement_vars": mock_define_binary_agreement_vars.return_value,
+        "partial_agreement_vars": mock_define_partial_agreement_vars.return_value,
+        "p": mock_define_p.return_value,
+        "kj": mock_define_kj.return_value,
+        "K": mock_define_K.return_value,
+    }
 
     # Act
     result = ut.get_input_variables(config_path=test_input_filepath)
@@ -305,18 +329,7 @@ def test_get_input_variables(
     )
     mock_define_kj.assert_called_once_with(cutpoints=test_input_formatted_cutpoints)
     mock_define_K.assert_called_once_with(kj=test_input_kj)
-    assert result["cutpoints"] is mock_format_cutpoints.return_value
-    assert (
-        result["binary_agreement_vars"]
-        is mock_define_binary_agreement_vars.return_value
-    )
-    assert (
-        result["partial_agreement_vars"]
-        is mock_define_partial_agreement_vars.return_value
-    )
-    assert result["p"] is mock_define_p.return_value
-    assert result["kj"] is mock_define_kj.return_value
-    assert result["K"] is mock_define_K.return_value
+    assert result == expected
 
 
 def test_get_s(spark: pyspark.sql.SparkSession) -> None:
