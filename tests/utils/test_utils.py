@@ -287,7 +287,7 @@ def test_get_input_variables(
     mock_define_kj.return_value = test_input_kj
     mock_define_K.return_value = test_input_K
 
-    expected = {
+    expected_output = {
         "spark_session_size": test_input_config["run_spec"]["spark_session_size"],
         "bucket_name": test_input_config["filepaths"]["bucket_name"],
         "ssl_file": test_input_config["filepaths"]["ssl_file"],
@@ -310,7 +310,7 @@ def test_get_input_variables(
     }
 
     # Act
-    result = ut.get_input_variables(config_path=test_input_filepath)
+    test_output = ut.get_input_variables(config_path=test_input_filepath)
 
     # Assert
     mock_read_configs.assert_called_once_with(config_path=test_input_filepath)
@@ -329,7 +329,7 @@ def test_get_input_variables(
     )
     mock_define_kj.assert_called_once_with(cutpoints=test_input_formatted_cutpoints)
     mock_define_K.assert_called_once_with(kj=test_input_kj)
-    assert result == expected
+    assert test_output == expected_output
 
 
 def test_get_s(spark: pyspark.sql.SparkSession) -> None:
