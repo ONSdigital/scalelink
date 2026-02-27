@@ -219,7 +219,7 @@ def test_get_scaled_labelled_x_star(
     mock_scale_x_star.return_value = test_scale_x_star_output
 
     # Act
-    result = ma.get_scaled_labelled_x_star(
+    test_output = ma.get_scaled_labelled_x_star(
         matrix_a_star=make_input_matrix_a_star, input_variables=test_input_dict
     )
 
@@ -236,7 +236,7 @@ def test_get_scaled_labelled_x_star(
         x_star=make_solve_for_x_star_output, cutpoints=test_input_dict["cutpoints"]
     )
     mock_scale_x_star.assert_called_once_with(x_star_labelled=test_label_x_star_output)
-    assert result is mock_scale_x_star.return_value
+    assert test_output is mock_scale_x_star.return_value
 
 
 def test_label_x_star() -> None:
