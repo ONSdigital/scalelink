@@ -42,6 +42,7 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 - Unit tests:
   - `test_create_spark_session` in `tests/utils/test_utils_create_spark_session.py`.
   - `test_get_input_variables` in `tests/utils/utils.py`.
+  - Additional assert statements in unit tests of parent functions.
 - `README.md`:
   - Added contact, dedication and icons for linter and formatter.
   - Edited pre-requisites and acknowledgements.

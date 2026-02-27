@@ -108,7 +108,7 @@ def test_get_match_scores(
     mock_assign_match_score.return_value = spark_mock.sql.DataFrame
 
     # Act
-    _ = ms.get_match_scores(
+    test_output = ms.get_match_scores(
         df_deltas=test_input_df,
         x_star_scaled_labelled=test_input_x_star,
         input_variables={
@@ -131,3 +131,4 @@ def test_get_match_scores(
     mock_assign_match_score.assert_called_once_with(
         df_with_weights=assign_weights_output_df
     )
+    assert test_output is mock_assign_match_score.return_value

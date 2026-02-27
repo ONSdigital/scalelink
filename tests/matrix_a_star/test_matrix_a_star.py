@@ -151,7 +151,7 @@ def test_get_matrix_a_star(
     mock_calculate_r.return_value = test_rs_input
 
     # Act
-    _ = ma.get_matrix_a_star(
+    test_output = ma.get_matrix_a_star(
         df_delta_comparisons=test_input_df, input_variables=test_input_dict
     )
 
@@ -174,6 +174,7 @@ def test_get_matrix_a_star(
     mock_make_matrix_a_star.assert_called_once_with(
         matrix_a=make_matrix_a_output, q=test_qs_output, r=test_rs_output
     )
+    assert test_output is mock_make_matrix_a_star.return_value
 
 
 @patch("scalelink.matrix_a_star.matrix_a_star.scale_x_star")
@@ -218,7 +219,7 @@ def test_get_scaled_labelled_x_star(
     mock_scale_x_star.return_value = test_scale_x_star_output
 
     # Act
-    expected_output = ma.get_scaled_labelled_x_star(
+    test_output = ma.get_scaled_labelled_x_star(
         matrix_a_star=make_input_matrix_a_star, input_variables=test_input_dict
     )
 
@@ -235,7 +236,7 @@ def test_get_scaled_labelled_x_star(
         x_star=make_solve_for_x_star_output, cutpoints=test_input_dict["cutpoints"]
     )
     mock_scale_x_star.assert_called_once_with(x_star_labelled=test_label_x_star_output)
-    assert mock_scale_x_star.return_value == expected_output
+    assert test_output is mock_scale_x_star.return_value
 
 
 def test_label_x_star() -> None:

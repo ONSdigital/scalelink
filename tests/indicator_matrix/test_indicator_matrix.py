@@ -316,7 +316,9 @@ def test_get_deltas(
     spark_mock.sql.DataFrame.checkpoint.return_value = agreement_states_output_df
 
     # Act
-    _ = im.get_deltas(df_cartesian_join=test_input_df, input_variables=test_input_dict)
+    test_output = im.get_deltas(
+        df_cartesian_join=test_input_df, input_variables=test_input_dict
+    )
 
     # Assert
     mock_calculate_sorensen_dice.assert_called_once_with(
@@ -337,6 +339,7 @@ def test_get_deltas(
         agreement_col_suffix="_agr_state",
         string_similarity_suffix="_sorensen_dice",
     )
+    assert test_output is mock_calculate_deltas.return_value
 
 
 def test_make_bigrams(spark: pyspark.sql.SparkSession) -> None:
