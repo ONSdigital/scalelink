@@ -26,8 +26,8 @@ jobs:
     needs: check-branch
     steps:
       - name: Check changelog
-      - id: changelog
-      - uses: dangoslen/changelog-enforcer@v3
+        id: changelog
+        uses: dangoslen/changelog-enforcer@v3
   
   pre-commit:
     name: Run pre-commit hooks
