@@ -1,0 +1,52 @@
+name: Deploy version to Test PyPI
+
+on: 
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: "Version to deploy, e.g. 1.0.0"
+        required: true
+        type: string
+
+jobs:
+  release-build:
+    name: Build and verify release distributions
+    runs-on: ubuntu-latest
+    permissions:
+      # allows the provenance attestation to work
+      attestations: write
+      id-token: write
+    steps:
+      - name: Check out repository
+        id: build-repo-checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          python-version: ["3.10", "3.11"]
+
+      - name: Build and lint dist
+        id: build-dist
+        uses: hynek/build-and-inspect-python-package@d44ca7d91762de7a7d5436ddae667c6da6d1c3df
+        with:
+          attest-build-provenance-github: 'true'
+  
+  release-publish:
+    name: Upload release to PyPI
+    runs-on: ubuntu-latest
+    needs: release-build
+    permissions:
+      # mandatory for PyPI Trusted Publishing
+      id-token: write
+    environment:
+      name: test-pypi
+      url: https://test.pypi.org/project/scalelink/
+    steps:
+      - name: Retrieve release distributions
+        id: publish-retrieve-dist
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          name: release-dists
+          path: dist/
+
+      - name: Publish release distributions on PyPI
+        id: publish-to-pypi
+        uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b
