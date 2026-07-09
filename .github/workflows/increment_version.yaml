@@ -1,4 +1,4 @@
-name: Increment version on push to main
+name: Increment version
 
 on:
   push:
@@ -42,5 +42,3 @@ jobs:
           tag: ${{ steps.version-tag.outputs.new_tag }}
           name: Release ${{ steps.version-tag.outputs.new_tag }}
           body: ${{ steps.version-tag.outputs.changelog }}
-
-
