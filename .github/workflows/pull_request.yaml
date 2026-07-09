@@ -56,11 +56,7 @@ jobs:
     steps:
       - name: Check out repository
         id: test-repo-checkout
-<<<<<<< HEAD
-        uses: actions/checkout@v7
-=======
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
->>>>>>> 55d9e84 (ci: change github action workflows to pin to commit hash)
 
       - name: Set up Python ${{ matrix.python-version }}
         id: test-python-set-up
