@@ -40,7 +40,7 @@ jobs:
       id-token: write
     environment:
       name: pypi
-      uses: https://pypi.org/project/scalelink/
+      url: https://pypi.org/project/scalelink/
     steps:
       - name: Retrieve release distributions
         id: publish-retrieve-dist
