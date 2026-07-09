@@ -50,6 +50,8 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
   - Updated deployment instructions.
 - Build method, from using `setuptools` with `setup.py`, `setup.cfg` and `requirements.txt` to using `hatchling` with `pyproject.toml`.
 - Location of config template, so it is included in build.
+- Minor phrasing changes to User Guide (`docs/user_guide.md`) and pull request template (`.github/pull_request_template.md`).
+- Changed all third-party resuable workflows in GitHub Actions workflows to pin to latest release's long commit hash.
 
 ### Deprecated
 
