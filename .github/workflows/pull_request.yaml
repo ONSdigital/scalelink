@@ -27,7 +27,7 @@ jobs:
     steps:
       - name: Check changelog
         id: changelog
-        uses: dangoslen/changelog-enforcer@v3
+        uses: dangoslen/changelog-enforcer@8b5e9dc3121363bb7c0115f8533404d92af382de
   
   pre-commit:
     name: Run pre-commit hooks
@@ -36,15 +36,15 @@ jobs:
     steps:
       - name: Check out repository
         id: pre-commit-repo-checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
       
       - name: Set up Python
         id: pre-commit-python-set-up
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
       
       - name: Run pre-commit hooks
         id: pre-commit-run
-        uses: pre-commit/action@v3.0.1
+        uses: pre-commit/action@2c7b3805fd2a0fd8c1884dcaebf91fc102a13ecd
 
   test:
     name: Run unit tests
@@ -56,11 +56,15 @@ jobs:
     steps:
       - name: Check out repository
         id: test-repo-checkout
+<<<<<<< HEAD
         uses: actions/checkout@v7
+=======
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+>>>>>>> 55d9e84 (ci: change github action workflows to pin to commit hash)
 
       - name: Set up Python ${{ matrix.python-version }}
         id: test-python-set-up
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
         with:
           python-version: ${{ matrix.python-version }}
       

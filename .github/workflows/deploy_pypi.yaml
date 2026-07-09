@@ -15,11 +15,11 @@ jobs:
     steps:
       - name: Check out repository
         id: version-repo-checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
         
       - name: Check version
         id: version-check
-        uses: maybe-hello-world/pyproject-check-version@v4
+        uses: maybe-hello-world/pyproject-check-version@cb964e82b3c8a0b1cedb117da63e1761c46600b8
         with:
           pyproject-path: "./pyproject.toml"
 
@@ -30,14 +30,14 @@ jobs:
 
       - name: Bump version and push tag
         id: version-tag
-        uses: mathieudutour/github-tag-action@v6.2
+        uses: mathieudutour/github-tag-action@a22cf08638b34d5badda920f9daf6e72c477b07b
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           custom_tag: ${{ env.PACKAGE_VERSION }}
       
       - name: Create a GitHub release
         id: version-release
-        uses: ncipollo/release-action@v1
+        uses: ncipollo/release-action@339a81892b84b4eeb0f6e744e4574d79d0d9b8dd
         with:
           tag: ${{ steps.version-tag.outputs.new_tag }}
           name: Release ${{ steps.version-tag.outputs.new_tag }}
@@ -53,14 +53,14 @@ jobs:
     steps:
       - name: Check out repository
         id: build-repo-checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
         with:
           fetch-depth: 0
           python-version: ["3.10", "3.11"]
 
       - name: Build and lint dist
         id: build-dist
-        uses: hynek/build-and-inspect-python-package@v2
+        uses: hynek/build-and-inspect-python-package@d44ca7d91762de7a7d5436ddae667c6da6d1c3df
         with:
           attest-build-provenance-github: 'true'
   
@@ -76,11 +76,11 @@ jobs:
     steps:
       - name: Retrieve release distributions
         id: publish-retrieve-dist
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: release-dists
           path: dist/
 
       - name: Publish release distributions on PyPI
         id: publish-to-pypi
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b
