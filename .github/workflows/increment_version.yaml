@@ -26,7 +26,7 @@ jobs:
       - name: Set version as env variable
         id: version-set
         run: |
-          echo "PACKAGE_VERSION=${{ steps.versioncheck.outputs.local_version }}" >> $GITHUB_ENV
+          echo "PACKAGE_VERSION=${{ steps.version-check.outputs.local_version }}" >> $GITHUB_ENV
 
       - name: Bump version and push tag
         id: version-tag

@@ -48,3 +48,5 @@ jobs:
       - name: Publish release distributions on PyPI
         id: publish-to-pypi
         uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b
+        with:
+          repository-url: https://test.pypi.org

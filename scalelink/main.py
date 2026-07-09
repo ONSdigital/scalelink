@@ -3,7 +3,6 @@ Run script for Scalelink.
 """
 
 import boto3
-import pyspark
 import raz_client
 from rdsa_utils.cdp.helpers.s3_utils import delete_folder
 
@@ -13,7 +12,7 @@ from scalelink.matrix_a_star import matrix_a_star as ma
 from scalelink.utils import utils as ut
 
 
-def run_scalelink(config_path: str = "scalelink/configs.ini") -> pyspark.sql.DataFrame:
+def run_scalelink(config_path: str = "scalelink/configs.ini") -> None:
     """
     Takes a path for the location of the config file. From this, runs the entire
       scaling method as per Goldstein et al. (2017) on the specified datasets,

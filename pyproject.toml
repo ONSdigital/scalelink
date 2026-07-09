@@ -13,7 +13,7 @@ dependencies = [
   "raz_client >= 1.1.0",
   "rdsa_utils >= 0.16.0",
 ]
-requires-python = ">= 3.10"
+requires-python = ">= 3.10,< 3.12"
 authors = [
   {name = "Data Linkage team, Methodology & Quality Directorate, Office for National Statistics", email = "datalinkage@ons.gov.uk"},
 ]

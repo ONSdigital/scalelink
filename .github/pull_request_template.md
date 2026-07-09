@@ -8,7 +8,7 @@
 
 </details>
  
-**This pr introduces....**
+**This PR introduces...**
 
 ## Type of change
 
@@ -17,7 +17,7 @@
 - [ ] Breaking change - **backwards incompatible change**, changes expected behaviour.
 - [ ] Non-user facing change - structural change, dev functionality, docs, etc.
 
-## Checklist:
+## Checklist
 
 I have:
 
@@ -28,24 +28,24 @@ I have:
 - [ ] Checked that new and existing unit tests pass locally with my changes.
 - [ ] Updated the change log.
 
-##  Peer review
+## Peer review
 
 You should review all of the following:
 
 - **Documentation**:
   - Are docstrings present?
-  - Are comments only present where necessary and have they been added/updated?
+  - Are comments only present where necessary and have they been updated where applicable?
 - **Style guidelines**:
-  - Do the new files conforms to the project's contribution guidelines?
+  - Do the new files conform to the project's contribution guidelines?
 - **Functionality**:
-  - Does the code works as expected?
+  - Does the code work as expected?
   - Does the code handle expected edge cases and exceptions appropriately?
 - **Complexity**:
-  - Is the code is not overly complex?
+  - Is the code overly complex?
   - Has the logic been split into appropriately sized functions?
 - **Test coverage**:
   - Are there unit tests for all essential functions for a reasonable range of inputs and conditions?
-  - Do added and existing tests locally on the reviewer's machine?
+  - Do added and existing tests pass locally on the reviewer's machine?
 
 ### Review comments
 
