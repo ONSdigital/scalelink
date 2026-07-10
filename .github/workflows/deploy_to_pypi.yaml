@@ -16,15 +16,15 @@ jobs:
       # allows the provenance attestation to work
       attestations: write
       id-token: write
-    # only allow tagged commits to be deployed
-    if: ${{ !startsWith(github.ref, "refs/tags") }}
-    run: |
-      echo "ERROR: You can only deploy a tagged commit to PyPI."
-      exit 1
+
     steps:
       - name: Check out repository
         id: build-repo-checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0    # only allow tagged commits to be deployed
+        if: ${{ !startsWith(github.ref, "refs/tags") }}
+        run: |
+          echo "ERROR: You can only deploy a tagged commit to PyPI."
+          exit 1
 
       - name: Build and lint dist
         id: build-dist
