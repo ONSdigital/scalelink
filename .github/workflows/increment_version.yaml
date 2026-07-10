@@ -1,0 +1,44 @@
+name: Increment version
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  version-increment:
+    permissions:
+      contents: write
+      actions: write
+    name: Increment repo version, push tag and create release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        id: version-repo-checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        
+      - name: Check version
+        id: version-check
+        uses: maybe-hello-world/pyproject-check-version@cb964e82b3c8a0b1cedb117da63e1761c46600b8
+        with:
+          pyproject-path: "./pyproject.toml"
+
+      - name: Set version as env variable
+        id: version-set
+        run: |
+          echo "PACKAGE_VERSION=${{ steps.version-check.outputs.local_version }}" >> $GITHUB_ENV
+
+      - name: Bump version and push tag
+        id: version-tag
+        uses: mathieudutour/github-tag-action@a22cf08638b34d5badda920f9daf6e72c477b07b
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          custom_tag: ${{ env.PACKAGE_VERSION }}
+      
+      - name: Create a GitHub release
+        id: version-release
+        uses: ncipollo/release-action@339a81892b84b4eeb0f6e744e4574d79d0d9b8dd
+        with:
+          tag: ${{ steps.version-tag.outputs.new_tag }}
+          name: Release ${{ steps.version-tag.outputs.new_tag }}
+          body: ${{ steps.version-tag.outputs.changelog }}

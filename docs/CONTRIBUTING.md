@@ -109,8 +109,8 @@ See [Branching and deployment guide][git-guide].
 
 [gitflow]: https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow
 [commits]: https://www.markdownguide.org/basic-syntax/#links
-[pre-commit]: .pre-commit-config.yaml
+[pre-commit]: /.pre-commit-config.yaml
 [git-guide]: /docs/branch_and_deploy_guide.md
 [pep8]: https://peps.python.org/pep-0008/
-[pyproject]: pyproject.toml
+[pyproject]: /pyproject.toml
 [style-guide]: https://github.com/google/styleguide/blob/gh-pages/pyguide.md#38-comments-and-docstrings
