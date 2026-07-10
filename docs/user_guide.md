@@ -43,7 +43,7 @@ The configs must be inputted as follows:
 | filepaths | bucket_name        | Y         | The name of your AWS S3 bucket, excluding the `s3a://` prefix. All configs ending `_path` will be concatenated onto this to create full filepaths.                                                                                                                                                                                     |
 | filepaths | ssl_file           | Y         | The relative filepath to your local SSL Certificate file, ending `.crt`. For `raz_client`, to permit use of `boto3`.                                                                                                                                                                                                                   |
 | filepaths | df1_path           | N*        | The relative filepath to the first dataset you wish to link. This must be a parquet file in your AWS S3 bucket.                                                                                                                                                                                                                        |
-| filepaths | df2_path           | N*        | The relative filepath to the second dataset you with to link. This must be a parquet file in your AWS S3 bucket.                                                                                                                                                                                                                       |
+| filepaths | df2_path           | N*        | The relative filepath to the second dataset you wish to link. This must be a parquet file in your AWS S3 bucket.                                                                                                                                                                                                                       |
 | filepaths | df_candidates_path | N*        | The relative filepath to the Cartesian product of the two datasets you wish to link. This must be a parquet file in your AWS S3 bucket.                                                                                                                                                                                                |
 | filepaths | checkpoint_path    | Y         | The relative filepath to the folder you wish checkpoint files to be saved to during the linkage. This must be a location within your AWS S3 bucket. It **must be a unique location** as `run_scalelink` will delete it once the run is finished.                                                                                       |
 | filepaths | output_path        | Y         | The relative filepath to the folder you wish the linked dataset to be saved to. This must be a location within your AWS S3 bucket.                                                                                                                                                                                                     |
@@ -61,7 +61,9 @@ blocked set of candidate pairs. However, note that it is currently unknown how b
 ### Configs example
 
 Imagine you had an AWS S3 bucket named `s3a://my-aws-s3-bucket`. Inside this bucket are two parquet files at `/my_project/dataframe1` and `/my_project/dataframe2`.
-You decide to let the `run_scalelink`
+You decide to let the `run_scalelink` use these directly, rather than joining them yourself (e.g. using blocking criteria) and running Scalelink on the candidate pairs you
+have produced.
+
 Additionally, there is a folder called `/checkpoints` where you want checkpoint files to be stored and a folder called `/outputs` where you want your linked dataset
 to be saved. Locally, your SSL Certificate is located at `/local/folder/containing/cert_file.crt`.
 
@@ -136,7 +138,7 @@ assumptions are made:
 - Your linkage variables do not contain any missingness (either as `None` or as a place-holder, e.g. a string consisting of `"None"`, `"N/A"`, etc.).
 - You want your linked dataset to be outputted as a parquet file saved to a location within your AWS S3 bucket.
 
-[config-template]: scalelink/configs_template.ini
+[config-template]: /scalelink/configs_template.ini
 [github-releases]: https://github.com/ONSdigital/scalelink/releases
 [pypi]: https://pypi.org/project/scalelink/
-[readme]: README.md
+[readme]: /README.md

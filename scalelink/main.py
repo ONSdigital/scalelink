@@ -26,7 +26,6 @@ def run_scalelink(config_path: str = "scalelink/configs.ini") -> None:
 
     Dependencies:
       boto3
-      pyspark.sql.DataFrame
       raz_client
       delete_folder from rdsa_utils.cdp.helpers.s3_utils
 

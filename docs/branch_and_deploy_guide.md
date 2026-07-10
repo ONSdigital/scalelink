@@ -96,7 +96,7 @@ enter `main` without the version being incremented and a release being published
    - When a `push` to `main` is detected.
 
 2. **Extract repo version:**
-   - Extract the version of the repo from the location specified in `setup.py`.
+   - Extract the version of the repo from `pyproject.toml`.
 
 3. **Push version tag:**
    - Push a new tag containing the repo version.
@@ -158,7 +158,7 @@ to preserve the codebase's integrity and reliability. Below is a straightforward
    - Review the styling of the information from `README.md`. Make a note of any changes that need to be implemented
      prior to uploading to PyPI.
 
-3. **Download from Test PyPI and test:**
+4. **Download from Test PyPI and test:**
    - In your local environment, download the test build from Test PyPI by running: `pip install -i https://test.pypi.org/simple/ scalelink==<version>`.
    - Test that the package runs correctly using a script containing the following:
    
@@ -206,7 +206,7 @@ These steps must be carried out by someone other than the pull request initiator
      documentation of changes from being pending release to being part of the new version's official changelog.
    - Ensure the "Unreleased" section is left empty after this process, ready for documenting future changes.
    - Update the "Release links" section at the bottom of the document. Add links to the new version's GitHub Release
-     page and its PyPi listing, following the existing format. **Note: this repo does not currently have a PyPi listing.**
+     page and its PyPI listing, following the existing format. **Note: this repo does not currently have a PyPI listing.**
      This step ensures users and developers can easily find and access the specific versions of `scalelink` through their
      respective release pages and download links, maintaining comprehensive and navigable documentation.
    - Commit and push all changes to the remote `develop` branch.
@@ -271,7 +271,7 @@ graph TD
     Dev1{Develop branch: Ready for release?}
     Dev2[Manually create build dist locally]
     Dev3[Deploy build to Test PyPI]
-    Dev4[Check description and metadata is correct on Test PyPI]
+    Dev4[Check description and metadata are correct on Test PyPI]
     Dev5[Download build from Test PyPI and check it runs correctly]
     Dev6{Deployment: are there any errors?}  
     Dev7[Update change log]

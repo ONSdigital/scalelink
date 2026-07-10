@@ -40,7 +40,7 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 - Dependabot config, so that version updates are targeted to `develop` not `main`.
 - Unit tests:
   - `test_create_spark_session` in `tests/utils/test_utils_create_spark_session.py`.
-  - `test_get_input_variables` in `tests/utils/utils.py`.
+  - `test_get_input_variables` in `tests/utils/test_utils.py`.
   - Additional assert statements in unit tests of parent functions.
 - `README.md`:
   - Added installation and use, contact, dedication and icons.
@@ -51,7 +51,7 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 - Build method, from using `setuptools` with `setup.py`, `setup.cfg` and `requirements.txt` to using `hatchling` with `pyproject.toml`.
 - Location of config template, so it is included in build.
 - Minor phrasing changes to User Guide (`docs/user_guide.md`) and pull request template (`.github/pull_request_template.md`).
-- Changed all third-party resuable workflows in GitHub Actions workflows to pin to latest release's long commit hash.
+- Changed all third-party reusable workflows in GitHub Actions workflows to pin to latest release's long commit hash.
 
 ### Deprecated
 
@@ -59,15 +59,15 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 
 - GitHub Action that increments release version - fixed typos.
 - Unit tests:
-  - `test_cartesian_join_dataframes` in `tests/utils/utils.py`.
-  - `test_get_s` in `tests/utils/utils.py`.
+  - `test_cartesian_join_dataframes` in `tests/utils/test_utils.py`.
+  - `test_get_s` in `tests/utils/test_utils.py`.
 - Formatting of all docstrings.
 
 ### Removed
 
 - Python 3.8 and 3.9 support.
 - Use of `bump2version`, as it's no longer supported.
-- Use of `hotfix` branches by this project. Updated Branch and Deploy Guide and Pull Request GitHub Action workflow to reflec this.
+- Use of `hotfix` branches by this project. Updated Branch and Deploy Guide and Pull Request GitHub Action workflow to reflect this.
 
 ## [0.1.1] 2025-07-18
 

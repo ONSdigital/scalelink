@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: Check branch
         id: check-branch
-        if: ${{github.base_ref == 'main' && (github.head_ref != 'develop')}}
+        if: ${{ github.base_ref == 'main' && (github.head_ref != 'develop') }}
         run: |
           echo "ERROR: You can only merge to main from develop."
           exit 1
