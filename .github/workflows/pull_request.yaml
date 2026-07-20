@@ -42,7 +42,7 @@ jobs:
       
       - name: Set up Python
         id: pre-commit-python-set-up
-        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
       
       - name: Run pre-commit hooks
         id: pre-commit-run
@@ -64,7 +64,7 @@ jobs:
 
       - name: Set up Python ${{ matrix.python-version }}
         id: test-python-set-up
-        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
           python-version: ${{ matrix.python-version }}
       
