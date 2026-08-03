@@ -119,4 +119,7 @@ max-complexity = 10
 locale = "en-gb"
 
 [tool.typos.default.extend-words]
+labeled = "labeled"
 sav = "sav"
+synchronize = "synchronize"
+unlabeled = "unlabeled"
