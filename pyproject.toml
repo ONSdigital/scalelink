@@ -67,10 +67,56 @@ changelog = "https://github.com/ONSdigital/scalelink/blob/develop/CHANGELOG.md"
 [tool.hatch.build.targets.wheel]
 only-include = ["scalelink"]
 
-[tool.isort]
-profile = "black"
-known_local_folder = "scalelink"
-skip = [".gitignore"]
+[tool.ruff]
+extend-include = ["*.ipynb", ".md"]
+# Exclude a variety of commonly ignored directories
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+    "doc",
+]
+
+[tool.ruff.format]
+# Change formatting to be more like black
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+docstring-code-format = true
+
+[tool.ruff.lint.mccabe]
+# Flag when cyclomatic complexity is too high
+max-complexity = 10
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"]
+
+[tool.typos.default]
+locale = "en-gb"
+
+[tool.typos.default.extend-words]
+sav = "sav"
