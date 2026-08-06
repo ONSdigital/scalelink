@@ -48,8 +48,6 @@ build = [
   "twine >= 6.2.0",
 ]
 dev = [
-  "black >= 24.4.2",
-  "isort >= 5.13.2",
   "ruff >= 0.0.270",
 ]
 test = [
@@ -68,7 +66,7 @@ changelog = "https://github.com/ONSdigital/scalelink/blob/develop/CHANGELOG.md"
 only-include = ["scalelink"]
 
 [tool.ruff]
-extend-include = ["*.ipynb", ".md"]
+extend-include = ["*.ipynb", "*.md"]
 # Exclude a variety of commonly ignored directories
 exclude = [
     ".bzr",
