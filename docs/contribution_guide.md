@@ -59,7 +59,7 @@ See [Branching and deployment guide][git-guide].
 - Maintain unit test coverage of >=80%.
 
 - Use linting and formatting:
-  - Lint all code with `ruff` and format all code with `black`.
+  - Lint and format all code with `ruff`, using the configs in the `pyproject.toml`.
   - This is most easily done by installing `pre-commit` and using the [repo's pre-commit configs][pre-commit].
 
 ### Functions
