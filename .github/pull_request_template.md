@@ -85,8 +85,8 @@ Suggestions may include:
     - Ensure sufficient coverage of both functions and inputs/conditions.
     - Ensure all tests pass.
 -   **Style improvements**:
-    - Ensure the `cats-training` [contribution guide][contribution-guide] is followed.
+    - Ensure the [contribution guide][contribution-guide] is followed.
 
-[contribution-guide]: docs/contribution_guide.md
+[contribution-guide]: ../docs/contribution_guide.md
 [issue-citation]: https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/autolinked-references-and-urls#issues-and-pull-requests
 [keywords]: https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/using-keywords-in-issues-and-pull-requests
