@@ -88,14 +88,14 @@ See [Branching and deployment guide][git-guide].
 
 ### Function checklist
 
-| Requirement                                            | Check before submitting                                                             |
-| ------------------------------------------------------ | ----------------------------------------------------------------------------------- |
-| Function signatures contain type hints.                | Clearly specify input and output types. Do not duplication type hints in docstring. |
-| Docstrings are correctly formatted.                    | Follow Google Python Style Guide format with `Args` and `Returns` or `Yields`.      |
-| Function, argument and variable names are descriptive. | Avoid overly abbreviated or cryptic names.                                          |
-| Complex logic is broken into helper functions.         | Keep functions focused and small whenever possible.                                 |
-| Comments explain **why** not **what**.                 | Only use comments where intent isn't obvious despite good naming.                   |
-| Code prioritises readability.                          | Prefer clear structure over clever one-liners.                                      |
+| Requirement                                            | Check before submitting                                                           |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------- |
+| Function signatures contain type hints.                | Clearly specify input and output types. Do not duplicate type hints in docstring. |
+| Docstrings are correctly formatted.                    | Follow Google Python Style Guide format with `Args` and `Returns` or `Yields`.    |
+| Function, argument and variable names are descriptive. | Avoid overly abbreviated or cryptic names.                                        |
+| Complex logic is broken into helper functions.         | Keep functions focused and small whenever possible.                               |
+| Comments explain **why** not **what**.                 | Only use comments where intent isn't obvious despite good naming.                 |
+| Code prioritises readability.                          | Prefer clear structure over clever one-liners.                                    |
 
 ## Unit tests
 
@@ -128,8 +128,6 @@ See [Branching and deployment guide][git-guide].
 | Assertions are clear and meaningful.  | Assertions clearly show expected versus actual results.                                                       |
 | Edge cases are covered.               | Tests aim for full coverage, not just low-hanging fruit. Where tests are not performed, this is justified.    |
 
-[gitflow]: https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow
-[commits]: https://www.markdownguide.org/basic-syntax/#links
 [pre-commit]: /.pre-commit-config.yaml
 [git-guide]: /docs/branch_and_deploy_guide.md
 [pep8]: https://peps.python.org/pep-0008/
