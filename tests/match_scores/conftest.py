@@ -1,5 +1,3 @@
-from typing import Dict
-
 import pyspark
 import pytest
 
@@ -73,7 +71,7 @@ def assign_weights_input_df(spark: pyspark.sql.SparkSession) -> pyspark.sql.Data
 
 
 @pytest.fixture(scope="module")
-def assign_weights_input_x_star() -> Dict[str, float]:
+def assign_weights_input_x_star() -> dict[str, float]:
     return {
         "sex_disagree": 0.0,
         "sex_agree": 75.0,

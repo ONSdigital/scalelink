@@ -22,7 +22,7 @@ Methods:
      - assign_match_score
 """
 
-from typing import Any, Dict, List, Union
+from typing import Any
 
 import pyspark
 from pyspark.sql import functions as F
@@ -62,8 +62,8 @@ def assign_weights(
     df_with_deltas: pyspark.sql.DataFrame,
     df1_id: str,
     df2_id: str,
-    cutpoints: Dict[str, Union[List[float], None]],
-    x_star_scaled: Dict[str, float],
+    cutpoints: dict[str, list[float] | None],
+    x_star_scaled: dict[str, float],
     spark: pyspark.sql.SparkSession,
 ) -> pyspark.sql.DataFrame:
     """
@@ -107,10 +107,9 @@ def assign_weights(
 
     # Make then fill weight columns
     for col in linkage_cols:
-
         df_with_weights = df_with_weights.withColumn(col + "_weight", F.lit(None))
 
-        for key in [x for x in x_star_scaled.keys() if x.startswith(col)]:
+        for key in [x for x in x_star_scaled if x.startswith(col)]:
             if "_disagree" in key:
                 df_with_weights = df_with_weights.withColumn(
                     col + "_weight",
@@ -158,8 +157,8 @@ def assign_weights(
 
 def get_match_scores(
     df_deltas: pyspark.sql.DataFrame,
-    x_star_scaled_labelled: Dict[str, float],
-    input_variables: Dict[str, Any],
+    x_star_scaled_labelled: dict[str, float],
+    input_variables: dict[str, Any],
     spark: pyspark.sql.SparkSession,
 ) -> pyspark.sql.DataFrame:
     """

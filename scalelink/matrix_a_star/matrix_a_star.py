@@ -68,14 +68,14 @@ Methods:
 import collections
 import itertools
 import re
-from typing import Any, Dict, List, Union
+from typing import Any
 
 import numpy as np
 import pandas as pd
 import pyspark
 
 
-def calculate_b(K: int) -> List[int]:
+def calculate_b(K: int) -> list[int]:
     """
     Takes the Scalelink variable K. From this, calculates the Scalelink vector
     b.
@@ -130,7 +130,7 @@ def calculate_njklm_values(df: pyspark.sql.DataFrame) -> pd.DataFrame:
     return df_Njklm
 
 
-def calculate_q(cutpoints: Dict[str, Union[List[float], None]]) -> List[int]:
+def calculate_q(cutpoints: dict[str, list[float] | None]) -> list[int]:
     """
     Takes a dictionary containing linkage variable names and the string
     comparison cutpoints for those variables. From this, calculates the
@@ -164,7 +164,7 @@ def calculate_q(cutpoints: Dict[str, Union[List[float], None]]) -> List[int]:
     return q
 
 
-def calculate_r(cutpoints: Dict[str, Union[List[float], None]]) -> List[int]:
+def calculate_r(cutpoints: dict[str, list[float] | None]) -> list[int]:
     """
     Takes a dictionary containing linkage variable names and the string
     comparison cutpoints for those variables. From this, calculates the
@@ -199,7 +199,7 @@ def calculate_r(cutpoints: Dict[str, Union[List[float], None]]) -> List[int]:
 
 
 def get_matrix_a_star(
-    df_delta_comparisons: pyspark.sql.DataFrame, input_variables: Dict[str, Any]
+    df_delta_comparisons: pyspark.sql.DataFrame, input_variables: dict[str, Any]
 ) -> np.array:
     """
     Takes a dataframe containing the delta comparisons for the two dataframes to
@@ -251,8 +251,8 @@ def get_matrix_a_star(
 
 
 def get_scaled_labelled_x_star(
-    matrix_a_star: np.array, input_variables: Dict[str, Any]
-) -> Dict[str, float]:
+    matrix_a_star: np.array, input_variables: dict[str, Any]
+) -> dict[str, float]:
     """
     Takes a Numpy array containing Matrix A*, as defined in Goldstein et al.
     (2017). Also takes the input variables, stored in a dictionary. From this,
@@ -294,8 +294,8 @@ def get_scaled_labelled_x_star(
 
 
 def label_x_star(
-    x_star: List[float], cutpoints: Dict[str, Union[List[float], None]]
-) -> Dict[str, float]:
+    x_star: list[float], cutpoints: dict[str, list[float] | None]
+) -> dict[str, float]:
     """
     Takes Scalelink vector x* and a list of linkage variable names and their
     string comparison cutpoints. From this, converts x* into a dictionary,
@@ -375,7 +375,7 @@ def make_matrix_a(df_Njklm: pd.DataFrame, K: int, p: int) -> np.array:
     Njklm_rows = [None] * K
 
     # Fill vector of rows, row by row, with Njklm values
-    for i in range(0, K):
+    for i in range(K):
         if i == 0:
             Njklm_rows[i] = df_Njklm.values.tolist()[0][i : (i + K)]
         else:
@@ -394,7 +394,7 @@ def make_matrix_a(df_Njklm: pd.DataFrame, K: int, p: int) -> np.array:
     return matrix_a
 
 
-def make_matrix_a_star(matrix_a: np.array, q: List[int], r: List[int]) -> np.array:
+def make_matrix_a_star(matrix_a: np.array, q: list[int], r: list[int]) -> np.array:
     """
     Takes Scalelink Matrix A, Vector q and vector r. From this, makes Scalelink
     Matrix A*.
@@ -444,7 +444,7 @@ def make_matrix_a_star(matrix_a: np.array, q: List[int], r: List[int]) -> np.arr
     return matrix_a_star
 
 
-def multiply_vectors_by_s(vector: List[int], s: int) -> List[int]:
+def multiply_vectors_by_s(vector: list[int], s: int) -> list[int]:
     """
     Takes Scalelink vector (q, r or b) and the Scalelink variable s. Multiplies
     the vector by s, element-wise, to give q_s, r_s or b_s. These are used in
@@ -467,7 +467,7 @@ def multiply_vectors_by_s(vector: List[int], s: int) -> List[int]:
     return vector_by_s
 
 
-def scale_x_star(x_star_labelled: Dict[str, float]) -> Dict[str, float]:
+def scale_x_star(x_star_labelled: dict[str, float]) -> dict[str, float]:
     """
     Takes the labelled version of the Scalelink vector x* and scales it. This is
     a two-step process. First, on a linkage variable basis, the disagreement
@@ -511,7 +511,7 @@ def scale_x_star(x_star_labelled: Dict[str, float]) -> Dict[str, float]:
     return x_star_scaled
 
 
-def solve_for_x_star(matrix_a_star: np.array, b: List[int]) -> List[float]:
+def solve_for_x_star(matrix_a_star: np.array, b: list[int]) -> list[float]:
     """
     Takes Scalelink Matrix A* and vector b. From this, solves the matrix to make
     Scalelink vector x*.

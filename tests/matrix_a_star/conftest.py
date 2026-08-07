@@ -1,5 +1,3 @@
-from typing import List
-
 import numpy as np
 import pandas as pd
 import pytest
@@ -46,7 +44,7 @@ def calculate_njklm_values_output() -> pd.DataFrame:
 @pytest.fixture(scope="module")
 def make_matrix_a_output() -> np.array:
     """
-    Sets up the expected ouput for make_matrix_a, which is also the test input
+    Sets up the expected output for make_matrix_a, which is also the test input
     for and used by test_get_matrix_a_star.
     """
     return np.array(
@@ -63,25 +61,25 @@ def make_matrix_a_output() -> np.array:
 @pytest.fixture(scope="module")
 def make_input_matrix_a_star() -> np.array:
     """
-    Sets up the input matrix_a_star for test_solve_for_x_star, and it is also
+    Sets up the input matrix_a_star for test_solve_for_x_star, which is also
     one of the test inputs for test_get_scaled_labelled_x_star.
     """
     return np.array([[2, 1], [1, 1]])
 
 
 @pytest.fixture(scope="module")
-def make_input_b() -> List[int]:
+def make_input_b() -> list[int]:
     """
-    Sets up the input b vector for test_solve_for_x_star, and it is also
+    Sets up the input b vector for test_solve_for_x_star, which is also
     one of the test inputs for test_get_scaled_labelled_x_star.
     """
     return [5, 3]
 
 
 @pytest.fixture(scope="module")
-def make_solve_for_x_star_output() -> List[float]:
+def make_solve_for_x_star_output() -> list[float]:
     """
-    Sets up the expected ouput for test_solve_for_x_star, and it is also
+    Sets up the expected output for test_solve_for_x_star, which is also
     one of the test inputs for test_get_scaled_labelled_x_star.
     """
     return [2, 1]
