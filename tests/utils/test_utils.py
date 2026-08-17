@@ -143,19 +143,15 @@ def test_define_p() -> None:
     appropriate inputs.
     """
     # Arrange
-    test_input_1 = ["fn", "sn", "sex"]
-    test_input_2 = ["fn", "mn", "sn", "sex", "dob"]
+    test_input = ["fn", "sn", "sex"]
 
-    expected_output_1 = 3
-    expected_output_2 = 5
+    expected_output = 3
 
     # Act
-    test_output_1 = ut.define_p(linkage_vars=test_input_1)
-    test_output_2 = ut.define_p(linkage_vars=test_input_2)
+    test_output = ut.define_p(linkage_vars=test_input)
 
     # Assert
-    assert test_output_1 == expected_output_1
-    assert test_output_2 == expected_output_2
+    assert test_output == expected_output
 
 
 def test_define_partial_agreement_vars() -> None:

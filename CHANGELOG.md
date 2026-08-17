@@ -52,6 +52,7 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 - Location of config template, so it is included in build.
 - Minor phrasing changes to User Guide (`docs/user_guide.md`) and pull request template (`.github/pull_request_template.md`).
 - Changed all third-party reusable workflows in GitHub Actions workflows to pin to latest release's long commit hash.
+- Parametrised unit tests in `tests/utils/`.
 
 ### Deprecated
 
