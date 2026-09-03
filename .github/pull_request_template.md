@@ -87,6 +87,6 @@ Suggestions may include:
 -   **Style improvements**:
     - Ensure the [contribution guide][contribution-guide] is followed.
 
-[contribution-guide]: ../docs/contribution_guide.md
+[contribution-guide]: /scalelink/docs/contribution_guide.md
 [issue-citation]: https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/autolinked-references-and-urls#issues-and-pull-requests
 [keywords]: https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/using-keywords-in-issues-and-pull-requests
