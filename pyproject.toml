@@ -21,6 +21,11 @@ build = [
   "twine >= 6.2.0",
 ]
 dev = [
+  {include-group = "build"},
+  {include-group = "lint"},
+  {include-group = "test"},
+]
+lint = [
   "ruff >= 0.0.270",
 ]
 test = [
@@ -31,7 +36,7 @@ test = [
 ]
 requires-python = ">= 3.10, < 3.12"
 authors = [
-  {name = "Data Linkage team, Methodology & Quality Directorate, Office for National Statistics", email = "datalinkage@ons.gov.uk"},
+  {name = "Data Linkage team, Methodology & Quality Directorate, Office for National Statistics", email = "datalinkage@ons.gov.uk"}
 ]
 description = "A Python and PySpark implementation of the Scalelink method of data linkage by Goldstein et al."
 readme = "README.md"
