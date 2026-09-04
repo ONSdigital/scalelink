@@ -290,13 +290,30 @@ def define_partial_agreement_vars(
       partial_agreement_vars:
         A list containing the names of the linkage variables that will have
         partial agreement state.
+
+    Raises:
+      ValueError: Vairable names must be strings.
     """
     partial_agreement_cutpoints = {
         key: value for key, value in cutpoints.items() if value is not None
     }
     partial_agreement_vars = list(partial_agreement_cutpoints.keys())
 
-    return partial_agreement_vars
+    variable_name_errors = []
+
+    for i in partial_agreement_vars:
+        if not isinstance(i, str):
+            variable_name_errors.append(i)
+
+    if len(variable_name_errors) != 0:
+        message = (
+            "Variable names must be strings."
+            f" Partial agreement variable names include {variable_name_errors}."
+        )
+        raise ValueError(message)
+        exit()
+    else:
+        return partial_agreement_vars
 
 
 def format_cutpoints(

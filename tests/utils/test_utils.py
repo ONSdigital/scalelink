@@ -171,21 +171,34 @@ def test_define_p() -> None:
     assert test_output == expected_output
 
 
-def test_define_partial_agreement_vars() -> None:
+@pytest.mark.parametrize(
+    "test_input, expected_output, expected_context",
+    [
+        pytest.param(
+            {"fn": [0.4, 0.7, 0.9], "sn": [0.75, 0.9], "sex": None, "dob": None},
+            ["fn", "sn"],
+            does_not_raise(),
+            id="Expected scenario",
+        ),
+        pytest.param(
+            {1: [0.4, 0.7, 0.9], 2: [0.75, 0.9], 3: None, 4: None},
+            None,
+            pytest.raises(ValueError),
+            id="Error handling: non-string variable names",
+        ),
+    ],
+)
+def test_define_partial_agreement_vars(
+    test_input: dict[Any, Union[list[float], None]],
+    expected_output: Union[list, None],
+    expected_context: Union[contextlib.nullcontext, Exception],
+) -> None:
     """
     Tests that define_partial_agreement_vars() gives the correct output when
-    provided with appropriate inputs.
+    provided with appropriate inputs and raises the expected errors.
     """
-    # Arrange
-    test_input = {"fn": [0.4, 0.7, 0.9], "sn": [0.75, 0.9], "sex": None, "dob": None}
-
-    expected_output = ["fn", "sn"]
-
-    # Act
-    test_output = ut.define_partial_agreement_vars(cutpoints=test_input)
-
-    # Assert
-    assert test_output == expected_output
+    with expected_context:
+        assert expected_output == ut.define_partial_agreement_vars(cutpoints=test_input)
 
 
 def test_format_cutpoints() -> None:
