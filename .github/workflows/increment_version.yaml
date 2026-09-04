@@ -16,7 +16,7 @@ jobs:
       - name: Check out repository
         id: version-repo-checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        
+
       - name: Check version
         id: version-check
         uses: maybe-hello-world/pyproject-check-version@cb964e82b3c8a0b1cedb117da63e1761c46600b8
@@ -34,7 +34,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           custom_tag: ${{ env.PACKAGE_VERSION }}
-      
+
       - name: Create a GitHub release
         id: version-release
         uses: ncipollo/release-action@339a81892b84b4eeb0f6e744e4574d79d0d9b8dd
