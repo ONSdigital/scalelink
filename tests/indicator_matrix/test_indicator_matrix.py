@@ -21,6 +21,7 @@ from unittest.mock import patch
 
 import chispa as ch
 import pyspark
+import pytest
 
 from scalelink.indicator_matrix import indicator_matrix as im
 
@@ -190,7 +191,71 @@ def test_compare_deltas(
     ch.assert_df_equality(df1=test_output, df2=expected_output, ignore_row_order=True)
 
 
-def test_compute_normalised_levenshtein(spark: pyspark.sql.SparkSession) -> None:
+@pytest.mark.parametrize(
+    "test_input_df1_rows, test_input_df1_cols, test_input_df2_rows, test_input_df2_cols, expected_output_df_rows, expected_output_df_cols",
+    [
+        pytest.param(
+            [
+                ("1", "string", "string"),
+                ("2", "stringed", "str"),
+                ("3", "tring", "tri"),
+                ("4", "ttri", "str"),
+                ("5", None, "string"),
+                ("6", "string", None),
+                ("7", None, None),
+            ],
+            ("id", "string_1", "string_2"),
+            None,
+            None,
+            [
+                ("1", "string", "string", 1.0),
+                ("2", "stringed", "str", 0.375),
+                ("3", "tring", "tri", 0.6),
+                ("4", "ttri", "str", 0.5),
+                ("5", None, "string", None),
+                ("6", "string", None, None),
+                ("7", None, None, None),
+            ],
+            ("id", "string_1", "string_2", "normalised_levenshtein_output"),
+            id="compare_cols_from_one_df",
+        ),
+        pytest.param(
+            [
+                ("1", "string"),
+                ("2", None),
+                ("3", "str"),
+                ("4", None),
+                ("5", "string"),
+            ],
+            ("l_id", "string_1"),
+            [
+                ("1", "string"),
+                ("2", "str"),
+                ("3", None),
+                ("4", None),
+                ("5", "st"),
+                ("6", "ttri"),
+            ],
+            ("r_id", "string_2"),
+            [
+                ("1", "string", "1", "string"),
+                ("5", "string", "1", "string"),
+                ("3", "str", "2", "str"),
+            ],
+            ("l_id", "string_1", "r_id", "string_2"),
+            id="compare_cols_from_two_dfs",
+        ),
+    ],
+)
+def test_compute_normalised_levenshtein(
+    test_input_df1_rows: list[tuple[str | None]],
+    test_input_df1_cols: tuple[str],
+    test_input_df2_rows: list[tuple[str | None]],
+    test_input_df2_cols: tuple[str],
+    expected_output_df_rows: list[tuple[str | None]],
+    expected_output_df_cols: tuple[str],
+    spark: pyspark.sql.SparkSession,
+) -> None:
     """
     Tests that compute_normalised_levenshtein gives the correct output when
     provided with appropriate inputs.
@@ -198,91 +263,40 @@ def test_compute_normalised_levenshtein(spark: pyspark.sql.SparkSession) -> None
     Dependencies:
       chispa as ch
     """
-    test_input_1 = spark.createDataFrame(
-        [
-            ("1", "string", "string"),
-            ("2", "stringed", "str"),
-            ("3", "tring", "tri"),
-            ("4", "ttri", "str"),
-            ("5", None, "string"),
-            ("6", "string", None),
-            ("7", None, None),
-        ],
-        ("id", "string_1", "string_2"),
-    )
+    # Assert
+    test_input_1 = spark.createDataFrame(test_input_df1_rows, test_input_df1_cols)
 
-    test_input_2 = spark.createDataFrame(
-        [
-            ("1", "name", "string"),
-            ("2", "name", None),
-            ("3", "name", "str"),
-            ("4", "name", None),
-            ("5", "name", "string"),
-        ],
-        ("l_id", "first_name_1", "string_1"),
-    )
+    if test_input_df2_rows is not None:
+        test_input_2 = spark.createDataFrame(test_input_df2_rows, test_input_df2_cols)
 
-    test_input_3 = spark.createDataFrame(
-        [
-            ("1", "name", "string"),
-            ("2", "name", "str"),
-            ("3", "name", None),
-            ("4", "name", None),
-            ("5", "name", "st"),
-            ("6", "name", "ttri"),
-        ],
-        ("r_id", "first_name_2", "string_2"),
-    )
-
-    expected_output_1 = spark.createDataFrame(
-        [
-            ("1", "string", "string", 1.0),
-            ("2", "stringed", "str", 0.375),
-            ("3", "tring", "tri", 0.6),
-            ("4", "ttri", "str", 0.5),
-            ("5", None, "string", None),
-            ("6", "string", None, None),
-            ("7", None, None, None),
-        ],
-        ("id", "string_1", "string_2", "normalised_levenshtein_output"),
-    )
-
-    expected_output_2 = spark.createDataFrame(
-        [
-            ("1", "name", "string", "1", "name", "string"),
-            ("5", "name", "string", "1", "name", "string"),
-            ("3", "name", "str", "2", "name", "str"),
-        ],
-        ("l_id", "first_name_1", "string_1", "r_id", "first_name_2", "string_2"),
+    expected_output = spark.createDataFrame(
+        expected_output_df_rows, expected_output_df_cols
     )
 
     # Act
-    test_output_1 = test_input_1.withColumn(
-        "normalised_levenshtein_output",
-        im.compute_normalised_levenshtein(test_input_1.string_1, test_input_1.string_2),
-    )
-
-    test_output_2 = test_input_2.join(
-        test_input_3,
-        (
+    if test_input_df2_rows is None:
+        test_output = test_input_1.withColumn(
+            "normalised_levenshtein_output",
+            im.compute_normalised_levenshtein(
+                test_input_1[test_input_df1_cols[1]],
+                test_input_1[test_input_df1_cols[2]],
+            ),
+        )
+    else:
+        test_output = test_input_1.join(
+            test_input_2,
             (
                 im.compute_normalised_levenshtein(
-                    test_input_2.string_1, test_input_3.string_2
+                    test_input_1[test_input_df1_cols[1]],
+                    test_input_2[test_input_df2_cols[1]],
                 )
                 > 0.7
-            )
-            & (test_input_2.first_name_1 == test_input_3.first_name_2)
-        ),
-        how="inner",
-    )
+            ),
+            how="inner",
+        )
 
     # Assert
-    ch.assert_df_equality(
-        df1=test_output_1, df2=expected_output_1, ignore_row_order=True
-    )
-    ch.assert_df_equality(
-        df1=test_output_2, df2=expected_output_2, ignore_row_order=True
-    )
+    ch.assert_df_equality(df1=test_output, df2=expected_output, ignore_row_order=True)
 
 
 @patch("scalelink.indicator_matrix.indicator_matrix.calculate_deltas")
