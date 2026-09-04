@@ -58,15 +58,15 @@ Methods:
 
 import collections
 import configparser as cp
-from typing import Any, Dict, List, Union
+from typing import Any, Union
 
 import pyspark
 from pyspark.sql import SparkSession
 
 
 def define_binary_agreement_vars(
-    cutpoints: Dict[str, Union[List[float], None]],
-) -> List[str]:
+    cutpoints: dict[str, Union[list[float], None]],
+) -> list[str]:
     """
     Defines the linkage variables that will have binary agreement state.
 
@@ -80,12 +80,30 @@ def define_binary_agreement_vars(
       binary_agreement_vars:
         A list containing the names of the linkage variables that will have
         binary agreement state.
+
+    Raises:
+      ValueError: Variable names must be strings.
     """
     binary_agreement_cutpoints = {
         key: value for key, value in cutpoints.items() if value is None
     }
     binary_agreement_vars = list(binary_agreement_cutpoints.keys())
-    return binary_agreement_vars
+
+    variable_name_errors = []
+
+    for i in binary_agreement_vars:
+        if not isinstance(i, str):
+            variable_name_errors.append(i)
+
+    if len(variable_name_errors) != 0:
+        message = (
+            "Variable names must be strings."
+            f" Binary agreement variable names include {variable_name_errors}."
+        )
+        raise ValueError(message)
+        exit()
+    else:
+        return binary_agreement_vars
 
 
 def cartesian_join_dataframes(
@@ -189,7 +207,7 @@ def create_spark_session(
     return spark
 
 
-def define_K(kj: Dict[str, int]) -> int:
+def define_K(kj: dict[str, int]) -> int:
     """
     Defines the variable K, as per Goldstein et al. (2017). This variable is the
     total number of agreement states across all linkage variables.
@@ -210,7 +228,7 @@ def define_K(kj: Dict[str, int]) -> int:
     return K
 
 
-def define_kj(cutpoints: Dict[str, Union[List[float], None]]) -> Dict[str, int]:
+def define_kj(cutpoints: dict[str, Union[list[float], None]]) -> dict[str, int]:
     """
     Defines the variable kj for each linkage variable, as per Goldstein et al.
     (2017). This variable is the number of agreement states.
@@ -239,7 +257,7 @@ def define_kj(cutpoints: Dict[str, Union[List[float], None]]) -> Dict[str, int]:
     return kj
 
 
-def define_p(linkage_vars: List[str]) -> int:
+def define_p(linkage_vars: list[str]) -> int:
     """
     Defines the variable p, as per Goldstein et al (2017). This variable is the
     total number of linkage variables.
@@ -257,8 +275,8 @@ def define_p(linkage_vars: List[str]) -> int:
 
 
 def define_partial_agreement_vars(
-    cutpoints: Dict[str, Union[List[float], None]],
-) -> List[str]:
+    cutpoints: dict[str, Union[list[float], None]],
+) -> list[str]:
     """
     Defines the linkage variables that will have partial agreement state.
 
@@ -277,12 +295,13 @@ def define_partial_agreement_vars(
         key: value for key, value in cutpoints.items() if value is not None
     }
     partial_agreement_vars = list(partial_agreement_cutpoints.keys())
+
     return partial_agreement_vars
 
 
 def format_cutpoints(
-    linkage_vars: List[str], configs: cp.ConfigParser
-) -> Dict[str, float]:
+    linkage_vars: list[str], configs: cp.ConfigParser
+) -> dict[str, float]:
     """
     Formats the string comparison cutpoints to be used for each linkage variable.
 
@@ -313,7 +332,7 @@ def format_cutpoints(
     return cutpoints_formatted
 
 
-def get_input_variables(config_path: str) -> Dict[str, Any]:
+def get_input_variables(config_path: str) -> dict[str, Any]:
     """
     Takes the filepath to a config file. From this, returns a dictionary
     containing all of the input variables required for Scalelink.
@@ -459,8 +478,8 @@ def get_input_variables(config_path: str) -> Dict[str, Any]:
 
 
 def get_s(
-    input_variables: Dict[str, Any], df_cartesian_join: pyspark.sql.DataFrame
-) -> Dict[str, Any]:
+    input_variables: dict[str, Any], df_cartesian_join: pyspark.sql.DataFrame
+) -> dict[str, Any]:
     """
     Takes a dictionary of input variables and a dataframe consisting of the
     Cartesian join of the two dataframes to be linked. From this, calculates the

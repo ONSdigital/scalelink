@@ -23,31 +23,48 @@ Methods:
 """
 
 import configparser as cp
+import contextlib
 import os
 import unittest
+from contextlib import nullcontext as does_not_raise
+from typing import Any, Union
 from unittest.mock import Mock, patch
 
 import chispa as ch
 import pyspark
+import pytest
 
 from scalelink.utils import utils as ut
 
 
-def test_define_binary_agreement_vars() -> None:
+@pytest.mark.parametrize(
+    "test_input, expected_output, expected_context",
+    [
+        pytest.param(
+            {"fn": [0.4, 0.7, 0.9], "sn": [0.75, 0.9], "sex": None, "dob": None},
+            ["sex", "dob"],
+            does_not_raise(),
+            id="Expected scenario",
+        ),
+        pytest.param(
+            {1: [0.4, 0.7, 0.9], 2: [0.75, 0.9], 3: None, 4: None},
+            None,
+            pytest.raises(ValueError),
+            id="Error handling: non-string variable names",
+        ),
+    ],
+)
+def test_define_binary_agreement_vars(
+    test_input: dict[Any, Union[list[float], None]],
+    expected_output: Union[list, None],
+    expected_context: Union[contextlib.nullcontext, Exception],
+) -> None:
     """
-    Tests that define_binary_agreement_vars gives the correct output when
-    provided with appropriate inputs.
+    Tests define_binary_agreement_vars gives the correct output when
+    provided with appropriate inputs and raises the expected errors.
     """
-    # Arrange
-    test_input = {"fn": [0.4, 0.7, 0.9], "sn": [0.75, 0.9], "sex": None, "dob": None}
-
-    expected_output = ["sex", "dob"]
-
-    # Act
-    test_output = ut.define_binary_agreement_vars(cutpoints=test_input)
-
-    # Assert
-    assert test_output == expected_output
+    with expected_context:
+        assert expected_output == ut.define_binary_agreement_vars(cutpoints=test_input)
 
 
 def test_cartesian_join_dataframes(
