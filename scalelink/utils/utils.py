@@ -100,8 +100,7 @@ def define_binary_agreement_vars(
             "Variable names must be strings."
             f" Binary agreement variable names include {variable_name_errors}."
         )
-        raise ValueError(message)
-        exit()
+        raise TypeError(message)
     else:
         return binary_agreement_vars
 
@@ -129,9 +128,21 @@ def cartesian_join_dataframes(
         A dataframe containing the two input dataframes Cartesian joined
         together.
     """
-    df1 = spark.read.parquet(df1_path)
+    try:
+        df1 = spark.read.parquet(df1_path)
+    except pyspark.sql.utils.AnalysisException:
+        message = "The filepath `bucket_name`+`df1_path` does not exist."
+        raise AttributeError(message)
+    #    except pyspark.errors.exceptions.Py4JJavaError as error_info:
+    #      if "java.lang.ClassCastException" in error_info:
+    #        message = (
+    #          f"File paths must be strings. `df1_path` was a {type(df1_path)}."
+    #        )
+    #        raise TypeError(message)
+
     df2 = spark.read.parquet(df2_path)
     cartesian_join_df = df1.crossJoin(other=df2)
+
     return cartesian_join_df
 
 
@@ -310,8 +321,7 @@ def define_partial_agreement_vars(
             "Variable names must be strings."
             f" Partial agreement variable names include {variable_name_errors}."
         )
-        raise ValueError(message)
-        exit()
+        raise TypeError(message)
     else:
         return partial_agreement_vars
 

@@ -49,7 +49,7 @@ from scalelink.utils import utils as ut
         pytest.param(
             {1: [0.4, 0.7, 0.9], 2: [0.75, 0.9], 3: None, 4: None},
             None,
-            pytest.raises(ValueError),
+            pytest.raises(TypeError),
             id="Error handling: non-string variable names",
         ),
     ],
@@ -183,7 +183,7 @@ def test_define_p() -> None:
         pytest.param(
             {1: [0.4, 0.7, 0.9], 2: [0.75, 0.9], 3: None, 4: None},
             None,
-            pytest.raises(ValueError),
+            pytest.raises(TypeError),
             id="Error handling: non-string variable names",
         ),
     ],
