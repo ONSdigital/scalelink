@@ -126,3 +126,6 @@ sav = "sav"
 synchronize = "synchronize"
 tring = "tring"
 unlabeled = "unlabeled"
+
+[tool.uv]
+exclude-newer = "14 days"

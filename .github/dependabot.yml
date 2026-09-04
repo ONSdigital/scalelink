@@ -16,6 +16,8 @@ updates:
     target-branch: "develop"
     labels:
       - "dependabot"
+    cooldown:
+      default-days: 14
 
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -33,3 +35,5 @@ updates:
     labels:
       - "dependabot"
       - "github actions"
+    cooldown:
+      default-days: 14
