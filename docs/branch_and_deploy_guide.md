@@ -100,21 +100,21 @@ enter `main` without the version being incremented and a release being published
 
 3. **Push version tag:**
    - Push a new tag containing the repo version.
-   
+
 4. **Create GitHub release:**
    - Create a new GitHub release using the new tag and changelog.
 
 5. **Build and verify package:**
    - Use `hynek/build-and-inspect-python-package` to:
       - Build the package.
-      - Upload the built wheel and the source distribution as GitHub Actions artifacts.
+      - Upload the built wheel and the source distribution as GitHub Actions artefacts.
       - Lint the wheel contents using `check-wheel-contents`.
-      - Lint the PyPI README using `Twine` and upload it as a GitHub Actions artifact.
+      - Lint the PyPI README using `Twine` and upload it as a GitHub Actions artefact.
       - Print the tree of both SDist and `wheel`, allowing manual checking of the content list.
-      - Print and upload the packaging metadata as a GitHub Actions artifact.
+      - Print and upload the packaging metadata as a GitHub Actions artefact.
 
 6. **Download built package:**
-   - Download the built package from GitHub Actions artifacts to `dist/`.
+   - Download the built package from GitHub Actions artefacts to `dist/`.
 
 7. **Upload package to PyPI:**
    - Upload the package from `dist` to PyPI, using Trusted Publishing.
@@ -134,7 +134,7 @@ to preserve the codebase's integrity and reliability. Below is a straightforward
    - Title the merge request with a relevant name that succinctly describes the set of features, fixes or improvements
      being merged. Example: "Release 1.2.0: Feature Enhancements and Bug Fixes".
    - Add a suitable description, using the Pull Request Template.
-  
+
 ### Carry out test build
 
 1. **Build and lint the package locally:**
@@ -152,7 +152,7 @@ to preserve the codebase's integrity and reliability. Below is a straightforward
 2. **Upload the test build to Test PyPI:**
    - Upload by running: `twine upload -r testpypi dist/*`.
    - When prompted, input your Test PyPI API token.
-   
+
 3. **Check the package styling:**
    - Check the uploaded package on Test PyPI by following the link provided in the terminal.
    - Review the styling of the information from `README.md`. Make a note of any changes that need to be implemented
@@ -161,7 +161,7 @@ to preserve the codebase's integrity and reliability. Below is a straightforward
 4. **Download from Test PyPI and test:**
    - In your local environment, download the test build from Test PyPI by running: `pip install -i https://test.pypi.org/simple/ scalelink==<version>`.
    - Test that the package runs correctly using a script containing the following:
-   
+
     ```python
     from scalelink import run_scalelink
     output = run_scalelink(config_path = "<filepath/to/config/file>")
@@ -222,7 +222,7 @@ These steps must be carried out by someone other than the pull request initiator
    - This action can be done through the GitHub UI by completing the pull request initiated in the Preparation section of
      this guide.
    - Merging to `main` automatically triggers the GitHub Actions workflow for deployment.
-  
+
 ### Synchronising develop branch post-merge
 
 After the pull request from `develop` to `main` has merged, it is crucial to synchronise the `develop` branch with the
@@ -230,10 +230,10 @@ changes in `main`. Perform the following steps in your local environment to ensu
 
 1. **Switch to `develop` branch:**
    - Use `git checkout develop` to switch from your current feature branch to the `develop` branch.
- 
+
 2. **Merge `main` into `develop`:**
    - Run `git merge main` whilst on the `develop` branch to merge the changes from the `main` branch into `develop`.
- 
+
 3. **Push updated `develop`:**
    - After merging, push the updated `develop` branch back to the remote repository using `git push origin develop`.
 
@@ -248,7 +248,7 @@ codebase remains stable and the release process flows seamlessly. As maintainers
    - Execute `git pull origin main` to fetch and merge the latest changes from the `main` branch to your current feature
      branch.
    - If you are currently working on more than one feature branch, use `git checkout <my-feature-branch>` to switch to
-     your next feature branch. Then, execute `git pull origin main` to fetch and merge the latest changes from the `main` 
+     your next feature branch. Then, execute `git pull origin main` to fetch and merge the latest changes from the `main`
      branch to it. Repeat this until all of your current feature branches have been updated.
 
 ## Git workflow diagram
@@ -258,7 +258,7 @@ Below is a visual representation of our Git workflow, illustrating the process f
 ```mermaid
 graph TD
     Start1([Start or continue feature development or fix])
-    
+
     Feat1[Create feature branch from develop branch]
     Feat2[Develop feature or bugfix in feature branch]
     Feat3{Feature branch: complete and tested?}
@@ -267,13 +267,13 @@ graph TD
     Feat6[Review pull request]
     Feat7{Feature branch: approve pull request?}
     Feat8[Merge pull request]
-    
+
     Dev1{Develop branch: Ready for release?}
     Dev2[Manually create build dist locally]
     Dev3[Deploy build to Test PyPI]
     Dev4[Check description and metadata are correct on Test PyPI]
     Dev5[Download build from Test PyPI and check it runs correctly]
-    Dev6{Deployment: are there any errors?}  
+    Dev6{Deployment: are there any errors?}
     Dev7[Update change log]
     Dev8[Update package version - semver major or minor update]
     Dev9[Raise pull request to merge develop branch into main branch]
@@ -281,13 +281,13 @@ graph TD
     Dev11[Review pull request]
     Dev12{Develop branch: approve pull request?}
     Dev13[Merge pull request]
-    
+
     Deploy1[Trigger automated deployment via GitHub Actions]
     Deploy2[Create GitHub Release with version tag]
     Deploy3[Update develop branch with main]
     Deploy4[Build and test scalelink package]
     Deploy5[Publish to PyPI]
-    
+
     subgraph sg1 [Deploy]
       Deploy1 --> Deploy2
       Deploy2 --> Deploy3
@@ -320,7 +320,7 @@ graph TD
       Feat7 -- No --> Feat2
       Feat7 -- Yes ---> Feat8
     end
-    
+
     Deploy5 --> Start1
     Dev1 -- No --> Start1
     Dev1 -- Yes --> Dev2

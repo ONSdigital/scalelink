@@ -55,7 +55,7 @@ my_indicator_matrix = im.compare_deltas(
 )
 """
 
-from typing import Any, Dict, List, Union
+from typing import Any
 
 import pyspark
 from pyspark.ml.feature import NGram
@@ -63,7 +63,7 @@ from pyspark.sql import functions as F
 
 
 def calculate_agreement_states(
-    df: pyspark.sql.DataFrame, binary_agreement_cols: List[str], df_suffixes: List[str]
+    df: pyspark.sql.DataFrame, binary_agreement_cols: list[str], df_suffixes: list[str]
 ) -> pyspark.sql.DataFrame:
     """
     Takes a dataframe made by Cartesian join of two datasets to be linked and
@@ -117,7 +117,7 @@ def calculate_agreement_states(
 
 def calculate_deltas(
     df: pyspark.sql.DataFrame,
-    cutpoints: Dict[str, Union[List[float], None]],
+    cutpoints: dict[str, list[float] | None],
     agreement_col_suffix: str,
     string_similarity_suffix: str,
 ) -> pyspark.sql.DataFrame:
@@ -185,8 +185,8 @@ def calculate_deltas(
     """
     df_with_deltas = df
 
-    for col_name, cutpoints in cutpoints.items():
-        if cutpoints is None:
+    for col_name, cutpoint in cutpoints.items():
+        if cutpoint is None:
             df_with_deltas = df_with_deltas.withColumn(
                 "di_" + col_name + "_1",
                 F.when(~F.col(col_name + agreement_col_suffix), F.lit(True)).otherwise(
@@ -203,19 +203,19 @@ def calculate_deltas(
             # of the actual cutpoint range. They permit calculation of whether a
             # string comparison metric is below the lowest inputted cutpoint or above
             # the highest.
-            cutpoints_bounded = [-0.1] + cutpoints + [1.1]
+            cutpoint_bounded = [-0.1] + cutpoint + [1.1]
 
-            for count in range(len(cutpoints_bounded[:-1])):
+            for count in range(len(cutpoint_bounded[:-1])):
                 df_with_deltas = df_with_deltas.withColumn(
                     "di_" + col_name + "_" + str(count + 1),
                     F.when(
                         (
                             F.col(col_name + string_similarity_suffix)
-                            >= F.lit(cutpoints_bounded[count])
+                            >= F.lit(cutpoint_bounded[count])
                         )
                         & (
                             F.col(col_name + string_similarity_suffix)
-                            < F.lit(cutpoints_bounded[count + 1])
+                            < F.lit(cutpoint_bounded[count + 1])
                         ),
                         F.lit(True),
                     ).otherwise(F.lit(False)),
@@ -234,7 +234,7 @@ def calculate_sorensen_dice(
     Args:
       df:
         The dataframe containing the two columns that the Sorensen-Dice
-        coefficent will be calculated for.
+        coefficient will be calculated for.
       col1:
         The name of the first string column to be compared.
       col2:
@@ -281,7 +281,7 @@ def calculate_sorensen_dice(
         .otherwise(F.size(F.array_intersect(col1 + "_bigrams", col2 + "_bigrams"))),
     )
 
-    # Calculate and round Sorensen-Dice coefficent
+    # Calculate and round Sorensen-Dice coefficient
     df_compared = df_compared.withColumn(
         new_col,
         F.round(
@@ -298,7 +298,7 @@ def calculate_sorensen_dice(
 
 
 def compare_deltas(
-    df: pyspark.sql.DataFrame, linkage_vars: List[str], delta_col_prefix: str
+    df: pyspark.sql.DataFrame, linkage_vars: list[str], delta_col_prefix: str
 ) -> pyspark.sql.DataFrame:
     """
     Takes a dataframe made by Cartesian join of two datasets to be linked that
@@ -379,7 +379,7 @@ def compute_normalised_levenshtein(
 
 
 def get_deltas(
-    df_cartesian_join: pyspark.sql.DataFrame, input_variables: Dict[str, Any]
+    df_cartesian_join: pyspark.sql.DataFrame, input_variables: dict[str, Any]
 ) -> pyspark.sql.DataFrame:
     """
     Takes the dataframe created by Cartesian join of the two dataframes to be
@@ -452,7 +452,7 @@ def make_bigrams(df: pyspark.sql.DataFrame, col: str) -> pyspark.sql.DataFrame:
     Args:
       df:
         The dataframe containing the two columns that the Sorensen-Dice
-        coefficent will be calculated for.
+        coefficient will be calculated for.
       col:
         The name of the first string column to be compared.
 

@@ -28,7 +28,6 @@ Methods:
 """
 
 import unittest
-from typing import List
 from unittest.mock import call, patch
 
 import numpy as np
@@ -189,8 +188,8 @@ def test_get_scaled_labelled_x_star(
     mock_label_x_star: unittest.mock.MagicMock,
     mock_scale_x_star: unittest.mock.MagicMock,
     make_input_matrix_a_star: np.array,
-    make_input_b: List[int],
-    make_solve_for_x_star_output: List[float],
+    make_input_b: list[int],
+    make_solve_for_x_star_output: list[float],
 ) -> None:
     """
     Tests that get_scaled_labelled_x_star() gives the correct output when provided
@@ -420,8 +419,8 @@ def test_scale_x_star() -> None:
 
 def test_solve_for_x_star(
     make_input_matrix_a_star: np.array,
-    make_input_b: List[int],
-    make_solve_for_x_star_output: List[float],
+    make_input_b: list[int],
+    make_solve_for_x_star_output: list[float],
 ) -> None:
     """
     Tests that solve_for_x_star() gives the correct output when provided with

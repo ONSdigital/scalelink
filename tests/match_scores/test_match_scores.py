@@ -9,7 +9,6 @@ Methods:
 """
 
 import unittest
-from typing import Dict
 from unittest.mock import patch
 
 import chispa as ch
@@ -55,7 +54,7 @@ def test_assign_match_score(spark: pyspark.sql.SparkSession) -> None:
 def test_assign_weights(
     spark: pyspark.sql.SparkSession,
     assign_weights_input_df: pyspark.sql.DataFrame,
-    assign_weights_input_x_star: Dict[str, float],
+    assign_weights_input_x_star: dict[str, float],
     assign_weights_output_df: pyspark.sql.DataFrame,
 ) -> None:
     """
@@ -91,7 +90,7 @@ def test_get_match_scores(
     mock_assign_match_score: unittest.mock.MagicMock,
     spark_mock: unittest.mock.MagicMock,
     assign_weights_input_df: pyspark.sql.DataFrame,
-    assign_weights_input_x_star: Dict[str, float],
+    assign_weights_input_x_star: dict[str, float],
     assign_weights_output_df: pyspark.sql.DataFrame,
 ) -> None:
     """

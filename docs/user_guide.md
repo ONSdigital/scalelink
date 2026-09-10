@@ -34,7 +34,7 @@ The config file must contain four sections:
  - `filepaths`
  - `variables`
  - `cutpoints`
- 
+
 The configs must be inputted as follows:
 
 | Section   | Config             | Required? | Contents                                                                                                                                                                                                                                                                                                                               |

@@ -82,7 +82,7 @@ def test_create_spark_session() -> None:
 
     # Assert
     for count, size in enumerate(expected_outputs.keys()):
-        for key in expected_outputs[size].keys():
-            assert (
-                expected_outputs[size][key] == test_outputs[size][key]
-            ), f"for {size}:\n expected_output {key} is {expected_outputs[size][key]}\n test_output {key} is {test_outputs[size][key]}"
+        for key in expected_outputs[size]:
+            assert expected_outputs[size][key] == test_outputs[size][key], (
+                f"for {size}:\n expected_output {key} is {expected_outputs[size][key]}\n test_output {key} is {test_outputs[size][key]}"
+            )
