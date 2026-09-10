@@ -5,6 +5,14 @@ build-backend = "hatchling.build"
 [project]
 name = "scalelink"
 version = "0.1.1"
+description = "A Python and PySpark implementation of the Scalelink method of data linkage by Goldstein et al."
+authors = [
+  {name = "Data Linkage team, Methodology & Quality Directorate, Office for National Statistics", email = "datalinkage@ons.gov.uk"}
+]
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">= 3.10, < 3.12"
 dependencies = [
   "boto3 >= 1.34.149",
   "numpy >= 1.24",
@@ -13,14 +21,6 @@ dependencies = [
   "raz_client >= 1.1.0",
   "rdsa_utils >= 0.16.0",
 ]
-requires-python = ">= 3.10, < 3.12"
-authors = [
-  {name = "Data Linkage team, Methodology & Quality Directorate, Office for National Statistics", email = "datalinkage@ons.gov.uk"}
-]
-description = "A Python and PySpark implementation of the Scalelink method of data linkage by Goldstein et al."
-readme = "README.md"
-license = "MIT"
-license-files = ["LICENSE"]
 keywords = [
   "data linkage",
   "harvey goldstein",
