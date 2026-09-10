@@ -26,7 +26,6 @@ jobs:
         uses: hynek/build-and-inspect-python-package@2abe76da66d0a6a4a227101f9348ee855797cfa5
         with:
           attest-build-provenance-github: 'true'
-          name: release-dists
 
   release-publish:
     name: Upload release to PyPI
@@ -43,7 +42,7 @@ jobs:
         id: publish-retrieve-dist
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
-          name: release-dists
+          name: Packages
           path: dist/
 
       - name: Publish release distributions on PyPI
