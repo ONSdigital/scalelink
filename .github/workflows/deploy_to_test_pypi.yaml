@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       tags:
-        description: "Version to deploy, e.g. 1.0.0"
+        description: "Version to deploy, e.g. 1.0.0-dev"
         required: true
         type: string
 
@@ -28,7 +28,7 @@ jobs:
           attest-build-provenance-github: 'true'
 
   release-publish:
-    name: Upload release to PyPI
+    name: Upload release to Test PyPI
     runs-on: ubuntu-latest
     needs: release-build
     permissions:
@@ -44,10 +44,9 @@ jobs:
           name: Packages
           path: dist/
 
-      - name: Publish release distributions on PyPI
+      - name: Publish release distributions on Test PyPI
         id: publish-to-pypi
         uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33
         with:
           repository-url: https://test.pypi.org/legacy/
           skip-existing: true
-          verbose: true
