@@ -125,7 +125,7 @@ Below are visual representations of our Git workflow, illustrating the process f
 ### Development: diagram
 
 ```mermaid
-graph TD
+graph LR
     Start1([Start developing a new feature or fix])
 
     Feat1[Create feature branch from develop branch]
@@ -140,6 +140,7 @@ graph TD
     Dev1{Develop branch: Ready for release?}
 
     subgraph sg1 [Develop features]
+      direction TB
       Feat1 --> Feat2
       Feat2 --> Feat3
       Feat3 -- No --> Feat2
@@ -158,7 +159,7 @@ graph TD
 ### Deployment testing: diagram
 
 ```mermaid
-graph TD
+graph LR
     Start1([Start developing a new feature or fix])
 
     Dev1{Develop branch: Ready for release?}
@@ -177,6 +178,7 @@ graph TD
     Dev14[Merge pull request into main branch]
 
     subgraph sg1 [Prepare to deploy]
+      direction TB
       Dev2 --> Dev3
       Dev3 --> Dev4
       Dev4 --> Dev5
@@ -200,7 +202,7 @@ graph TD
 ### Deployment: diagram
 
 ```mermaid
-graph TD
+graph LR
     Start1([Start developing a new feature or fix])
 
     Deploy1[Tag latest commit on main branch]
@@ -214,6 +216,7 @@ graph TD
     Deploy9[Deployment of new version is complete!]
 
     subgraph sg1 [Deploy]
+      direction TB
       Deploy1 --> Deploy2
       Deploy2 --> Deploy3
       Deploy3 --> Deploy4
