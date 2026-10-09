@@ -176,8 +176,6 @@ graph TD
     Dev13{Develop branch: approve pull request?}
     Dev14[Merge pull request into main branch]
 
-    Deploy1[Tag latest commit on main branch]
-
     subgraph sg1 [Prepare to deploy]
       Dev2 --> Dev3
       Dev3 --> Dev4
@@ -194,12 +192,9 @@ graph TD
       Dev13 -- Yes --> Dev14
     end
 
-    subgraph sg2 [Deploy]
-
     Dev1 -- No --> Start1
     Dev1 -- Yes --> Dev2
     Dev7 --> Start1
-    Dev13 --> sg2
 ```
 
 ### Deployment: diagram
