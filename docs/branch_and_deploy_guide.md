@@ -17,247 +17,116 @@ Our repository has two permanent branches:
 - **`main`** - stable codebase reflecting the current production state. Only pull requests from the `develop`
   branch are accepted.
 - **`develop`** - active development branch containing new features, bug fixes and improvements. All feature
-  branch and fix branch pull requests should be made here.
+  branch and fix branch pull requests should merge to here.
 
 ## Development workflow
 
-1. **Feature branches:**
-  - All new features and fixes are developed in separate branches created from the `develop` branch.
-  - [Conventional branch][branches] naming conventions:
+### Development: steps
+
+1.  **Feature branches:**
+    - All new features and fixes are developed in separate branches created from the `develop` branch.
+    - [Conventional branch][branches] naming conventions:
     - `feat/<feature-description>` - feature branches, for introducing new features.
-    - `fix/<bug-description>` - bugfixes or hotfixes, for resolving bugs (we aim for `develop` to always be
-      release-ready, so a separate system for rapidly integrating hotfixes is not required).
-  - [Conventional commit][commits] messages, including the following types:
-    - `build` - for changes that affect the build system or external dependencies.
-    - `ci` - for changes to CI configuration files and scripts, e.g. GitHub Actions, Dependabot.
-    - `docs` - for documentation-only changes.
-    - `feat` - for new features.
-    - `fix` - for bugfixes and hotfixes.
-    - `perf` - for changes that improve performance only.
-    - `refactor` - for code changes that neither add a feature, fix a bug nor improve performance.
-    - `style` - for changes that do not affect code meaning (e.g. removing whitespace, standardising quote type).
-    - `test` - for changes that add missing tests or correct existing tests.
+        - `fix/<bug-description>` - bugfixes or hotfixes, for resolving bugs (we aim for `develop` to always be
+          release-ready, so a separate system for rapidly integrating hotfixes is not required).
+    - [Conventional commit][commits] messages, including the following types:
+        - `build` - for changes that affect the build system or external dependencies.
+        - `ci` - for changes to CI configuration files and scripts, e.g. GitHub Actions, Dependabot.
+        - `docs` - for documentation-only changes.
+        - `feat` - for new features.
+        - `fix` - for bugfixes and hotfixes.
+        - `perf` - for changes that improve performance only.
+        - `refactor` - for code changes that neither add a feature, fix a bug nor improve performance.
+        - `style` - for changes that do not affect code meaning (e.g. removing whitespace, standardising quote type).
+        - `test` - for changes that add missing tests or correct existing tests.
 
-2. **Merging to development:**
-   - Once a feature is complete and tested, it is merged into the `develop` branch via a pull request.
-   - Pull requests must undergo peer review.
-   - Approval for the most recent commit on the branch must be given by the peer reviewer prior to merge.
-   - Remember to update the changelog.
+2.  **Merging to development:**
+    - Once a feature is complete and tested, it is merged into the `develop` branch via a pull request.
+    - Pull requests must undergo peer review.
+    - Approval for the most recent commit on the branch must be given by the peer reviewer prior to merge.
+    - Remember to update the changelog.
 
-3. **Version bumping:**
-   - Before merging `develop` into `main`, manually update the package version in `pyproject.toml` following
-     [semantic versioning principles][sem-ver].
-   - Remember to update the changelog.
+### Deployment testing: steps
 
-4. **Merging to main:**
-   - After a set of features is finalised in the `develop` branch and the package version is bumped, merge `develop`
-     into `main`.
-   - This action triggers the automated deployment process through GitHub Actions.
+1.  **Tagging:**
+    - Once these updates merged to `develop`, tag them as follows:
+        - Pull updates from the `develop` branch locally.
+        - Tag the latest commit on the `develop` branch using `git tag <version number dev>`, e.g.
+          `git tag 1.0.0-dev`.
+        - Push the tag remotely using `git push origin <version number dev>`, e.g. `git push origin 1.0.0-dev`.
 
-5. **Post-merge update:**
-   - After merging into `main`, update the `develop` branch with the latest `main` branch changes using `git pull`.
-     This ensures the `develop` branch is aligned with production.
+2.  **Build and deployment testing:**
+    - Test the build and deployment of the new package as follows:
+        - In GitHub, navigate to the "Actions" page of the `scalelink` repository.
+        - Navigate to the "Deploy version to Test PyPI" workflow, using the menu on the left-hand side of the window.
+        - Click on the "Run workflow" button on the right of the page.
+        - Ensure the "Use workflow from" option has "Branch: develop" selected.
+        - Enter the develop tag name, e.g. `1.0.0-dev`, into the "Version to deploy" box.
+        - Click on the "Run workflow" button.
+    - If the workflow runs successfully and the deployed package passes checks, move on to the next step. A package
+      is defined as passing checks if:
+        - Both its description and metadata are correct on Test PyPI.
+        - When downloaded from from Test PyPI, the build runs correctly.
+    - If the workflow fails, fix it in a separate branch that is merged into the `develop` branch when working.
+        - Note: you can test deployments to Test PyPI from this fix branch by following the above instructions but
+          changing the "Use workflow from" option from "Branch: develop" to the fix branch.
 
-## Pull request process using GitHub Actions
+3.  **Version bumping:**
+    - Once deployment from `develop` to Test PyPI is successful, bump the version by making a feature branch containing
+      the following changes:
+        - Update the package version in `pyproject.toml`, following [semantic versioning principles][sem-ver].
+        - Update the changelog. Move the "Unreleased" changes into a new section for this version and
+          create a new, empty "Unreleased" changes section.
+    - Raise a pull request for this branch to `develop`.
+    - This pull request, like all pull requests in this repository, must undergo peer review. However, this should
+      be able to be light-touch.
 
-### Overview
+4.  **Merging to main:**
+    - Once the version on `develop` is successfully bumped, raise a pull request to merge `develop` to `main`.
+    - Peer review should be light-touch and mainly focused on confirming:
+        - Version bumping.
+        - Evidence of successful Test PyPI deployment.
 
-Certain [GitHub Actions][github-actions] are triggered on merging to any branch. This CI/CD pipeline ensures code
-does not enter any parent branches unless it has had certain checks.
+### Deployment: steps
 
-### Pull request workflow steps
+1.  **Tagging:**
+    - Once the updates are merged to `main`, tag them as follows:
+        - Pull updates from the `main` branch locally.
+        - Tag the latest commit on the `main` branch using `git tag <version number>`, e.g. `git tag 1.0.0`.
+        - Push the tag remotely using `git push origin <version number>`, e.g. `git push origin 1.0.0`.
 
-1. **Trigger:**
-   - When a `merge` is detected.
+2.  **Deployment to PyPI:**
+    - The PyPI deployment workflow is currently also manually triggered. To deploy:
+        - In GitHub, navigate to the "Actions" page of the `scalelink` repository.
+        - Navigate to the "Deploy version to PyPI" workflow, using the menu on the left-hand side of the window.
+        - Click on the "Run workflow" button on the right of the page.
+        - Update the "Use workflow from" option to "Branch: main".
+        - Enter the tag name, e.g. `1.0.0`, into the "Version to deploy" box.
+        - Click on the "Run workflow" button.
+   - If the workflow runs successfully and the deployed package passes checks, move on to the next step. A package
+     is defined as passing checks if:
+        - Both its description and metadata are correct on PyPI.
+        - When downloaded from from PyPI, the build runs correctly.
+   - If the workflow fails, fix it in a separate branch that is merged into the `develop` branch when working,
+     then merge `develop` to `main`, re-tag the latest commit in `main` as a new patch version and re-attempt
+     this step.
 
-2. **Check branch:**
-   - Check the base branch for the pull request.
-   - If the base branch is `main`, check if the branch is `develop`.
+3. **Post-merge updates:**
+   - After merging into `main`, update the `develop` branch with the latest `main` branch changes using `git rebase`.
+     This ensures the `develop` branch is aligned with `main` and is ready to receive new merges ahead of creating
+     a new version.
+   - After this, all developers must update their currently open feature branches by rebasing to `develop`. This
+     prevents conflicts when these branches come to be merged.
 
-3. **Changelog:**
-   - Check that `CHANGELOG.md` has been updated.
+## Git workflow diagrams
 
-4. **Pre-commit:**
-   - Run all pre-commit hooks.
+Below are visual representations of our Git workflow, illustrating the process from feature development through to deployment.
 
-5. **Test:**
-   - Run all unit tests on all versions of Python supported by the repo.
-
-## Deployment process using GitHub Actions
-
-### Overview
-
-The deployment process is automated using [GitHub Actions][github-actions]. This CI/CD pipeline ensures code does not
-enter `main` without the version being incremented and a release being published on PyPI.
-
-### Increment version and deploy workflow steps
-
-1. **Trigger:**
-   - When a `push` to `main` is detected.
-
-2. **Extract repo version:**
-   - Extract the version of the repo from `pyproject.toml`.
-
-3. **Push version tag:**
-   - Push a new tag containing the repo version.
-
-4. **Create GitHub release:**
-   - Create a new GitHub release using the new tag and changelog.
-
-5. **Build and verify package:**
-   - Use `hynek/build-and-inspect-python-package` to:
-      - Build the package.
-      - Upload the built wheel and the source distribution as GitHub Actions artefacts.
-      - Lint the wheel contents using `check-wheel-contents`.
-      - Lint the PyPI README using `Twine` and upload it as a GitHub Actions artefact.
-      - Print the tree of both SDist and `wheel`, allowing manual checking of the content list.
-      - Print and upload the packaging metadata as a GitHub Actions artefact.
-
-6. **Download built package:**
-   - Download the built package from GitHub Actions artefacts to `dist/`.
-
-7. **Upload package to PyPI:**
-   - Upload the package from `dist` to PyPI, using Trusted Publishing.
-
-## Merging develop to main: A guide for maintainers
-
-As `scalelink` maintainers, ensuring a seamless transition from `develop` to `main` branch is essential. This process
-extends beyond mere code managing: it encompasses careful preparation, version management and detailed documentation
-to preserve the codebase's integrity and reliability. Below is a straightforward guide on the procedure.
-
-### Preparation
-
-1. **Initiate merge request:**
-   - Navigate to the GitHub repository's page and access the "Pull Requests" section.
-   - Click on "New Pull Request" to start the merging process. Select the `develop` branch as the source and the `main`
-     branch as the target.
-   - Title the merge request with a relevant name that succinctly describes the set of features, fixes or improvements
-     being merged. Example: "Release 1.2.0: Feature Enhancements and Bug Fixes".
-   - Add a suitable description, using the Pull Request Template.
-
-### Carry out test build
-
-1. **Build and lint the package locally:**
-   - Ensure the `build` dependencies are installed, by opening the terminal and running: `pip install .[build]`.
-   - Change directory to the repo by running: `cd scalelink`.
-   - Build the package locally by running: `python -m build`.
-   - Lint the built wheel using [`check-wheel-contents`][check-wheel-contents] by running: `check-wheel-contents dist/<wheel filename>`.
-      - If this returns 'OK', the wheel has passed all checks and you can continue.
-      - Else, a message will be printed for each check that has failed (plus, if applicable, a list of filepaths that
-        caused the failure). In this instance, backtrack and carry out the necessary fixes until this passes.
-   - Lint the PyPI README using [`twine`][twine] by running: `twine check dist/*`.
-      - If this returns 'PASSED' for both the `.whl` and `.tar.gz` files in `dist/`, you can continue.
-      - Else, backtrack and bugfix the README until this passes.
-
-2. **Upload the test build to Test PyPI:**
-   - Upload by running: `twine upload -r testpypi dist/*`.
-   - When prompted, input your Test PyPI API token.
-
-3. **Check the package styling:**
-   - Check the uploaded package on Test PyPI by following the link provided in the terminal.
-   - Review the styling of the information from `README.md`. Make a note of any changes that need to be implemented
-     prior to uploading to PyPI.
-
-4. **Download from Test PyPI and test:**
-   - In your local environment, download the test build from Test PyPI by running: `pip install -i https://test.pypi.org/simple/ scalelink==<version>`.
-   - Test that the package runs correctly using a script containing the following:
-
-    ```python
-    from scalelink import run_scalelink
-    output = run_scalelink(config_path = "<filepath/to/config/file>")
-    ```
-
-   - Again, make a note of any changes that need to be implemented prior to uploading to PyPI.
-
-5. **Fix build issues:**
-   - If there are any build issues, make a new feature branch and address them.
-   - Once this feature branch is QA'd and merged to `develop`, repeat the [Carry out test build](#carry-out-test-build)
-     instructions until no build issues remain.
-   - Only once no build issues remain can you move on to the next section.
-
-### Review and approval
-
-These steps must be carried out by someone other than the pull request initiator.
-
-1. **Review changes:**
-   - Utilise GitHub's User Interface (UI) to review the changes introduced. This is critical for spotting any potential
-     issues before they make it into `main` branch.
-   - Cross-reference the changes against the `CHANGELOG.md` file to ensure all updates, fixes and new features are
-     properly documented.
-   - Ensure all checks via GitHub Actions pass.
-
-2. **Approve changes:**
-   - Once satisfied with the review, click on the "Review changes" button in GitHub and select "Approve" from the options.
-     This indicates that the changes have been reviewed and are considered ready for merging. If you're reviewing multiple
-     files, click on the "Viewed" checkbox for each file as you review them. This helps manage and streamline the review
-     process by marking files that have already been checked.
-
-### Version management and documentation
-
-1. **Bump version:**
-   - Before merging, it's essential to update the package version.
-   - Check out and pull the `develop` branch to your local environment.
-   - Manually update the package version in `pyproject.toml` following [semantic versioning principles][sem-ver].
-
-2. **Update `CHANGELOG.md`:**
-   - Continue to work in the `develop` branch.
-   - In the `CHANGELOG.md` file, create a new header/section for the newly bumped version.
-   - Move all entries from the "Unreleased" section to the new version section. This action effectively transfers the
-     documentation of changes from being pending release to being part of the new version's official changelog.
-   - Ensure the "Unreleased" section is left empty after this process, ready for documenting future changes.
-   - Update the "Release links" section at the bottom of the document. Add links to the new version's GitHub Release
-     page and its PyPI listing, following the existing format. **Note: this repo does not currently have a PyPI listing.**
-     This step ensures users and developers can easily find and access the specific versions of `scalelink` through their
-     respective release pages and download links, maintaining comprehensive and navigable documentation.
-   - Commit and push all changes to the remote `develop` branch.
-
-3. **Final review:**
-   - Arrange for the reviewer to review the changes one more time, ensuring that the version bump and `CHANGELOG.md`
-     updates are correctly applied.
-
-### Merging and deployment
-
-1. **Merge to main:**
-   - With all preparations complete and changes reviewed, proceed to merge the `develop` branch into the `main` branch.
-   - This action can be done through the GitHub UI by completing the pull request initiated in the Preparation section of
-     this guide.
-   - Merging to `main` automatically triggers the GitHub Actions workflow for deployment.
-
-### Synchronising develop branch post-merge
-
-After the pull request from `develop` to `main` has merged, it is crucial to synchronise the `develop` branch with the
-changes in `main`. Perform the following steps in your local environment to ensure that `develop` stays up-to-date:
-
-1. **Switch to `develop` branch:**
-   - Use `git checkout develop` to switch from your current feature branch to the `develop` branch.
-
-2. **Merge `main` into `develop`:**
-   - Run `git merge main` whilst on the `develop` branch to merge the changes from the `main` branch into `develop`.
-
-3. **Push updated `develop`:**
-   - After merging, push the updated `develop` branch back to the remote repository using `git push origin develop`.
-
-By adhering to these steps, you'll make the transition from development to production smooth and efficient, ensuring the
-codebase remains stable and the release process flows seamlessly. As maintainers, your pivotal role guarantees the
-`scalelink` package's reliability and efficiency for all users.
-
-## Post-merge feature branch synchronisation: All developers
-
-1. **Pull changes from `main`:**
-   - Ensure your feature branch is checked out, using `git checkout <my-feature-branch>`.
-   - Execute `git pull origin main` to fetch and merge the latest changes from the `main` branch to your current feature
-     branch.
-   - If you are currently working on more than one feature branch, use `git checkout <my-feature-branch>` to switch to
-     your next feature branch. Then, execute `git pull origin main` to fetch and merge the latest changes from the `main`
-     branch to it. Repeat this until all of your current feature branches have been updated.
-
-## Git workflow diagram
-
-Below is a visual representation of our Git workflow, illustrating the process from feature development through to deployment.
+### Development: diagram
 
 ```mermaid
-graph TD
-    Start1([Start or continue feature development or fix])
+graph LR
+    Start1([Start developing a new feature or fix])
 
     Feat1[Create feature branch from develop branch]
     Feat2[Develop feature or bugfix in feature branch]
@@ -266,50 +135,12 @@ graph TD
     Feat5[Trigger automated checks via GitHub Actions]
     Feat6[Review pull request]
     Feat7{Feature branch: approve pull request?}
-    Feat8[Merge pull request]
+    Feat8[Merge pull request into develop branch]
 
     Dev1{Develop branch: Ready for release?}
-    Dev2[Manually create build dist locally]
-    Dev3[Deploy build to Test PyPI]
-    Dev4[Check description and metadata are correct on Test PyPI]
-    Dev5[Download build from Test PyPI and check it runs correctly]
-    Dev6{Deployment: are there any errors?}
-    Dev7[Update change log]
-    Dev8[Update package version - semver major or minor update]
-    Dev9[Raise pull request to merge develop branch into main branch]
-    Dev10[Trigger automated checks via GitHub Actions]
-    Dev11[Review pull request]
-    Dev12{Develop branch: approve pull request?}
-    Dev13[Merge pull request]
 
-    Deploy1[Trigger automated deployment via GitHub Actions]
-    Deploy2[Create GitHub Release with version tag]
-    Deploy3[Update develop branch with main]
-    Deploy4[Build and test scalelink package]
-    Deploy5[Publish to PyPI]
-
-    subgraph sg1 [Deploy]
-      Deploy1 --> Deploy2
-      Deploy2 --> Deploy3
-      Deploy3 --> Deploy4
-      Deploy4 --> Deploy5
-    end
-
-    subgraph sg2 [Prepare to deploy]
-      Dev2 --> Dev3
-      Dev3 --> Dev4
-      Dev4 --> Dev5
-      Dev5 --> Dev6
-      Dev6 -- No --> Dev7
-      Dev7 --> Dev8
-      Dev8 --> Dev9
-      Dev9 --> Dev10
-      Dev10 --> Dev11
-      Dev11 --> Dev12
-      Dev12 -- Yes --> Dev13
-    end
-
-    subgraph sg3 [Develop features]
+    subgraph sg1 [Develop features]
+      direction TB
       Feat1 --> Feat2
       Feat2 --> Feat3
       Feat3 -- No --> Feat2
@@ -321,15 +152,165 @@ graph TD
       Feat7 -- Yes ---> Feat8
     end
 
-    Deploy5 --> Start1
-    Dev1 -- No --> Start1
-    Dev1 -- Yes --> Dev2
-    Dev6 -- Yes --> Start1
-    Dev12 -- No --> Start1
-    Dev13 --> Deploy1
     Start1 --> Feat1
     Feat8 --> Dev1
 ```
+
+### Deployment testing: diagram
+
+```mermaid
+graph LR
+    Start1([Start developing a new feature or fix])
+
+    Dev1{Develop branch: Ready for release?}
+    Dev2[Tag latest commit on develop branch]
+    Dev3[Manually deploy to Test PyPI using GitHub Action workflow]
+    Dev4[Check description and metadata are correct on Test PyPI]
+    Dev5[Download build from Test PyPI and check it runs correctly]
+    Dev6{Deployment: are there any errors?}
+    Dev7[Fix is required]
+    Dev8[Bump version - semver major, minor or patch update]
+    Dev9[Update change log]
+    Dev10[Raise pull request to merge develop branch into main branch]
+    Dev11[Trigger automated checks via GitHub Actions]
+    Dev12[Review pull request]
+    Dev13{Develop branch: approve pull request?}
+    Dev14[Merge pull request into main branch]
+
+    subgraph sg1 [Prepare to deploy]
+      direction TB
+      Dev2 --> Dev3
+      Dev3 --> Dev4
+      Dev4 --> Dev5
+      Dev5 --> Dev6
+      Dev6 -- No --> Dev8
+      Dev6 -- Yes --> Dev7
+      Dev8 --> Dev9
+      Dev9 --> Dev10
+      Dev10 --> Dev11
+      Dev11 --> Dev12
+      Dev12 --> Dev13
+      Dev13 -- No --> Dev7
+      Dev13 -- Yes --> Dev14
+    end
+
+    Dev1 -- No --> Start1
+    Dev1 -- Yes --> Dev2
+    Dev7 --> Start1
+```
+
+### Deployment: diagram
+
+```mermaid
+graph LR
+    Start1([Start developing a new feature or fix])
+
+    Deploy1[Tag latest commit on main branch]
+    Deploy2[Manually deploy to PyPI using GitHub Action workflow]
+    Deploy3[Check description and metadata are correct on Test PyPI]
+    Deploy4[Download build from Test PyPI and check it runs correctly]
+    Deploy5{Deployment: are there any errors?}
+    Deploy6[Fix is required]
+    Deploy7[Rebase develop branch]
+    Deploy8[Rebase currently open feature branches]
+    Deploy9[Deployment of new version is complete!]
+
+    subgraph sg1 [Deploy]
+      direction TB
+      Deploy1 --> Deploy2
+      Deploy2 --> Deploy3
+      Deploy3 --> Deploy4
+      Deploy4 --> Deploy5
+      Deploy5 -- No --> Deploy7
+      Deploy5 -- Yes --> Deploy6
+      Deploy7 --> Deploy8
+      Deploy8 --> Deploy9
+    end
+
+    Deploy6 --> Start1
+```
+
+## Overview of GitHub Actions
+
+CI/CD in this repository is implemented using [GitHub Actions][github-actions].
+
+### Pull request workflow
+
+The following workflow is triggered on pull request to any branch. This ensures code does not enter any parent
+branches unless it is permitted to and has passed certain checks.
+
+1.  **Trigger:**
+    - When a pull request is detected that is opened, synchronised, reopened, ready for review, unlabelled or labelled.
+
+2.  **Check branch job:**
+    - Checks the base branch for the pull request.
+    - If the base branch is `main`, checks if the branch is `develop`. If it is not, returns an error.
+    - This prevents merges to `main` from branches other than `develop`.
+
+3.  **Changelog job:**
+    - Checks that `CHANGELOG.md` has been updated.
+    - This prompts the developer to update the change log if they have forgotten.
+
+4.  **Pre-commit job:**
+    - Runs all pre-commit hooks.
+    - This protects against developers who, for whatever reason, do not have the pre-commit hooks turned on locally.
+
+5.  **Test:**
+    - Run all unit tests on all versions of Python supported by the repo.
+    - This ensures all unit tests, both new and existing, pass.
+
+### Deploy to Test PyPI workflow
+
+The following workflow is triggered manually. It deploys the specified tagged commit on the specified branch to
+Test PyPI, allowing testing of package deployment ahead of releasing a new version to PyPI.
+
+1.  **Trigger:**
+    - Manual, via the "Actions" page in GitHub.
+    - Requires the version to deploy to be specified, e.g. `1.0.0-dev`.
+
+2.  **Release build job:**
+    - Checks out the repository.
+    - Uses `hynek/build-and-inspect-python-package` to:
+        - Build the package.
+        - Upload the built wheel and the source distribution as GitHub Actions artefacts.
+        - Lint the wheel contents using `check-wheel-contents`.
+        - Lint the PyPI README using `Twine` and upload it as a GitHub Actions artefact.
+        - Attest the build provenance.
+        - Print the tree of both SDist and `wheel`, allowing manual checking of the content list.
+        - Print and upload the packaging metadata as a GitHub Actions artefact.
+
+3.  **Release publish job:**
+    - Retrieves the distribution produced by the previous job.
+    - Publishes it to Test PyPI, using Trusted Publishing.
+
+### Deploy to PyPI workflow
+
+The following workflow is triggered manually. It deploys the specified tagged commit on the specified branch
+(which should be `main`) to PyPI, thus releasing a new version of the `scalelink` package.
+
+1.  **Trigger:**
+    - Manual, via the "Actions" page in GitHub.
+    - Requires the version to deploy to be specified, e.g. `1.0.0`.
+
+2.  **Release build job:**
+    - Checks out the repository.
+    - Uses `hynek/build-and-inspect-python-package` to:
+        - Build the package.
+        - Upload the built wheel and the source distribution as GitHub Actions artefacts.
+        - Lint the wheel contents using `check-wheel-contents`.
+        - Lint the PyPI README using `Twine` and upload it as a GitHub Actions artefact.
+        - Attest the build provenance.
+        - Print the tree of both SDist and `wheel`, allowing manual checking of the content list.
+        - Print and upload the packaging metadata as a GitHub Actions artefact.
+
+3.  **Release publish job:**
+    - Retrieves the distribution produced by the previous job.
+    - Publishes it to PyPI, using Trusted Publishing.
+
+### Increment version workflow
+
+This workflow is not currently used. It has been retained to provide a starting point for developing
+automated version incrementation and deployment in the future.
 
 [branches]: https://conventional-branch.github.io/
 [check-wheel-contents]: https://pypi.org/project/check-wheel-contents/
