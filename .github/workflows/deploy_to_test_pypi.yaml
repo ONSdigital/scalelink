@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       tags:
-        description: "Version to deploy, e.g. 1.0.0"
+        description: "Version to deploy, e.g. 1.0.0-dev"
         required: true
         type: string
 
@@ -26,10 +26,9 @@ jobs:
         uses: hynek/build-and-inspect-python-package@2abe76da66d0a6a4a227101f9348ee855797cfa5
         with:
           attest-build-provenance-github: 'true'
-          name: release-dists
 
   release-publish:
-    name: Upload release to PyPI
+    name: Upload release to Test PyPI
     runs-on: ubuntu-latest
     needs: release-build
     permissions:
@@ -37,17 +36,17 @@ jobs:
       id-token: write
     environment:
       name: test-pypi
-      url: https://test.pypi.org/project/scalelink/
     steps:
       - name: Retrieve release distributions
         id: publish-retrieve-dist
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
-          name: release-dists
+          name: Packages
           path: dist/
 
-      - name: Publish release distributions on PyPI
+      - name: Publish release distributions on Test PyPI
         id: publish-to-pypi
         uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33
         with:
-          repository-url: https://test.pypi.org
+          repository-url: https://test.pypi.org/legacy/
+          skip-existing: true

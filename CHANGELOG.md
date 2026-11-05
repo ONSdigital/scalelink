@@ -48,8 +48,9 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
   - Added installation and use, contact, dedication and icons.
   - Edited pre-requisites and acknowledgements.
 - Branch and Deploy Guide (`docs/branch_and_deploy_guide.md`):
-  - Updated description of GitHub Actions.
   - Updated deployment instructions.
+  - Updated description of GitHub Actions.
+  - Updated mermaid diagrams.
 - Build method, from old method using `setuptools` with `setup.py`, `setup.cfg` and `requirements.txt` to new method
   using `hatchling` with `pyproject.toml`.
 - Location of config template, so it is included in build.
