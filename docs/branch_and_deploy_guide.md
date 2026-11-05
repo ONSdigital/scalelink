@@ -26,7 +26,7 @@ Our repository has two permanent branches:
 1.  **Feature branches:**
     - All new features and fixes are developed in separate branches created from the `develop` branch.
     - [Conventional branch][branches] naming conventions:
-    - `feat/<feature-description>` - feature branches, for introducing new features.
+        - `feat/<feature-description>` - feature branches, for introducing new features.
         - `fix/<bug-description>` - bugfixes or hotfixes, for resolving bugs (we aim for `develop` to always be
           release-ready, so a separate system for rapidly integrating hotfixes is not required).
     - [Conventional commit][commits] messages, including the following types:
@@ -49,7 +49,7 @@ Our repository has two permanent branches:
 ### Deployment testing: steps
 
 1.  **Tagging:**
-    - Once these updates merged to `develop`, tag them as follows:
+    - Once these updates are merged to `develop`, tag them as follows:
         - Pull updates from the `develop` branch locally.
         - Tag the latest commit on the `develop` branch using `git tag <version number dev>`, e.g.
           `git tag 1.0.0-dev`.
@@ -66,7 +66,7 @@ Our repository has two permanent branches:
     - If the workflow runs successfully and the deployed package passes checks, move on to the next step. A package
       is defined as passing checks if:
         - Both its description and metadata are correct on Test PyPI.
-        - When downloaded from from Test PyPI, the build runs correctly.
+        - When downloaded from Test PyPI, the build runs correctly.
     - If the workflow fails, fix it in a separate branch that is merged into the `develop` branch when working.
         - Note: you can test deployments to Test PyPI from this fix branch by following the above instructions but
           changing the "Use workflow from" option from "Branch: develop" to the fix branch.
@@ -106,7 +106,7 @@ Our repository has two permanent branches:
    - If the workflow runs successfully and the deployed package passes checks, move on to the next step. A package
      is defined as passing checks if:
         - Both its description and metadata are correct on PyPI.
-        - When downloaded from from PyPI, the build runs correctly.
+        - When downloaded from PyPI, the build runs correctly.
    - If the workflow fails, fix it in a separate branch that is merged into the `develop` branch when working,
      then merge `develop` to `main`, re-tag the latest commit in `main` as a new patch version and re-attempt
      this step.
@@ -170,7 +170,7 @@ graph LR
     Dev6{Deployment: are there any errors?}
     Dev7[Fix is required]
     Dev8[Bump version - semver major, minor or patch update]
-    Dev9[Update change log]
+    Dev9[Update changelog]
     Dev10[Raise pull request to merge develop branch into main branch]
     Dev11[Trigger automated checks via GitHub Actions]
     Dev12[Review pull request]
@@ -208,7 +208,7 @@ graph LR
     Deploy1[Tag latest commit on main branch]
     Deploy2[Manually deploy to PyPI using GitHub Action workflow]
     Deploy3[Check description and metadata are correct on Test PyPI]
-    Deploy4[Download build from Test PyPI and check it runs correctly]
+    Deploy4[Download build from PyPI and check it runs correctly]
     Deploy5{Deployment: are there any errors?}
     Deploy6[Fix is required]
     Deploy7[Rebase develop branch]
@@ -249,7 +249,7 @@ branches unless it is permitted to and has passed certain checks.
 
 3.  **Changelog job:**
     - Checks that `CHANGELOG.md` has been updated.
-    - This prompts the developer to update the change log if they have forgotten.
+    - This prompts the developer to update the changelog if they have forgotten.
 
 4.  **Pre-commit job:**
     - Runs all pre-commit hooks.
@@ -314,7 +314,7 @@ automated version incrementation and deployment in the future.
 
 [branches]: https://conventional-branch.github.io/
 [check-wheel-contents]: https://pypi.org/project/check-wheel-contents/
-[commits]: https://www.markdownguide.org/basic-syntax/#links
+[commits]: https://www.conventionalcommits.org/en/v1.0.0/
 [github-actions]: https://github.com/features/actions
 [sem-ver]: https://semver.org/
 [twine]: https://twine.readthedocs.io/en/stable/
