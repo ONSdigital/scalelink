@@ -207,7 +207,7 @@ graph LR
 
     Deploy1[Tag latest commit on main branch]
     Deploy2[Manually deploy to PyPI using GitHub Action workflow]
-    Deploy3[Check description and metadata are correct on Test PyPI]
+    Deploy3[Check description and metadata are correct on PyPI]
     Deploy4[Download build from PyPI and check it runs correctly]
     Deploy5{Deployment: are there any errors?}
     Deploy6[Fix is required]
