@@ -77,9 +77,6 @@ Our repository has two permanent branches:
         - Update the package version in `pyproject.toml`, following [semantic versioning principles][sem-ver].
         - Update the changelog. Move the "Unreleased" changes into a new section for this version and
           create a new, empty "Unreleased" changes section.
-    - Raise a pull request for this branch to `develop`.
-    - This pull request, like all pull requests in this repository, must undergo peer review. However, this should
-      be able to be light-touch.
 
 4.  **Merging to main:**
     - Once the version on `develop` is successfully bumped, raise a pull request to merge `develop` to `main`.
