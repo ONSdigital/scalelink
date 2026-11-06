@@ -1,53 +1,56 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
-      - id: trailing-whitespace
-        exclude: |
-          (?x)(
-            ^.github/
-          )
-        exclude_types: [markdown, yaml, toml]
-      - id: end-of-file-fixer
-        exclude: |
-          (?x)(
-            ^.github/
-          )
-        exclude_types: [markdown, yaml, toml]
-      - id: check-docstring-first
-      - id: check-yaml
-      - id: check-toml
-      - id: debug-statements
-      - id: requirements-txt-fixer
+    - id: check-added-large-files
+    - id: check-merge-conflict
+      args: ["--assume-in-merge"]
+    - id: check-toml
+    - id: check-yaml
+    - id: debug-statements
+    - id: detect-aws-credentials
+      args:
+      - --allow-missing-credentials
+    - id: detect-private-key
+    - id: end-of-file-fixer
+    - id: name-tests-test
+      args: ["--pytest-test-first"]
+    - id: no-commit-to-branch  # Protects main by default
+    - id: trailing-whitespace
+
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.9.1
+    hooks:
+    - id: nbstripout
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.12.0
+    rev: v0.16.1
     hooks:
-      - id: ruff-check
-        args: [--fix]
-        exclude: .github/workflows/
+    - id: ruff-check  # Linter
+      args: [--fix]
+    - id: ruff-format  # Formatter
 
-  - repo: https://github.com/psf/black
-    rev: 25.1.0
+  - repo: https://github.com/crate-ci/typos
+    rev: v1.48.0
     hooks:
-      - id: black
-        exclude: .github/workflows/
-
-  - repo: https://github.com/PyCQA/isort
-    rev: 6.0.1
-    hooks:
-      - id: isort
-        exclude: .github/workflows/
+    - id: typos
+      name: Commit message typos
+      args: []  # Turns off automatic fixing
+      stages: [commit-msg]
+    - id: typos
+      name: Script typos
+      args: []  # Turns off automatic fixing
+      stages: [pre-commit]
 
 #  - repo: https://github.com/gitleaks/gitleaks
-#    rev: v8.23.1
+#    rev: v8.30.1
 #    hooks:
-#      - id: gitleaks
+#    - id: gitleaks
 
   - repo: local
     hooks:
       - id: restricted-filenames
-        name: Check commits for restricted file extensions
+        name: Restricted filenames
         entry: These file extensions are restricted. Data should be removed from the commit
         language: fail
-        files: .*\.(csv|feather|xlsx|zip|hdf5|h5|txt|json|xml|hd|parquet)
+        files: .*\.(arvo|bson|csv|dat|fbs|feather|h5|hd|hdf5|ndjson|orc|parquet|proto|sav|tsv|xls|xlsx|xml)
