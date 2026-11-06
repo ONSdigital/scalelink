@@ -9,6 +9,18 @@ and this project adheres to [semantic versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Deprecated
+
+### Fixed
+
+### Removed
+
+## [1.0.0] 2026-11-06
+
+### Added
+
 - Existing functions and unit tests:
   - Indicator matrix (`scalelink/indicator_matrix/` and `tests/indicator_matrix/`).
   - Match scores (`scalelink/match_scores/` and `tests/match_scores/`).
