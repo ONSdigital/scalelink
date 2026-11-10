@@ -1,55 +1,92 @@
-## Description
-<details><summary>Please include a summary of the changes. </summary>
+# Request
 
-  - What is this change?
-  - Is this a bug fix or a feature and does it break any existing functionality?
-  - How has it been tested?
-</details>
- 
-*This pr introduces....*
+This section must be completed by the person making the pull request.
+
+## Description
+
+Please **replace this text** with a summary of the changes, using the following prompts:
+
+  - What has been changed?
+  - Why was it changed?
+  - How has the change been tested?
+  - Does the change close or contribute to closing any issues? Use [GitHub keywords][keywords] and
+    [cite][issue-citation] relevant issues.
+
 ## Type of change
 
-*You can delete options that are not relevant.*
+Please check all items that are applicable:
 
-- [ ] Bug fix - *non-breaking change*
-- [ ] New feature - *non-breaking change*
-- [ ] Breaking change - *backwards incompatible change, changes expected behaviour*
-- [ ] Non-user facing change, structural change, dev functionality, docs ...
+- [ ] New feature - change that adds new documentation, functionality, etc.
+- [ ] Refactor - change that alters existing files, but not to fix an error.
+- [ ] Bugfix - change that alters existing files to fix an error.
+- [ ] Breaking change - backwards incompatible change, changes expected behaviour, etc.
+- [ ] Non-user-facing change e.g. structural change, CI/CD change, etc.
 
 ## Checklist:
 
-- [ ] I have performed a self-review of my own code.
-- [ ] I have commented my code appropriately, focusing on explaining my design decisions (explain why, not how).
-- [ ] I have made corresponding changes to the documentation (comments, docstring, etc.. )
-- [ ] I have added tests that prove my fix is effective or that my feature works.
-- [ ] New and existing unit tests pass locally with my changes.
-- [ ] I have updated the change log.
+Please check all items that have been completed. If any are not completed, provide an explanation in the description.
 
-<br>
+- [ ] **Assignee:** I have marked myself as the assignee of this pull request.
+- [ ] **Code:** I have performed a self-review of my own code.
+- [ ] **Tests: I have:**
+  - [ ] Added tests that prove my fix is effective or that my feature works.
+  - [ ] Checked that new and existing unit tests pass locally with my changes.
+- [ ] **Documentation:** I have:
+  - [ ] Made corresponding changes to the documentation (comments, docstring, etc.).
+  - [ ] Commented my code appropriately, focusing on explaining my design decisions (explain why, not how).
+- [ ] **Style:** I have followed the [contribution guide][contribution-guide].
+- [ ] **Admin:** I have:
+  - [ ] Updated the change log.
+  - [ ] Labelled this pull request appropriately.
 
-#  Peer review
-Any new code includes all the following:
+#  Review
 
-- **Documentation**: docstrings, comments have been added/ updated.
-- **Style guidelines**: New code conforms to the project's contribution guidelines.
-- **Functionality**: The code works as expected, handles expected edge cases and exceptions are handled appropriately.
-- **Complexity**: The code is not overly complex, logic has been split into appropriately sized functions, etc..
-- **Test coverage**: Unit tests cover essential functions for a reasonable range of inputs and conditions. Added and existing tests pass on my machine.
+This section must be completed by the person or persons reviewing the pull request.
 
-### Review comments
-Suggestions should be tailored to the code that you are reviewing. Provide context.
-Be critical and clear, but not mean. Ask questions and set actions.
-<details><summary>These might include:</summary>
+## Checklist
 
-- bugs that need fixing (does it work as expected? and does it work with other code
-  that it is likely to interact with?)
-- alternative methods (could it be written more efficiently or with more clarity?)
-- documentation improvements (does the documentation reflect how the code actually works?)
-- additional tests that should be implemented
-  - Do the tests effectively assure that it
-  works correctly? Are there additional edge cases/ negative tests to be considered?
-- code style improvements (could the code be written more clearly?)
-</details>
-<br>
+Please check all items that have been completed:
 
-*Further reading: [code review best practices](https://best-practice-and-impact.github.io/qa-of-code-guidance/peer_review.html)*
+-   [ ] **Reviewer**: I have marked myself as the reviewer on this pull request.
+-   [ ] **Code**: I confirm that code changes:
+    - Work as expected.
+    - Are not overly complex.
+    - Are appropriately documented.
+    - Handle edge cases and exceptions.
+-   [ ] **Tests**: I confirm that unit tests:
+    - Are present where appropriate.
+    - Cover essential functions for a reasonable range of inputs and conditions.
+    - Pass locally (both new and existing tests).
+-   [ ] **Documentation**: I confirm that documentation files:
+    - Have been added/updated, as applicable.
+    - Make sense.
+    - Are not overly complex.
+-   [ ] **Style**: I confirm that all changes conform to the [contribution guide][contribution-guide].
+
+Where items in this checklist are not met, suggestions for improvement must be made using review comments.
+
+## Review comments
+
+Suggestions should be tailored to the code that you are reviewing. Provide context. Be critical and clear, but not mean.
+Ask questions and set actions.
+
+Suggestions may include:
+
+-   **Documentation improvements**:
+    - Improve clarity.
+    - Minimise complexity.
+    - Ensure all necessary information is covered accurately.
+-   **Code improvements**:
+    - Ensure correct functioning.
+    - Minimise complexity.
+    - Ensure all code is documented sufficiently.
+    - Ensure edge cases and exceptions are handled.
+-   **Test improvements**:
+    - Ensure sufficient coverage of both functions and inputs/conditions.
+    - Ensure all tests pass.
+-   **Style improvements**:
+    - Ensure the [contribution guide][contribution-guide] is followed.
+
+[contribution-guide]: /docs/contribution_guide.md
+[issue-citation]: https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/autolinked-references-and-urls#issues-and-pull-requests
+[keywords]: https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/using-keywords-in-issues-and-pull-requests
